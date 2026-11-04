@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import useAuth from '../../hooks/useAuth'
+import { Link, useLocation } from 'react-router-dom'
 import useScrollPosition from '../../hooks/useScrollPosition'
 import { cx } from '../../utils/helpers'
 import {
@@ -24,7 +23,7 @@ export const defaultSite = {
   ],
   header: {
     logo: 'logo-horizontal-light.png',
-    loginLabel: 'Login',
+    loginLink: { label: 'Scrie-ne', to: '/contact' },
     cta: { label: 'Become a Volunteer', to: '/register' },
     searchPlaceholder: 'Search . . .',
   },
@@ -41,9 +40,8 @@ export default function Navbar() {
 function NavbarContent() {
   const { value: nav = [] } = useField('nav')
   const { value: searchPlaceholder } = useField('header.searchPlaceholder')
+  const { value: loginLink } = useField('header.loginLink')
   const [open, setOpen] = useState(false)
-  const { isAuthenticated, logout } = useAuth()
-  const navigate = useNavigate()
   const location = useLocation()
   const scrollY = useScrollPosition()
 
@@ -52,11 +50,6 @@ function NavbarContent() {
   }, [location.pathname, location.hash])
 
   const closeMenu = () => setOpen(false)
-
-  const handleLogout = async () => {
-    await logout()
-    navigate('/')
-  }
 
   return (
     <header
@@ -81,21 +74,12 @@ function NavbarContent() {
             <div className="right-widget ms-auto me-3 me-lg-0 order-lg-3">
               <ul className="d-flex align-items-center style-none">
                 <li className="d-none d-xxl-block me-3">
-                  <Link
-                    to={isAuthenticated ? '/dashboard' : '/login'}
-                    className="cta-text font-amita text-white"
-                  >
-                    {isAuthenticated ? 'Dashboard' : <EditableText field="header.loginLabel" />}
+                  <Link to={loginLink?.to || '/contact'} className="cta-text font-amita text-white">
+                    <EditableText field="header.loginLink.label" />
                   </Link>
                 </li>
                 <li className="me-3 d-none d-md-block">
-                  {isAuthenticated ? (
-                    <button type="button" className="cta-btn-one" onClick={handleLogout}>
-                      Logout
-                    </button>
-                  ) : (
-                    <EditableLink field="header.cta" className="cta-btn-one" />
-                  )}
+                  <EditableLink field="header.cta" className="cta-btn-one" />
                 </li>
                 <li className="d-none d-sm-block">
                   <form

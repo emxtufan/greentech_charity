@@ -821,7 +821,7 @@ button.cms-ui:hover {
 .gt-hp{position:absolute!important;left:-10000px!important;width:1px;height:1px;overflow:hidden}
 @media (max-width:767px){.gt-cta-band{padding:36px 26px}.gt-form-card{padding:26px 20px}}
 /* footer-ul temei urca cu -240px peste conținut (gândit pentru bannerul de newsletter vechi) */
-.main-footer.top-space{margin-top:0 !important;padding-top:100px !important}
-@media (max-width:767px){.main-footer.top-space{padding-top:70px !important}}
+body:not(:has(.fancy-banner-one)) .main-footer.top-space{margin-top:0 !important;padding-top:100px !important}
+@media (max-width:767px){body:not(:has(.fancy-banner-one)) .main-footer.top-space{padding-top:70px !important}}
 
 

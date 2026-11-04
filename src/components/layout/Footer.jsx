@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import useContent from '../../hooks/useContent'
 import { img } from '../../utils/helpers'
 import {
   AddItemButton,
@@ -60,7 +61,9 @@ export default function Footer() {
 
 function FooterContent() {
   const year = new Date().getFullYear()
+  const { editMode } = useContent()
   const { value: phones = [] } = useField('phones')
+  const { value: address } = useField('address')
 
   return (
     <div id="contact" className="main-footer bg-one top-space">
@@ -106,27 +109,31 @@ function FooterContent() {
               <div className="ps-xxl-4 mb-30">
                 <EditableText field="supportTitle" as="h6" className="footer-title" />
                 <ul className="contact-info style-none">
-                  <li>
-                    <div className="icon d-flex align-items-center justify-content-center rounded-circle">
-                      <img src={img('icon_13.png')} alt="" />
-                    </div>
-                    <p className="m0 d-flex flex-column">
-                      {phones.map((phone, index) => (
-                        <ListItem key={index} field="phones" index={index}>
-                          <a href={`tel:${phone.replace(/[^\d+]/g, '')}`}>
-                            <EditableText as="span" />
-                          </a>
-                        </ListItem>
-                      ))}
-                      <AddItemButton field="phones" />
-                    </p>
-                  </li>
-                  <li>
-                    <div className="icon d-flex align-items-center justify-content-center rounded-circle">
-                      <img src={img('icon_14.png')} alt="" />
-                    </div>
-                    <EditableText field="address" />
-                  </li>
+                  {(editMode || phones.length > 0) && (
+                    <li>
+                      <div className="icon d-flex align-items-center justify-content-center rounded-circle">
+                        <img src={img('icon_13.png')} alt="" />
+                      </div>
+                      <p className="m0 d-flex flex-column">
+                        {phones.map((phone, index) => (
+                          <ListItem key={index} field="phones" index={index}>
+                            <a href={`tel:${phone.replace(/[^\d+]/g, '')}`}>
+                              <EditableText as="span" />
+                            </a>
+                          </ListItem>
+                        ))}
+                        <AddItemButton field="phones" />
+                      </p>
+                    </li>
+                  )}
+                  {(editMode || address) && (
+                    <li>
+                      <div className="icon d-flex align-items-center justify-content-center rounded-circle">
+                        <img src={img('icon_14.png')} alt="" />
+                      </div>
+                      <EditableText field="address" />
+                    </li>
+                  )}
                 </ul>
               </div>
             </div>

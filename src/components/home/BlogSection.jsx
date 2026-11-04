@@ -1,4 +1,5 @@
 import Reveal from '../common/Reveal'
+import useContent from '../../hooks/useContent'
 import {
   AddItemButton,
   EditableImage,
@@ -56,6 +57,7 @@ export const defaultData = {
 }
 
 export default function BlogSection() {
+  const { editMode } = useContent()
   const { value: items = [] } = useField('items')
 
   return (
@@ -80,19 +82,27 @@ export default function BlogSection() {
               >
                 <article className="blog-meta-one mt-30">
                   <div className="post-info">
-                    <ul className="style-none post-author d-flex justify-content-center flex-wrap">
-                      <li>
-                        <EditableText field="tag" as="span" />
-                      </li>
-                      <li>
-                        <i className="fa-regular fa-user"></i>{' '}
-                        <EditableText field="author" as="span" />
-                      </li>
-                      <li>
-                        <i className="fa-regular fa-calendar"></i>{' '}
-                        <EditableText field="date" as="span" />
-                      </li>
-                    </ul>
+                    {(post.tag || post.author || post.date || editMode) && (
+                      <ul className="style-none post-author d-flex justify-content-center flex-wrap">
+                        {(post.tag || editMode) && (
+                          <li>
+                            <EditableText field="tag" as="span" />
+                          </li>
+                        )}
+                        {(post.author || editMode) && (
+                          <li>
+                            <i className="fa-regular fa-user"></i>{' '}
+                            <EditableText field="author" as="span" />
+                          </li>
+                        )}
+                        {(post.date || editMode) && (
+                          <li>
+                            <i className="fa-regular fa-calendar"></i>{' '}
+                            <EditableText field="date" as="span" />
+                          </li>
+                        )}
+                      </ul>
+                    )}
                   </div>
                   <EditableImage field="image" asBackground className="img-meta" />
                   <div className="post-meta">
@@ -100,13 +110,17 @@ export default function BlogSection() {
                       <EditableLink field="title" className="line-bg" />
                     </h4>
                     <ul className="style-none bottom-widget d-flex flex-wrap">
-                      <li>
-                        <EditableLink field="cta" className="details-cta tran3s" />
-                      </li>
-                      <li>
-                        <i className="fa-regular fa-comment"></i>{' '}
-                        <EditableText field="comments" as="span" className="comment" />
-                      </li>
+                      {(post.cta?.label || editMode) && (
+                        <li>
+                          <EditableLink field="cta" className="details-cta tran3s" />
+                        </li>
+                      )}
+                      {(post.comments || editMode) && (
+                        <li>
+                          <i className="fa-regular fa-comment"></i>{' '}
+                          <EditableText field="comments" as="span" className="comment" />
+                        </li>
+                      )}
                     </ul>
                   </div>
                   {/* /.post-meta */}
