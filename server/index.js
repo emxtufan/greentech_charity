@@ -6,6 +6,7 @@ import dotenv from 'dotenv'
 import { adminLogin, requireAdmin } from './auth.js'
 import { registerMessageRoutes } from './messages.js'
 import { registerF230Routes } from './f230.js'
+import { applyEnvDefaults } from './orgDefaults.js'
 import { UPLOADS_DIR, uploadImage } from './upload.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -59,7 +60,7 @@ app.use('/uploads', express.static(UPLOADS_DIR))
 
 app.get('/api/content', (req, res, next) => {
   try {
-    res.json(readContent())
+    res.json(applyEnvDefaults(readContent()))
   } catch (err) {
     next(err)
   }

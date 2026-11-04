@@ -7,6 +7,7 @@ import { requireAdmin } from './auth.js'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const DATA_DIR = path.join(__dirname, 'data')
 const FORMS_FILE = path.join(DATA_DIR, 'f230.json')
+const KEY_FILE = path.join(DATA_DIR, 'f230.key')
 
 const ALGORITHM = 'aes-256-gcm'
 const KEY_BYTES = 32
@@ -68,16 +69,46 @@ const isEnabled = () => encryptionKey !== null
 
 const clean = (value) => (typeof value === 'string' ? value.replace(CONTROL_CHARS_RE, '').trim() : '')
 
-const parseKey = () => {
-  const raw = typeof process.env.F230_KEY === 'string' ? process.env.F230_KEY.trim() : ''
-  if (!raw) return null
+const decodeKey = (raw) => {
+  const value = typeof raw === 'string' ? raw.trim() : ''
+  if (!value) return null
 
   try {
-    const key = Buffer.from(raw, 'base64')
+    const key = Buffer.from(value, 'base64')
     return key.length === KEY_BYTES ? key : null
   } catch {
     return null
   }
+}
+
+const readFileKey = () => {
+  if (!fs.existsSync(KEY_FILE)) return null
+
+  try {
+    return decodeKey(fs.readFileSync(KEY_FILE, 'utf8'))
+  } catch {
+    return null
+  }
+}
+
+const createFileKey = () => {
+  const key = randomBytes(KEY_BYTES)
+  fs.mkdirSync(DATA_DIR, { recursive: true })
+  fs.writeFileSync(KEY_FILE, `${key.toString('base64')}\n`, { mode: 0o600 })
+  return key
+}
+
+// cheia din env are prioritate; altfel se folosește (sau se generează) server/data/f230.key
+const resolveKey = () => {
+  const envKey = decodeKey(process.env.F230_KEY)
+  if (envKey) return envKey
+
+  const fileKey = readFileKey() || createFileKey()
+  console.log(
+    '[server] F230: folosesc cheia din server/data/f230.key (pentru producție setează F230_KEY în .env.local și păstrează o copie de siguranță a cheii)',
+  )
+
+  return fileKey
 }
 
 const encrypt = (data) => {
@@ -418,10 +449,10 @@ const handleExportCsv = (req, res, next) => {
 }
 
 export function registerF230Routes(app) {
-  encryptionKey = parseKey()
-
-  if (!encryptionKey) {
-    console.warn('[server] F230_KEY lipsește sau nu are 32 de bytes — formularul 230 online e dezactivat')
+  try {
+    encryptionKey = resolveKey()
+  } catch (err) {
+    console.warn(`[server] F230: cheia nu a putut fi pregătită (${err.message}) — formularul 230 online e dezactivat`)
   }
 
   fs.mkdirSync(DATA_DIR, { recursive: true })
