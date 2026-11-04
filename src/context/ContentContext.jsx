@@ -37,6 +37,11 @@ export function ContentProvider({ children }) {
 
   const contentRef = useRef(null)
   const historyRef = useRef([])
+  const isAdminRef = useRef(false)
+
+  useEffect(() => {
+    isAdminRef.current = isAdmin
+  }, [isAdmin])
 
   const applyContent = useCallback((next) => {
     contentRef.current = next
@@ -128,11 +133,11 @@ export function ContentProvider({ children }) {
   }, [dirty])
 
   const setEditModeSafe = useCallback((next) => {
-    const value = Boolean(next) && isAdmin
+    const value = Boolean(next) && isAdminRef.current
     writeEditFlag(value)
     setEditMode(value)
     return value
-  }, [isAdmin])
+  }, [])
 
   const update = useCallback((path, value) => {
     const current = contentRef.current
@@ -191,6 +196,7 @@ export function ContentProvider({ children }) {
 
   const adminLogin = useCallback(async (password) => {
     await adminService.login(password)
+    isAdminRef.current = true
     setIsAdmin(true)
     return true
   }, [])
@@ -198,6 +204,7 @@ export function ContentProvider({ children }) {
   const adminLogout = useCallback(() => {
     adminService.logout()
     writeEditFlag(false)
+    isAdminRef.current = false
     setIsAdmin(false)
     setEditMode(false)
   }, [])
