@@ -48,6 +48,7 @@ const SHAPES = [
 ]
 
 export default function TestimonialsSection() {
+  const { value: items = [] } = useField('items')
   const prevRef = useRef(null)
   const nextRef = useRef(null)
 
@@ -55,8 +56,8 @@ export default function TestimonialsSection() {
     <div className="feedback-section-one position-relative z-1 pt-130 lg-pt-80 pb-130 lg-pb-80">
       <div className="container">
         <Reveal className="title-one text-center mb-70 lg-mb-50" anim="slide-up" duration={900}>
-          <div className="upper-title">Testimonial</div>
-          <h2>Real feedback, Real results</h2>
+          <EditableText field="subtitle" as="div" className="upper-title" />
+          <EditableText field="title" as="h2" />
         </Reveal>
         {/* /.title-one */}
 
@@ -64,42 +65,45 @@ export default function TestimonialsSection() {
           <div className="col-lg-10 m-auto">
             <Carousel
               className="feedback-slider-one"
-              items={TESTIMONIALS}
+              items={items}
               slidesToShow={{ xs: 1, md: 1, xl: 1 }}
               autoplay={5000}
               prevRef={prevRef}
               nextRef={nextRef}
-              renderItem={(testimonial) => (
-                <div className="feedback-wrapper">
-                  <img
-                    src={img(testimonial.avatar)}
-                    alt=""
-                    className="avatar rounded-circle m-auto"
-                  />
-                  <div className="bg-wrapper">
-                    <div className="rating">
-                      <ul className="style-none d-inline-flex justify-content-center">
-                        {Array.from({ length: 5 }).map((_, starIndex) => (
-                          <li key={starIndex}>
-                            <i className="fa-solid fa-star"></i>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <blockquote>"{testimonial.text}"</blockquote>
+              renderItem={(testimonial, index) => (
+                <ListItem field="items" index={index}>
+                  <div className="feedback-wrapper">
+                    <EditableImage
+                      field="avatar"
+                      alt=""
+                      className="avatar rounded-circle m-auto"
+                    />
+                    <div className="bg-wrapper">
+                      <div className="rating">
+                        <ul className="style-none d-inline-flex justify-content-center">
+                          {Array.from({ length: 5 }).map((_, starIndex) => (
+                            <li key={starIndex}>
+                              <i className="fa-solid fa-star"></i>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <EditableText field="text" as="blockquote" />
 
-                    <div className="name-wrapper d-flex align-items-center justify-content-center mb-45">
-                      <h5 className="name">{testimonial.name}</h5>
-                      <span>{testimonial.role}</span>
-                    </div>
+                      <div className="name-wrapper d-flex align-items-center justify-content-center mb-45">
+                        <EditableText field="name" as="h5" className="name" />
+                        <EditableText field="role" as="span" />
+                      </div>
 
-                    <img src={img('icon_09.png')} alt="icon" className="m-auto" />
+                      <img src={img('icon_09.png')} alt="icon" className="m-auto" />
+                    </div>
+                    {/* /.bg-wrapper */}
                   </div>
-                  {/* /.bg-wrapper */}
-                </div>
+                </ListItem>
               )}
             />
             {/* /.feedback-slider-one */}
+            <AddItemButton field="items" />
           </div>
         </div>
 
