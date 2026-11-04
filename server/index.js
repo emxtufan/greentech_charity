@@ -5,6 +5,7 @@ import express from 'express'
 import dotenv from 'dotenv'
 import { adminLogin, requireAdmin } from './auth.js'
 import { registerMessageRoutes } from './messages.js'
+import { registerF230Routes } from './f230.js'
 import { UPLOADS_DIR, uploadImage } from './upload.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -98,6 +99,7 @@ app.post('/api/upload', requireAdmin, (req, res) => {
 })
 
 registerMessageRoutes(app)
+registerF230Routes(app)
 
 app.use('/api', (req, res) => {
   res.status(404).json({ message: 'Endpoint inexistent' })

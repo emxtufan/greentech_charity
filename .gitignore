@@ -21,3 +21,5 @@ server/uploads/*
 server/data/backups/
 server/data/messages.json
 server/data/messages.json.tmp
+server/data/f230.json
+server/data/f230.json.tmp
