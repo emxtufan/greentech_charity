@@ -3,6 +3,8 @@ import { Outlet, useLocation } from 'react-router-dom'
 import Navbar from './Navbar'
 import Footer from './Footer'
 import TrackingLoader from '../site/TrackingLoader'
+import CookieConsent from '../site/CookieConsent'
+import SiteModals from '../site/SiteModals'
 import useScrollPosition from '../../hooks/useScrollPosition'
 import { img } from '../../utils/helpers'
 
@@ -77,6 +79,9 @@ export default function MainLayout() {
       )}
 
       <TrackingLoader />
+
+      <CookieConsent />
+      <SiteModals />
     </div>
   )
 }

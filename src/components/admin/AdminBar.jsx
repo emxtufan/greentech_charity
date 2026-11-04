@@ -24,9 +24,11 @@ export default function AdminBar() {
     if (!isAdmin) return undefined
 
     document.body.style.paddingBottom = BAR_PADDING
+    document.body.classList.add('cms-admin-active')
 
     return () => {
       document.body.style.paddingBottom = ''
+      document.body.classList.remove('cms-admin-active')
     }
   }, [isAdmin])
 
