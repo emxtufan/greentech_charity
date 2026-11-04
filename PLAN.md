@@ -68,3 +68,12 @@ Admin logat vede site-ul normal; în „Edit mode” fiecare text/imagine/link a
 - Dacă formularea „Suntem la început” descrie situația reală
 - Imaginea de fundal din footer (copil, din șablon) poate fi înlocuită cu o fotografie proprie sau cu fundal simplu
 - Paginile vechi /login, /register, /dashboard (conturi de vizitatori simulate, în engleză) nu mai apar în meniu; de decis dacă se șterg
+
+# Etapa 3 — Formularul 230 online
+- [x] server/f230.js: POST public (validare CNP, semnătură PNG, honeypot, rate limit), stocare criptată AES-256-GCM în server/data/f230.json (cheie F230_KEY din .env.local), admin: listă, status primit/depus, ștergere, export CSV.
+- [x] Secțiune publică form230Online pe /formular-230 (activă doar cu F230_KEY + CIF/IBAN completate, până la acceptUntil 2027-05-20).
+- [x] Panou admin „Formulare 230” (detalii, printare, marcare depus, export).
+## De confirmat
+- Validitatea semnăturii desenate pe ecran pentru formularele depuse de asociație (consultant fiscal/juridic).
+- Reprezentantul legal are certificat digital calificat pentru depunerea în SPV a situației centralizatoare (OPANAF 103/2025).
+- Perioada exactă de păstrare a formularelor după depunere.
