@@ -39,7 +39,8 @@ Admin logat vede site-ul normal; în „Edit mode” fiecare text/imagine/link a
 4. [x] Refactor secțiuni → data + editables, registry
 5. [x] Navbar/Footer din content.site
 6. [x] Admin UI: /admin, AdminBar, SectionToolbar, PagesPanel, PageRenderer, rute
-7. [ ] Build + test vizual + rebuild_map
+7. [x] Build + test vizual + rebuild_map
 
 ## Probleme deschise
-- (niciuna încă)
+- Parola admin: utilizatorul setează ADMIN_PASSWORD (și JWT_SECRET) în .env.local
+- Navbar se aglomerează când se adaugă multe pagini în meniu (CTA trece pe 2 rânduri ~1440px)
