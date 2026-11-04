@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import useContent from '../../hooks/useContent'
+import F230Panel from './F230Panel'
 import MessagesPanel from './MessagesPanel'
 import PagesPanel from './PagesPanel'
 
@@ -12,6 +13,7 @@ export default function AdminBar() {
 
   const [pagesOpen, setPagesOpen] = useState(false)
   const [messagesOpen, setMessagesOpen] = useState(false)
+  const [f230Open, setF230Open] = useState(false)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [barError, setBarError] = useState('')
@@ -90,6 +92,10 @@ export default function AdminBar() {
           Mesaje
         </button>
 
+        <button type="button" className="cms-bar-btn" onClick={() => setF230Open(true)}>
+          Formulare 230
+        </button>
+
         <button type="button" className="cms-bar-btn" onClick={undo} disabled={!canUndo}>
           Undo
         </button>
@@ -118,6 +124,7 @@ export default function AdminBar() {
 
       <PagesPanel open={pagesOpen} onClose={() => setPagesOpen(false)} />
       <MessagesPanel open={messagesOpen} onClose={() => setMessagesOpen(false)} />
+      <F230Panel open={f230Open} onClose={() => setF230Open(false)} />
     </>
   )
 }
