@@ -214,4 +214,109 @@ button.cms-ui:hover {
   background-color: rgba(46, 139, 87, 0.1);
 }
 
+/* CMS — secțiuni (edit mode) */
+.cms-section {
+  position: relative;
+  outline: 2px dashed transparent;
+  outline-offset: -2px;
+}
+
+.cms-section:hover {
+  outline-color: #f5c518;
+}
+
+.cms-section.is-hidden {
+  opacity: 0.45;
+}
+
+.cms-section-bar {
+  display: none;
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 99999;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px;
+  border-radius: 8px;
+  background-color: #1b6943;
+  color: #fff;
+  font-size: 13px;
+  line-height: 1.2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.cms-section:hover > .cms-section-bar {
+  display: flex;
+}
+
+.cms-section-bar button {
+  width: auto;
+  height: 24px;
+  min-width: 24px;
+  padding: 0 5px;
+  border: none;
+  border-radius: 4px;
+  background-color: transparent;
+  color: #fff;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.cms-section-bar button:hover {
+  background-color: rgba(255, 255, 255, 0.22);
+}
+
+.cms-section-bar button:disabled {
+  opacity: 0.4;
+  cursor: default;
+  background-color: transparent;
+}
+
+.cms-section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 6px 0 2px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.cms-section-hidden {
+  padding: 1px 5px;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.22);
+  font-size: 11px;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.cms-empty-page {
+  padding: 40px 0;
+}
+
+/* CMS — picker tipuri de secțiune */
+.cms-section-picker {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+}
+
+.cms-section-picker-btn {
+  padding: 12px 10px;
+  border: 1px solid #cfe0d6;
+  border-radius: 8px;
+  background-color: #f4f7f8;
+  color: #104b59;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.cms-section-picker-btn:hover {
+  border-color: #1b6943;
+  background-color: rgba(27, 105, 67, 0.1);
+  color: #1b6943;
+}
+
 

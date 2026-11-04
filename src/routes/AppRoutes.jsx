@@ -2,11 +2,11 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import MainLayout from '../components/layout/MainLayout'
 import ProtectedRoute from './ProtectedRoute'
 import useAuth from '../hooks/useAuth'
-import Home from '../pages/Home'
+import DynamicPage from '../pages/DynamicPage'
+import AdminLogin from '../pages/AdminLogin'
 import Login from '../pages/Login'
 import Register from '../pages/Register'
 import Dashboard from '../pages/Dashboard'
-import NotFound from '../pages/NotFound'
 
 export default function AppRoutes() {
   const { isAuthenticated } = useAuth()
@@ -14,7 +14,7 @@ export default function AppRoutes() {
   return (
     <Routes>
       <Route element={<MainLayout />}>
-        <Route index element={<Home />} />
+        <Route index element={<DynamicPage />} />
         <Route
           path="login"
           element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login />}
@@ -23,7 +23,8 @@ export default function AppRoutes() {
           path="register"
           element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Register />}
         />
-        <Route path="*" element={<NotFound />} />
+        <Route path="admin" element={<AdminLogin />} />
+        <Route path="*" element={<DynamicPage />} />
       </Route>
 
       <Route
