@@ -19,3 +19,5 @@ dist
 server/uploads/*
 !server/uploads/.gitkeep
 server/data/backups/
+server/data/messages.json
+server/data/messages.json.tmp

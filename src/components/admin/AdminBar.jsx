@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import useContent from '../../hooks/useContent'
+import MessagesPanel from './MessagesPanel'
 import PagesPanel from './PagesPanel'
 
 const BAR_PADDING = '70px'
@@ -10,6 +11,7 @@ export default function AdminBar() {
     useContent()
 
   const [pagesOpen, setPagesOpen] = useState(false)
+  const [messagesOpen, setMessagesOpen] = useState(false)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [barError, setBarError] = useState('')
@@ -84,6 +86,10 @@ export default function AdminBar() {
           Pages
         </button>
 
+        <button type="button" className="cms-bar-btn" onClick={() => setMessagesOpen(true)}>
+          Mesaje
+        </button>
+
         <button type="button" className="cms-bar-btn" onClick={undo} disabled={!canUndo}>
           Undo
         </button>
@@ -111,6 +117,7 @@ export default function AdminBar() {
       </div>
 
       <PagesPanel open={pagesOpen} onClose={() => setPagesOpen(false)} />
+      <MessagesPanel open={messagesOpen} onClose={() => setMessagesOpen(false)} />
     </>
   )
 }
