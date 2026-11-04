@@ -752,6 +752,10 @@ button.cms-ui:hover {
 /* Secțiuni GreenTech */
 .gt-bg-white{background:#fff}.gt-bg-cream{background:#f9f4d6}.gt-bg-mint{background:#e4f8f2}.gt-bg-light{background:#f8f7f4}
 .gt-section{padding:110px 0}
+.gt-section.gt-section-compact{padding:36px 0}
+.gt-section-compact + .gt-section-compact{padding-top:0}
+.gt-section-compact .title-one h2{font-size:28px}
+@media (max-width:575px){.gt-section.gt-section-compact{padding:28px 0}}
 .gt-intro-hero{padding:70px 0 110px;background:linear-gradient(180deg,#fff 0%,#f3faf6 100%)}
 .gt-hero-title{font-size:clamp(36px,5vw,62px);line-height:1.08;font-weight:600;color:#144734;margin:0}
 .gt-page-header{padding:80px 0 60px;background:#f3faf6}

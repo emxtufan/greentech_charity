@@ -4,6 +4,7 @@ import useContent from '../../hooks/useContent'
 export const defaultData = {
   anchor: '',
   bg: 'white',
+  compact: false,
   eyebrow: 'Subtitlu',
   title: 'Titlu',
   text: 'Scrie aici textul.',
@@ -17,6 +18,7 @@ export default function TextBlock() {
   const { editMode } = useContent()
   const { value: anchor } = useField('anchor')
   const { value: bg } = useField('bg')
+  const { value: compact } = useField('compact')
   const { value: image } = useField('image')
   const { value: imageNote } = useField('imageNote')
   const { value: imagePosition } = useField('imagePosition')
@@ -37,7 +39,7 @@ export default function TextBlock() {
   )
 
   return (
-    <section id={anchor || undefined} className={`gt-section gt-bg-${bg || 'white'}`}>
+    <section id={anchor || undefined} className={`gt-section gt-bg-${bg || 'white'}${compact ? ' gt-section-compact' : ''}`}>
       {hasImage ? (
         <div className="container">
           <div className="row align-items-center gy-5">
