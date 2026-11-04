@@ -32,6 +32,7 @@ export const defaultData = {
   image: 'img_18.jpg',
   count: 10,
   countLabel: 'Done homeless case',
+  countSuffix: 'k+',
 }
 
 export default function DonateSection() {
@@ -83,8 +84,14 @@ export default function DonateSection() {
               <div className="card-one d-flex align-items-center">
                 <div className="text">
                   <div className="main-count">
-                    <EditableText field="count" numeric render={(v) => <Counter end={v} />} />
-                    k+
+                    <EditableText
+                      field="count"
+                      numeric
+                      render={(v) => (
+                        <Counter end={v} decimals={Number.isInteger(Number(v)) ? 0 : 1} />
+                      )}
+                    />
+                    <EditableText field="countSuffix" />
                   </div>
                   <EditableText field="countLabel" as="p" />
                 </div>

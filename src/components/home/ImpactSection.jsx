@@ -1,6 +1,7 @@
 import Counter from '../common/Counter'
 import Reveal from '../common/Reveal'
 import { EditableImage, EditableList, EditableText, useField } from '../editable'
+import useContent from '../../hooks/useContent'
 import { img } from '../../utils/helpers'
 
 export const defaultData = {
@@ -9,6 +10,8 @@ export const defaultData = {
   text: 'There are many variations of passages of lorem Ipsum available, but the majority have suffered alteration dolore magna. We started charity in 2001 with a simple idea: to enable global philanthropy by empowering',
   amount: 1023,
   amountLabel: 'Dollar giving more than 15 years',
+  amountPrefix: '$',
+  amountSuffix: 'M',
   items: [
     'Our mission, vision, and the heart behind it all',
     'GivenGain is the global leader in online fundraising.',
@@ -17,6 +20,7 @@ export const defaultData = {
   progress: 65,
   count: 39976,
   countLabel: 'Project Done',
+  countSuffix: '+',
   years: 12,
   image: 'img_09.jpg',
 }
@@ -30,6 +34,9 @@ const SHAPES = [
 
 export default function ImpactSection() {
   const { value: progress = 0 } = useField('progress')
+  const { value: count } = useField('count')
+  const { value: years } = useField('years')
+  const { editMode } = useContent()
 
   return (
     <div className="feature-block-three position-relative z-1 pt-140 lg-pt-80 pb-140 lg-pb-80">
@@ -49,7 +56,15 @@ export default function ImpactSection() {
                 </div>
                 <div className="text">
                   <div className="main-count font-amita">
-                    $<EditableText field="amount" numeric render={(v) => <Counter end={v} />} />M
+                    <EditableText field="amountPrefix" />
+                    <EditableText
+                      field="amount"
+                      numeric
+                      render={(v) => (
+                        <Counter end={v} decimals={Number.isInteger(Number(v)) ? 0 : 1} />
+                      )}
+                    />
+                    <EditableText field="amountSuffix" />
                   </div>
                   <EditableText field="amountLabel" as="p" className="fs-16 fw-500" />
                 </div>
@@ -67,15 +82,17 @@ export default function ImpactSection() {
               />
               {/* /.list-style-two */}
 
-              <div className="sucess-score mt-35">
-                <EditableText field="progressLabel" as="p" />
-                <div className="progress-bar position-relative">
-                  <div className="progress position-relative" style={{ width: `${progress}%` }}>
-                    <span>{progress}%</span>
+              {(editMode || Number(progress) > 0) && (
+                <div className="sucess-score mt-35">
+                  <EditableText field="progressLabel" as="p" />
+                  <div className="progress-bar position-relative">
+                    <div className="progress position-relative" style={{ width: `${progress}%` }}>
+                      <span>{progress}%</span>
+                    </div>
                   </div>
+                  {/* /.progress-bar */}
                 </div>
-                {/* /.progress-bar */}
-              </div>
+              )}
             </div>
           </Reveal>
           <Reveal
@@ -92,19 +109,30 @@ export default function ImpactSection() {
                 <div className="icon rounded-circle d-flex align-items-center justify-content-center">
                   <img src={img('icon_05.png')} alt="" />
                 </div>
-                <div className="text">
-                  <div className="main-count">
-                    <EditableText field="count" numeric render={(v) => <Counter end={v} />} />+
+                {(editMode || count) && (
+                  <div className="text">
+                    <div className="main-count">
+                      <EditableText
+                        field="count"
+                        numeric
+                        render={(v) => (
+                          <Counter end={v} decimals={Number.isInteger(Number(v)) ? 0 : 1} />
+                        )}
+                      />
+                      <EditableText field="countSuffix" />
+                    </div>
+                    <EditableText field="countLabel" as="p" />
                   </div>
-                  <EditableText field="countLabel" as="p" />
-                </div>
+                )}
               </div>
               {/* /.card-one */}
 
-              <div className="years">
-                <img src={img('sticker.png')} alt="" />
-                <EditableText field="years" numeric render={(v) => <Counter end={v} />} />
-              </div>
+              {(editMode || years) && (
+                <div className="years">
+                  <img src={img('sticker.png')} alt="" />
+                  <EditableText field="years" numeric render={(v) => <Counter end={v} />} />
+                </div>
+              )}
             </EditableImage>
             {/* /.media-bg */}
           </Reveal>

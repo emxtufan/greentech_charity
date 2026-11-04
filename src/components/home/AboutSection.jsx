@@ -19,8 +19,10 @@ export const defaultData = {
   image: 'img_04.jpg',
   count1: 40000,
   count1Label: 'children meals served',
+  count1Suffix: '+',
   count2: 1.6,
   count2Label: 'Happy children',
+  count2Suffix: 'mi+',
 }
 
 export default function AboutSection() {
@@ -74,7 +76,8 @@ export default function AboutSection() {
                 </div>
                 <div className="text">
                   <div className="main-count">
-                    <EditableText field="count1" numeric render={(v) => <Counter end={v} />} />+
+                    <EditableText field="count1" numeric render={(v) => <Counter end={v} />} />
+                    <EditableText field="count1Suffix" />
                   </div>
                   <EditableText field="count1Label" as="p" />
                 </div>
@@ -87,7 +90,7 @@ export default function AboutSection() {
                     numeric
                     render={(v) => <Counter end={v} decimals={1} />}
                   />
-                  mi+
+                  <EditableText field="count2Suffix" />
                 </div>
                 <EditableText field="count2Label" as="p" />
               </div>

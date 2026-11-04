@@ -43,7 +43,13 @@ export default function StatsSection() {
                 >
                   <div className="main-count">
                     <EditableText field="prefix" />
-                    <EditableText field="count" numeric render={(v) => <Counter end={v} />} />
+                    <EditableText
+                      field="count"
+                      numeric
+                      render={(v) => (
+                        <Counter end={v} decimals={Number.isInteger(Number(v)) ? 0 : 1} />
+                      )}
+                    />
                     <EditableText field="suffix" />
                   </div>
                   <EditableText field="text" as="p" />
