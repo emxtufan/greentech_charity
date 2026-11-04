@@ -40,6 +40,9 @@ export default function Carousel({
   const maxIndex = Math.max(count - perView, 0)
   const dragging = dragOffset !== 0
 
+  // autoplay: true -> 5000ms, număr -> acel număr de ms, false/0 -> oprit
+  const autoplayDelay = autoplay === true ? 5000 : Number(autoplay) || 0
+
   useEffect(() => {
     const handleResize = () => setPerView(perViewFor(window.innerWidth, { xs, md, xl }))
 
@@ -100,12 +103,12 @@ export default function Carousel({
 
   // autoplay cu pauză la hover / în timpul drag-ului
   useEffect(() => {
-    if (!autoplay || paused || dragging || maxIndex < 1) return undefined
+    if (!autoplayDelay || paused || dragging || maxIndex < 1) return undefined
 
-    const timer = window.setInterval(() => next(), autoplay)
+    const timer = window.setInterval(() => next(), autoplayDelay)
 
     return () => window.clearInterval(timer)
-  }, [autoplay, paused, dragging, maxIndex, next])
+  }, [autoplayDelay, paused, dragging, maxIndex, next])
 
   const handlePointerDown = (event) => {
     if (maxIndex < 1) return
