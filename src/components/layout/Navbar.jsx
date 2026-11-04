@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import useAuth from '../../hooks/useAuth'
+import { Link, useLocation } from 'react-router-dom'
 import useScrollPosition from '../../hooks/useScrollPosition'
 import { cx } from '../../utils/helpers'
 import {
@@ -15,18 +14,16 @@ import {
 
 export const defaultSite = {
   nav: [
-    { label: 'Home', to: '/' },
-    { label: 'About', to: '/#about' },
-    { label: 'Causes', to: '/#causes' },
-    { label: 'Events', to: '/#events' },
-    { label: 'Blog', to: '/#blog' },
-    { label: 'Contact', to: '/#contact' },
+    { label: 'Acasă', to: '/' },
+    { label: 'Povestea noastră', to: '/#poveste' },
+    { label: 'Case modulare', to: '/case-modulare' },
+    { label: 'Cum poți ajuta', to: '/#cum-ajuti' },
+    { label: 'Proiecte', to: '/proiecte' },
+    { label: 'Contact', to: '/contact' },
   ],
   header: {
     logo: 'logo-horizontal-light.png',
-    loginLabel: 'Login',
-    cta: { label: 'Become a Volunteer', to: '/register' },
-    searchPlaceholder: 'Search . . .',
+    cta: { label: 'Redirecționează 3,5%', to: '/formular-230' },
   },
 }
 
@@ -40,10 +37,7 @@ export default function Navbar() {
 
 function NavbarContent() {
   const { value: nav = [] } = useField('nav')
-  const { value: searchPlaceholder } = useField('header.searchPlaceholder')
   const [open, setOpen] = useState(false)
-  const { isAuthenticated, logout } = useAuth()
-  const navigate = useNavigate()
   const location = useLocation()
   const scrollY = useScrollPosition()
 
@@ -52,11 +46,6 @@ function NavbarContent() {
   }, [location.pathname, location.hash])
 
   const closeMenu = () => setOpen(false)
-
-  const handleLogout = async () => {
-    await logout()
-    navigate('/')
-  }
 
   return (
     <header
