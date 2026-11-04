@@ -651,6 +651,9 @@ button.cms-ui:hover {
   position: relative;
 }
 
+@media (min-width:1540px){.theme-main-menu .bottom-header > .d-flex{padding-left:var(--site-pad);padding-right:var(--site-pad);box-sizing:border-box}}
+@media (max-width:1199px){.theme-main-menu .right-widget .search-form-one{display:none}}
+
 @media (max-width: 575px) {
   :root {
     --site-pad: 16px;

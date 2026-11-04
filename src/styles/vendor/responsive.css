@@ -26,7 +26,7 @@
 }
 /*(max-width: 1399px)*/
 
-@media (min-width: 1200px) and (max-width: 1600px) {
+@media (min-width: 1200px) {
   .theme-main-menu .gap-one {padding-left: 30px; padding-right: 30px;}
   .theme-main-menu .gap-two {padding-left: 40px; padding-right: 40px;}
   .theme-main-menu .navbar {margin-left: 3%;}
