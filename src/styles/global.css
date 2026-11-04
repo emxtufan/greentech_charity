@@ -676,6 +676,9 @@ button.cms-ui:hover {
 .fancy-banner-one form { position: relative; }
 .fancy-banner-one form input[type='email'] { padding-right: 170px; }
 .fancy-banner-one form button[type='submit'] { position: absolute; top: 6px; bottom: 6px; right: 6px; width: auto; height: auto; min-width: 140px; padding: 0 28px; border-radius: 999px; font-style: normal; font-weight: 500; line-height: 1; display: flex; align-items: center; justify-content: center; }
+.fancy-banner-one form button[type='submit'] { background: #ffe132; color: #2a493d; transition: background 0.2s; }
+.fancy-banner-one form button[type='submit']:hover { background: #f9da22; }
+.fancy-banner-one form button[type='submit']::before { display: none; }
 @media (max-width: 575px) {
   .fancy-banner-one form input[type='email'] { padding-right: 130px; }
   .fancy-banner-one form button[type='submit'] { min-width: 110px; padding: 0 18px; }
