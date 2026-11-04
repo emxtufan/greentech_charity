@@ -88,7 +88,7 @@ export default function AboutSection() {
                   <EditableText
                     field="count2"
                     numeric
-                    render={(v) => <Counter end={v} decimals={1} />}
+                    render={(v) => <Counter end={v} decimals={Number.isInteger(Number(v)) ? 0 : 1} />}
                   />
                   <EditableText field="count2Suffix" />
                 </div>

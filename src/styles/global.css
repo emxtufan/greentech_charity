@@ -824,4 +824,10 @@ button.cms-ui:hover {
 body:not(:has(.fancy-banner-one)) .main-footer.top-space{margin-top:0 !important;padding-top:100px !important}
 @media (max-width:767px){body:not(:has(.fancy-banner-one)) .main-footer.top-space{padding-top:70px !important}}
 
+/* meniu: etichetele din navigație stau pe un singur rând */
+.theme-main-menu .navbar-nav .nav-link,
+.theme-main-menu .right-widget .cta-text {
+  white-space: nowrap;
+}
+
 

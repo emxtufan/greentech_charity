@@ -108,11 +108,11 @@ export default function ImpactSection() {
               asBackground
               className="media-bg position-relative z-1 w-100"
             >
-              <div className="card-one d-flex align-items-center">
-                <div className="icon rounded-circle d-flex align-items-center justify-content-center">
-                  <img src={img('icon_05.png')} alt="" />
-                </div>
-                {(editMode || count) && (
+              {(editMode || count) && (
+                <div className="card-one d-flex align-items-center">
+                  <div className="icon rounded-circle d-flex align-items-center justify-content-center">
+                    <img src={img('icon_05.png')} alt="" />
+                  </div>
                   <div className="text">
                     <div className="main-count">
                       <EditableText
@@ -126,8 +126,8 @@ export default function ImpactSection() {
                     </div>
                     <EditableText field="countLabel" as="p" />
                   </div>
-                )}
-              </div>
+                </div>
+              )}
               {/* /.card-one */}
 
               {(editMode || years) && (
