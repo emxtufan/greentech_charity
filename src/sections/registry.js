@@ -11,6 +11,7 @@ import BlogSection, { defaultData as blogData } from '../components/home/BlogSec
 import NewsletterSection, { defaultData as newsletterData } from '../components/home/NewsletterSection'
 import RichTextSection, { defaultData as richTextData } from '../components/home/RichTextSection'
 import { defaultSite } from '../components/layout/Navbar'
+import { defaultFooter } from '../components/layout/Footer'
 
 export const sectionTypes = {
   hero: { label: 'Hero', component: HeroSection, defaultData: heroData },
@@ -60,6 +61,7 @@ export function normalizeContent(content) {
           ? site.nav
           : structuredClone(defaultSite.nav),
       header: needsData(site.header) ? structuredClone(defaultSite.header) : site.header,
+      footer: needsData(site.footer) ? structuredClone(defaultFooter) : site.footer,
     },
     pages: pages.map((page) => {
       if (!isObject(page)) return page
