@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import useAuth from '../../hooks/useAuth'
 import useScrollPosition from '../../hooks/useScrollPosition'
 import { cx } from '../../utils/helpers'
 import {
   AddItemButton,
   EditableImage,
   EditableLink,
+  EditableText,
   ListItem,
   Scope,
   useField,
@@ -13,16 +15,18 @@ import {
 
 export const defaultSite = {
   nav: [
-    { label: 'Acasă', to: '/' },
-    { label: 'Povestea noastră', to: '/#poveste' },
-    { label: 'Case modulare', to: '/case-modulare' },
-    { label: 'Cum poți ajuta', to: '/#cum-ajuti' },
-    { label: 'Proiecte', to: '/proiecte' },
-    { label: 'Contact', to: '/contact' },
+    { label: 'Home', to: '/' },
+    { label: 'About', to: '/#about' },
+    { label: 'Causes', to: '/#causes' },
+    { label: 'Events', to: '/#events' },
+    { label: 'Blog', to: '/#blog' },
+    { label: 'Contact', to: '/#contact' },
   ],
   header: {
     logo: 'logo-horizontal-light.png',
-    cta: { label: 'Redirecționează 3,5%', to: '/formular-230' },
+    loginLabel: 'Login',
+    cta: { label: 'Become a Volunteer', to: '/register' },
+    searchPlaceholder: 'Search . . .',
   },
 }
 
@@ -36,7 +40,10 @@ export default function Navbar() {
 
 function NavbarContent() {
   const { value: nav = [] } = useField('nav')
+  const { value: searchPlaceholder } = useField('header.searchPlaceholder')
   const [open, setOpen] = useState(false)
+  const { isAuthenticated, logout } = useAuth()
+  const navigate = useNavigate()
   const location = useLocation()
   const scrollY = useScrollPosition()
 
@@ -45,6 +52,11 @@ function NavbarContent() {
   }, [location.pathname, location.hash])
 
   const closeMenu = () => setOpen(false)
+
+  const handleLogout = async () => {
+    await logout()
+    navigate('/')
+  }
 
   return (
     <header
@@ -60,7 +72,7 @@ function NavbarContent() {
               <Link to="/" className="d-flex align-items-center">
                 <EditableImage
                   field="header.logo"
-                  alt="GreenTech Charity"
+                  alt="Greentech Charity"
                   className="logo-img"
                 />
               </Link>
@@ -68,8 +80,33 @@ function NavbarContent() {
             {/* logo */}
             <div className="right-widget ms-auto me-3 me-lg-0 order-lg-3">
               <ul className="d-flex align-items-center style-none">
+                <li className="d-none d-xxl-block me-3">
+                  <Link
+                    to={isAuthenticated ? '/dashboard' : '/login'}
+                    className="cta-text font-amita text-white"
+                  >
+                    {isAuthenticated ? 'Dashboard' : <EditableText field="header.loginLabel" />}
+                  </Link>
+                </li>
                 <li className="me-3 d-none d-md-block">
-                  <EditableLink field="header.cta" className="cta-btn-one" />
+                  {isAuthenticated ? (
+                    <button type="button" className="cta-btn-one" onClick={handleLogout}>
+                      Logout
+                    </button>
+                  ) : (
+                    <EditableLink field="header.cta" className="cta-btn-one" />
+                  )}
+                </li>
+                <li className="d-none d-sm-block">
+                  <form
+                    className="search-form-one position-relative z-1"
+                    onSubmit={(event) => event.preventDefault()}
+                  >
+                    <input type="text" placeholder={searchPlaceholder} />
+                    <button type="submit" className="tran3s rounded-circle">
+                      <i className="fa-regular fa-search"></i>
+                    </button>
+                  </form>
                 </li>
               </ul>
             </div>
@@ -91,7 +128,7 @@ function NavbarContent() {
                       <Link to="/" className="d-block" onClick={closeMenu}>
                         <EditableImage
                           field="header.logo"
-                          alt="GreenTech Charity"
+                          alt="Greentech Charity"
                           className="logo-img"
                         />
                       </Link>
@@ -110,6 +147,17 @@ function NavbarContent() {
                       className="cta-btn-one w-100"
                       onClick={closeMenu}
                     />
+                  </li>
+                  <li className="d-sm-none ps-3 pe-3 mt-20">
+                    <form
+                      className="search-form-one position-relative z-1"
+                      onSubmit={(event) => event.preventDefault()}
+                    >
+                      <input type="text" placeholder={searchPlaceholder} />
+                      <button type="submit" className="tran3s rounded-circle">
+                        <i className="fa-regular fa-search"></i>
+                      </button>
+                    </form>
                   </li>
                 </ul>
                 <div className="d-none d-lg-block">
