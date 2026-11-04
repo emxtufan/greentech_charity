@@ -843,4 +843,13 @@ body:not(:has(.fancy-banner-one)) .main-footer.top-space{margin-top:0 !important
 @media (max-width:575px){.gt-btn-block-sm{width:100%}}
 .gt-form-card .form-select{-webkit-appearance:none;appearance:none;background-color:#fff;background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%231b6943' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;background-repeat:no-repeat !important;background-position:right 16px center !important;background-size:14px 10px !important;padding-right:42px;cursor:pointer}
 
-
+/* Cookie & modale site */
+.gt-cookie-banner{position:fixed;left:16px;right:16px;bottom:16px;z-index:100002;max-width:880px;margin:0 auto;background:#fff;border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.18);padding:20px 24px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.gt-cookie-banner p{margin:0;flex:1 1 320px;font-size:15px;line-height:1.6;color:#1c2b20}
+.gt-cookie-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.gt-cookie-actions .btn-one,.gt-cookie-actions .btn-two{padding:10px 22px;font-size:14px;line-height:1.2}
+.gt-cookie-row{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:14px 0;border-bottom:1px solid rgba(20,77,46,.1)}
+.gt-cookie-row h6{margin:0 0 4px;font-weight:600}
+.gt-cookie-row p{margin:0;font-size:14px;color:#47504d}
+.gt-modal-text p{font-size:16px;line-height:1.7;color:#1c2b20}
+body.cms-admin-active .gt-cookie-banner{bottom:90px}

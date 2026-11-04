@@ -92,11 +92,11 @@ export default function CookieConsent() {
 
           <div className="gt-cookie-actions">
             <button type="button" className="btn-one" onClick={acceptAll}>
-              {cookie.acceptAllLabel || 'Accept toate'}
+              {cookie.acceptAll || 'Accept toate'}
             </button>
 
             <button type="button" className="btn-two" onClick={rejectAll}>
-              {cookie.rejectAllLabel || 'Refuz toate'}
+              {cookie.rejectAll || 'Doar cele necesare'}
             </button>
 
             <button
@@ -104,7 +104,7 @@ export default function CookieConsent() {
               className="btn btn-link"
               onClick={() => setSettingsOpen(true)}
             >
-              {cookie.settingsLabel || 'Setări cookie'}
+              {cookie.settings || 'Setări'}
             </button>
           </div>
         </div>
@@ -116,7 +116,7 @@ export default function CookieConsent() {
         title={cookie.modalTitle}
         footer={
           <button type="button" className="btn-one" onClick={saveSettings}>
-            {cookie.saveLabel || 'Salvează preferințele'}
+            {cookie.save || 'Salvează alegerile'}
           </button>
         }
       >

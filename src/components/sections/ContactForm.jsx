@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { EditableParagraphs, EditableText, ListItem, useField } from '../editable'
 import useContent from '../../hooks/useContent'
 import { sendMessage } from '../../services/messageService'
@@ -244,7 +244,7 @@ export default function ContactForm() {
                     />
                     <label className="form-check-label" htmlFor="gt-consent">
                       <EditableText field="consentText" as="span" />{' '}
-                      <Link to="/confidentialitate">{consentLinkLabel}</Link>
+                      <a href="#informare-gdpr">{consentLinkLabel}</a>
                     </label>
                     <div className="invalid-feedback">{errors.consent}</div>
                   </div>

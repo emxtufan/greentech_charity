@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { EditableParagraphs, EditableText, useField } from '../editable'
 import useContent from '../../hooks/useContent'
 import { getStatus, submitForm } from '../../services/f230Service'
@@ -683,7 +682,7 @@ export default function Form230Online() {
                           />
                           <label className="form-check-label" htmlFor="gt-f230-consent">
                             <EditableText field="consentText" as="span" />{' '}
-                            <Link to="/confidentialitate">{consentLinkLabel}</Link>
+                            <a href="#informare-gdpr">{consentLinkLabel}</a>
                           </label>
                         </div>
 

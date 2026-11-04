@@ -20,6 +20,7 @@ export const defaultData = {
   missingText: 'Datele vor fi publicate aici.',
   pdf: { label: 'Formularul oficial', to: 'https://www.anaf.ro' },
   guide: { label: '', to: '' },
+  anafInfo: { label: '', to: '#informatii-anaf' },
   deadlineNote: '',
 }
 
@@ -28,6 +29,7 @@ export default function Form230Data() {
   const { value: anchor } = useField('anchor')
   const { value: bg } = useField('bg')
   const { value: guide } = useField('guide')
+  const { value: anafInfo } = useField('anafInfo')
   const { value: deadlineNote } = useField('deadlineNote')
   const [copied, setCopied] = useState(null)
 
@@ -116,6 +118,9 @@ export default function Form230Data() {
                   target="_blank"
                   rel="noopener noreferrer"
                 />
+              )}
+              {(anafInfo?.label || editMode) && (
+                <EditableLink field="anafInfo" className="btn-two" />
               )}
             </div>
             {(deadlineNote || editMode) && (
