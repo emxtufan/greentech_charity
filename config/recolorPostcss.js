@@ -78,6 +78,9 @@ const HEX_PAIRS = {
   '25d6b1': '6fae4a',
   '486b5f': '3c6b46',
   '0a5d6a': '1b6943',
+  'f3faf6': 'f1f7eb',
+  'ebf6f1': 'eef6e6',
+  'f0faf6': 'f1f7eb',
 }
 
 // cheia este tripletul "r,g,b" al culorii sursă, valoarea este hex-ul țintă
