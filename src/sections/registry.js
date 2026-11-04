@@ -9,6 +9,7 @@ import Updates, { defaultData as updatesData } from '../components/sections/Upda
 import ContactForm, { defaultData as contactFormData } from '../components/sections/ContactForm'
 import OrgInfo, { defaultData as orgInfoData } from '../components/sections/OrgInfo'
 import Form230Data, { defaultData as form230Data } from '../components/sections/Form230Data'
+import Form230Online, { defaultData as form230OnlineData } from '../components/sections/Form230Online'
 import HeroSection, { defaultData as heroData } from '../components/home/HeroSection'
 import FeaturesSection, { defaultData as featuresData } from '../components/home/FeaturesSection'
 import AboutSection, { defaultData as aboutData } from '../components/home/AboutSection'
@@ -36,6 +37,7 @@ export const sectionTypes = {
   contactForm: { label: 'Formular de contact', component: ContactForm, defaultData: contactFormData },
   orgInfo: { label: 'Date de contact și identificare', component: OrgInfo, defaultData: orgInfoData },
   form230Data: { label: 'Date pentru Formularul 230', component: Form230Data, defaultData: form230Data },
+  form230Online: { label: 'Formular 230 online', component: Form230Online, defaultData: form230OnlineData },
   hero: { label: 'Hero', component: HeroSection, defaultData: heroData, legacy: true },
   features: { label: 'Features', component: FeaturesSection, defaultData: featuresData, legacy: true },
   about: { label: 'About', component: AboutSection, defaultData: aboutData, legacy: true },

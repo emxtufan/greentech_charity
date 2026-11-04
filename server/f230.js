@@ -384,7 +384,8 @@ const handleExportCsv = (req, res, next) => {
         data.lastName,
         data.fatherInitial,
         data.firstName,
-        data.cnp,
+        // scris ca ="..." ca Excel să păstreze CNP-ul ca text, nu ca număr
+        data.cnp ? `="${data.cnp}"` : '',
         data.street,
         data.number,
         data.block,
