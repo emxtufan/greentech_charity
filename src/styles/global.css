@@ -660,4 +660,11 @@ button.cms-ui:hover {
   }
 }
 
+/* track flex: pseudo-elementele slick (display:table) devin flex items și adaugă un gap fals */
+.slick-track::before,
+.slick-track::after {
+  display: none !important;
+  content: none !important;
+}
+
 
