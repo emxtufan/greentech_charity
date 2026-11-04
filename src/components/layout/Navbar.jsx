@@ -1,19 +1,46 @@
 import { useEffect, useState } from 'react'
-import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import useAuth from '../../hooks/useAuth'
 import useScrollPosition from '../../hooks/useScrollPosition'
-import { cx, img } from '../../utils/helpers'
+import { cx } from '../../utils/helpers'
+import {
+  AddItemButton,
+  EditableImage,
+  EditableLink,
+  EditableText,
+  ListItem,
+  Scope,
+  useField,
+} from '../editable'
 
-const NAV_LINKS = [
-  { label: 'Home', to: '/' },
-  { label: 'About', to: '/#about' },
-  { label: 'Causes', to: '/#causes' },
-  { label: 'Events', to: '/#events' },
-  { label: 'Blog', to: '/#blog' },
-  { label: 'Contact', to: '/#contact' },
-]
+export const defaultSite = {
+  nav: [
+    { label: 'Home', to: '/' },
+    { label: 'About', to: '/#about' },
+    { label: 'Causes', to: '/#causes' },
+    { label: 'Events', to: '/#events' },
+    { label: 'Blog', to: '/#blog' },
+    { label: 'Contact', to: '/#contact' },
+  ],
+  header: {
+    logo: 'logo-horizontal-light.png',
+    loginLabel: 'Login',
+    cta: { label: 'Become a Volunteer', to: '/register' },
+    searchPlaceholder: 'Search . . .',
+  },
+}
 
 export default function Navbar() {
+  return (
+    <Scope path={['site']}>
+      <NavbarContent />
+    </Scope>
+  )
+}
+
+function NavbarContent() {
+  const { value: nav = [] } = useField('nav')
+  const { value: searchPlaceholder } = useField('header.searchPlaceholder')
   const [open, setOpen] = useState(false)
   const { isAuthenticated, logout } = useAuth()
   const navigate = useNavigate()
@@ -43,8 +70,8 @@ export default function Navbar() {
           <div className="d-flex align-items-center">
             <div className="logo order-lg-0">
               <Link to="/" className="d-flex align-items-center">
-                <img
-                  src={img('logo-horizontal-light.png')}
+                <EditableImage
+                  field="header.logo"
                   alt="Greentech Charity"
                   className="logo-img"
                 />
@@ -58,7 +85,7 @@ export default function Navbar() {
                     to={isAuthenticated ? '/dashboard' : '/login'}
                     className="cta-text font-amita text-white"
                   >
-                    {isAuthenticated ? 'Dashboard' : 'Login'}
+                    {isAuthenticated ? 'Dashboard' : <EditableText field="header.loginLabel" />}
                   </Link>
                 </li>
                 <li className="me-3 d-none d-md-block">
@@ -67,9 +94,7 @@ export default function Navbar() {
                       Logout
                     </button>
                   ) : (
-                    <Link to="/register" className="cta-btn-one">
-                      Become a Volunteer
-                    </Link>
+                    <EditableLink field="header.cta" className="cta-btn-one" />
                   )}
                 </li>
                 <li className="d-none d-sm-block">
@@ -77,7 +102,7 @@ export default function Navbar() {
                     className="search-form-one position-relative z-1"
                     onSubmit={(event) => event.preventDefault()}
                   >
-                    <input type="text" placeholder="Search . . ." />
+                    <input type="text" placeholder={searchPlaceholder} />
                     <button type="submit" className="tran3s rounded-circle">
                       <i className="fa-regular fa-search"></i>
                     </button>
@@ -101,38 +126,43 @@ export default function Navbar() {
                   <li className="d-block d-lg-none">
                     <div className="logo">
                       <Link to="/" className="d-block" onClick={closeMenu}>
-                        <img
-                          src={img('logo-horizontal-light.png')}
+                        <EditableImage
+                          field="header.logo"
                           alt="Greentech Charity"
                           className="logo-img"
                         />
                       </Link>
                     </div>
                   </li>
-                  {NAV_LINKS.map((link) => (
-                    <li className="nav-item" key={link.label}>
-                      <NavLink className="nav-link" to={link.to} onClick={closeMenu}>
-                        {link.label}
-                      </NavLink>
-                    </li>
+                  {nav.map((link, index) => (
+                    <ListItem key={index} field="nav" index={index}>
+                      <li className="nav-item" onClick={closeMenu}>
+                        <EditableLink className="nav-link" />
+                      </li>
+                    </ListItem>
                   ))}
                   <li className="d-md-none ps-3 pe-3 mt-20">
-                    <Link to="/register" className="cta-btn-one w-100" onClick={closeMenu}>
-                      Become a Volunteer
-                    </Link>
+                    <EditableLink
+                      field="header.cta"
+                      className="cta-btn-one w-100"
+                      onClick={closeMenu}
+                    />
                   </li>
                   <li className="d-sm-none ps-3 pe-3 mt-20">
                     <form
                       className="search-form-one position-relative z-1"
                       onSubmit={(event) => event.preventDefault()}
                     >
-                      <input type="text" placeholder="Search . . ." />
+                      <input type="text" placeholder={searchPlaceholder} />
                       <button type="submit" className="tran3s rounded-circle">
                         <i className="fa-regular fa-search"></i>
                       </button>
                     </form>
                   </li>
                 </ul>
+                <div className="d-none d-lg-block">
+                  <AddItemButton field="nav" />
+                </div>
               </div>
             </nav>
           </div>

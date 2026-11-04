@@ -10,6 +10,7 @@ import DonateSection, { defaultData as donateData } from '../components/home/Don
 import BlogSection, { defaultData as blogData } from '../components/home/BlogSection'
 import NewsletterSection, { defaultData as newsletterData } from '../components/home/NewsletterSection'
 import RichTextSection, { defaultData as richTextData } from '../components/home/RichTextSection'
+import { defaultSite } from '../components/layout/Navbar'
 
 export const sectionTypes = {
   hero: { label: 'Hero', component: HeroSection, defaultData: heroData },
@@ -48,10 +49,18 @@ export function createSection(type) {
 export function normalizeContent(content) {
   const base = isObject(content) ? content : {}
   const pages = Array.isArray(base.pages) ? base.pages : []
+  const site = isObject(base.site) ? base.site : {}
 
   return {
     ...base,
-    site: isObject(base.site) ? base.site : {},
+    site: {
+      ...site,
+      nav:
+        Array.isArray(site.nav) && site.nav.length > 0
+          ? site.nav
+          : structuredClone(defaultSite.nav),
+      header: needsData(site.header) ? structuredClone(defaultSite.header) : site.header,
+    },
     pages: pages.map((page) => {
       if (!isObject(page)) return page
 
