@@ -6,6 +6,7 @@ import dotenv from 'dotenv'
 import { adminLogin, requireAdmin } from './auth.js'
 import { registerMessageRoutes } from './messages.js'
 import { registerF230Routes } from './f230.js'
+import { logEvent, registerAuditRoutes } from './audit.js'
 import { applyEnvDefaults } from './orgDefaults.js'
 import { UPLOADS_DIR, uploadImage } from './upload.js'
 
@@ -74,6 +75,7 @@ app.put('/api/content', requireAdmin, (req, res, next) => {
     }
     backupContent()
     writeContentAtomic(body)
+    logEvent('content', 'Conținutul site-ului a fost salvat')
     return res.json({ ok: true })
   } catch (err) {
     return next(err)
@@ -95,12 +97,14 @@ app.post('/api/upload', requireAdmin, (req, res) => {
     if (!req.file) {
       return res.status(400).json({ message: 'Niciun fișier încărcat' })
     }
+    logEvent('upload', 'Imagine încărcată', { file: req.file.filename })
     return res.json({ url: `/uploads/${req.file.filename}` })
   })
 })
 
 registerMessageRoutes(app)
 registerF230Routes(app)
+registerAuditRoutes(app)
 
 app.use('/api', (req, res) => {
   res.status(404).json({ message: 'Endpoint inexistent' })
@@ -117,11 +121,13 @@ if (fs.existsSync(DIST_DIR)) {
 
 app.use((err, req, res, next) => {
   const status = err.status || err.statusCode || 500
+  logEvent('system', `Eroare server: ${err.message}`, { level: 'error', path: req.path })
   res.status(status).json({ message: err.message || 'Eroare server' })
 })
 
 app.listen(PORT, () => {
   console.log(`[server] API pornit pe http://localhost:${PORT}`)
+  logEvent('system', 'Server pornit')
 
   if (!process.env.ADMIN_PASSWORD) {
     console.warn('[server] ADMIN_PASSWORD nu este setat — login-ul admin răspunde 503')

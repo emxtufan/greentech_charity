@@ -3,6 +3,7 @@ import path from 'node:path'
 import { randomUUID } from 'node:crypto'
 import { fileURLToPath } from 'node:url'
 import { requireAdmin } from './auth.js'
+import { logEvent } from './audit.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const DATA_DIR = path.join(__dirname, 'data')
@@ -129,6 +130,7 @@ const handleCreateMessage = (req, res, next) => {
       message: payload.message,
     })
     writeMessagesAtomic(messages)
+    logEvent('message', 'Mesaj nou primit', { topic: payload.topic })
 
     recent.push(now)
     submissions.set(ip, recent)
@@ -157,6 +159,7 @@ const handleDeleteMessage = (req, res, next) => {
     }
 
     writeMessagesAtomic(kept)
+    logEvent('message', 'Mesaj șters')
 
     return res.json({ ok: true })
   } catch (err) {

@@ -1,5 +1,6 @@
 import { createHash, randomBytes, timingSafeEqual } from 'node:crypto'
 import jwt from 'jsonwebtoken'
+import { logEvent, maskIp } from './audit.js'
 
 const TOKEN_TTL = '8h'
 const RATE_LIMIT_WINDOW_MS = 60 * 1000
@@ -44,6 +45,7 @@ export function adminLogin(req, res) {
 
   if (recentAttempts.length >= RATE_LIMIT_MAX) {
     loginAttempts.set(ip, recentAttempts)
+    logEvent('auth', 'Prea multe încercări de autentificare', { ip: maskIp(ip), level: 'warn' })
     return res.status(429).json({ message: 'Prea multe încercări. Reîncearcă într-un minut.' })
   }
 
@@ -54,9 +56,11 @@ export function adminLogin(req, res) {
   const isValid = timingSafeEqual(sha256(providedPassword), sha256(expectedPassword))
 
   if (!isValid) {
+    logEvent('auth', 'Încercare de autentificare eșuată', { ip: maskIp(ip), level: 'warn' })
     return res.status(401).json({ message: 'Parolă greșită' })
   }
 
   const token = jwt.sign({ role: 'admin' }, getJwtSecret(), { expiresIn: TOKEN_TTL })
+  logEvent('auth', 'Autentificare admin reușită', { ip: maskIp(ip) })
   return res.json({ token })
 }

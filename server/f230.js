@@ -3,6 +3,7 @@ import path from 'node:path'
 import { createCipheriv, createDecipheriv, randomBytes, randomInt, randomUUID } from 'node:crypto'
 import { fileURLToPath } from 'node:url'
 import { requireAdmin } from './auth.js'
+import { logEvent } from './audit.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const DATA_DIR = path.join(__dirname, 'data')
@@ -314,6 +315,8 @@ const handleCreateForm = (req, res, next) => {
     recent.push(now)
     submissions.set(ip, recent)
 
+    logEvent('f230', 'Formular 230 primit', { code })
+
     return res.status(201).json({ ok: true, code })
   } catch (err) {
     return next(err)
@@ -362,6 +365,7 @@ const handleUpdateStatus = (req, res, next) => {
     form.status = status
     form.submittedAt = status === 'depus' ? new Date().toISOString() : null
     writeFormsAtomic(forms)
+    logEvent('f230', `Formular ${form.code} marcat ca ${status}`)
 
     return res.json({ ok: true })
   } catch (err) {
@@ -372,13 +376,14 @@ const handleUpdateStatus = (req, res, next) => {
 const handleDeleteForm = (req, res, next) => {
   try {
     const forms = readForms()
-    const kept = forms.filter((form) => form.id !== req.params.id)
+    const form = forms.find((item) => item.id === req.params.id)
 
-    if (kept.length === forms.length) {
+    if (!form) {
       return res.status(404).json({ message: 'Formularul nu a fost găsit.' })
     }
 
-    writeFormsAtomic(kept)
+    writeFormsAtomic(forms.filter((item) => item.id !== req.params.id))
+    logEvent('f230', `Formular ${form.code} șters`)
 
     return res.json({ ok: true })
   } catch (err) {
@@ -438,6 +443,8 @@ const handleExportCsv = (req, res, next) => {
     const csv = [CSV_HEADER, ...rows]
       .map((row) => row.map(csvCell).join(CSV_SEPARATOR))
       .join('\r\n')
+
+    logEvent('f230', 'Export CSV formulare 230', { status: filter, count: rows.length })
 
     res.setHeader('Content-Type', 'text/csv; charset=utf-8')
     res.setHeader('Content-Disposition', 'attachment; filename="formulare-230.csv"')
