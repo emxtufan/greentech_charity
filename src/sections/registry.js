@@ -75,9 +75,18 @@ export function normalizeContent(content) {
 
           const entry = sectionTypes[section.type]
           if (!entry) return section
-          if (!needsData(section.data)) return section
+          if (needsData(section.data)) return { ...section, data: structuredClone(entry.defaultData) }
+          if (!isObject(entry.defaultData)) return section
 
-          return { ...section, data: structuredClone(entry.defaultData) }
+          // completează doar cheile de top lipsă, fără să suprascrie datele existente
+          const data = { ...section.data }
+
+          Object.keys(entry.defaultData).forEach((key) => {
+            if (key in data) return
+            data[key] = structuredClone(entry.defaultData[key])
+          })
+
+          return { ...section, data }
         }),
       }
     }),

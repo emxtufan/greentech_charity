@@ -451,4 +451,64 @@ button.cms-ui:hover {
   }
 }
 
+/* Marquee */
+.marquee {
+  display: flex;
+  overflow: hidden;
+  gap: var(--gap);
+}
+
+.marquee--vertical {
+  flex-direction: column;
+}
+
+.marquee__track {
+  display: flex;
+  flex-shrink: 0;
+  gap: var(--gap);
+  animation: marquee-x var(--duration) linear infinite;
+}
+
+.marquee--vertical .marquee__track {
+  flex-direction: column;
+  animation-name: marquee-y;
+}
+
+.marquee--reverse .marquee__track {
+  animation-direction: reverse;
+}
+
+.marquee--pause-hover:hover .marquee__track,
+.marquee--paused .marquee__track {
+  animation-play-state: paused;
+}
+
+.marquee--paused .marquee__track {
+  animation: none;
+}
+
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+  }
+}
+
+@keyframes marquee-y {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(calc(-100% - var(--gap)));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track {
+    animation: none;
+  }
+}
+
 
