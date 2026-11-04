@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import Button from '../common/Button'
 import Modal from '../common/Modal'
 import useContent from '../../hooks/useContent'
@@ -225,6 +225,7 @@ function CmsEditor({ editor, onClose, onSave }) {
 export default function CmsOverlay() {
   const { content, editMode, update, mutateList } = useContent()
   const navigate = useNavigate()
+  const onAdmin = useLocation().pathname.startsWith('/admin')
   const [selection, setSelection] = useState(null)
   const [itemParent, setItemParent] = useState(null)
   const [editor, setEditor] = useState(null)
@@ -261,7 +262,7 @@ export default function CmsOverlay() {
 
   // click = selectare, dblclick = selectare + editor, Esc = deselect
   useEffect(() => {
-    if (!editMode) return undefined
+    if (!editMode || onAdmin) return undefined
 
     const selectField = (el) => {
       const path = el.dataset.cmsPath
@@ -340,7 +341,7 @@ export default function CmsOverlay() {
       document.removeEventListener('dblclick', handleDoubleClick, true)
       document.removeEventListener('keydown', handleKeyDown)
     }
-  }, [editMode])
+  }, [editMode, onAdmin])
 
   // urmărirea selecției: elementul e re-găsit la fiecare frame, apoi desenăm conturul + bara
   useLayoutEffect(() => {
@@ -502,6 +503,8 @@ export default function CmsOverlay() {
     runItemAction((arr, index) => removeAt(arr, index))
     setSelection(null)
   }
+
+  if (onAdmin) return null
 
   if (!editMode) return null
 

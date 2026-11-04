@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import useContent from '../../hooks/useContent'
-import F230Panel from './F230Panel'
-import MessagesPanel from './MessagesPanel'
-import OrgDataPanel from './OrgDataPanel'
 import PagesPanel from './PagesPanel'
 
 const BAR_PADDING = '70px'
@@ -12,10 +10,10 @@ export default function AdminBar() {
   const { isAdmin, editMode, setEditMode, dirty, canUndo, undo, discard, save, adminLogout } =
     useContent()
 
+  const navigate = useNavigate()
+  const onAdmin = useLocation().pathname.startsWith('/admin')
+
   const [pagesOpen, setPagesOpen] = useState(false)
-  const [messagesOpen, setMessagesOpen] = useState(false)
-  const [f230Open, setF230Open] = useState(false)
-  const [orgDataOpen, setOrgDataOpen] = useState(false)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [barError, setBarError] = useState('')
@@ -23,14 +21,19 @@ export default function AdminBar() {
   useEffect(() => {
     if (!isAdmin) return undefined
 
-    document.body.style.paddingBottom = BAR_PADDING
+    if (onAdmin) {
+      document.body.style.paddingBottom = ''
+    } else {
+      document.body.style.paddingBottom = BAR_PADDING
+    }
+
     document.body.classList.add('cms-admin-active')
 
     return () => {
       document.body.style.paddingBottom = ''
       document.body.classList.remove('cms-admin-active')
     }
-  }, [isAdmin])
+  }, [isAdmin, onAdmin])
 
   useEffect(() => {
     if (!saved) return undefined
@@ -40,6 +43,7 @@ export default function AdminBar() {
     return () => clearTimeout(timer)
   }, [saved])
 
+  if (onAdmin) return null
   if (!isAdmin) return null
 
   const handleSave = async () => {
@@ -92,16 +96,8 @@ export default function AdminBar() {
           Pages
         </button>
 
-        <button type="button" className="cms-bar-btn" onClick={() => setMessagesOpen(true)}>
-          Mesaje
-        </button>
-
-        <button type="button" className="cms-bar-btn" onClick={() => setF230Open(true)}>
-          Formulare 230
-        </button>
-
-        <button type="button" className="cms-bar-btn" onClick={() => setOrgDataOpen(true)}>
-          Date asociație
+        <button type="button" className="cms-bar-btn" onClick={() => navigate('/admin')}>
+          <i className="bi bi-speedometer2"></i> Dashboard
         </button>
 
         <button type="button" className="cms-bar-btn" onClick={undo} disabled={!canUndo}>
@@ -131,9 +127,6 @@ export default function AdminBar() {
       </div>
 
       <PagesPanel open={pagesOpen} onClose={() => setPagesOpen(false)} />
-      <MessagesPanel open={messagesOpen} onClose={() => setMessagesOpen(false)} />
-      <F230Panel open={f230Open} onClose={() => setF230Open(false)} />
-      <OrgDataPanel open={orgDataOpen} onClose={() => setOrgDataOpen(false)} />
     </>
   )
 }
