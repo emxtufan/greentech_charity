@@ -43,7 +43,11 @@ export default function Navbar() {
           <div className="d-flex align-items-center">
             <div className="logo order-lg-0">
               <Link to="/" className="d-flex align-items-center">
-                <img src={img('logo_01.png')} alt="" />
+                <img
+                  src={img('logo-horizontal-light.png')}
+                  alt="Greentech Charity"
+                  className="logo-img"
+                />
               </Link>
             </div>
             {/* logo */}
@@ -97,7 +101,11 @@ export default function Navbar() {
                   <li className="d-block d-lg-none">
                     <div className="logo">
                       <Link to="/" className="d-block" onClick={closeMenu}>
-                        <img src={img('logo_02.png')} alt="" />
+                        <img
+                          src={img('logo-horizontal-light.png')}
+                          alt="Greentech Charity"
+                          className="logo-img"
+                        />
                       </Link>
                     </div>
                   </li>

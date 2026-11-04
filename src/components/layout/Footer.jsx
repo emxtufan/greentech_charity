@@ -36,7 +36,11 @@ export default function Footer() {
             <div className="col-lg-3">
               <div className="footer-intro mb-30 md-mb-50">
                 <Link to="/">
-                  <img src={img('logo_02.png')} alt="" />
+                  <img
+                    src={img('logo-horizontal-light.png')}
+                    alt="Greentech Charity"
+                    style={{ height: 70 }}
+                  />
                 </Link>
                 <p className="mt-20 mb-30 fs-16">
                   Our Gifall charity at vero eos et accusamus et iusto odio dignissimos ducimus qui
@@ -134,7 +138,7 @@ export default function Footer() {
                 </li>
               </ul>
             </div>
-            <p className="copyright-text text-center m0">©{year} Hopeu All Rights Reserved</p>
+            <p className="copyright-text text-center m0">©{year} Greentech Charity. All Rights Reserved</p>
           </div>
         </div>
       </div>

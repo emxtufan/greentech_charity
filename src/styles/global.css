@@ -2,6 +2,18 @@
 @import './vendor/style.min.css';
 @import './vendor/responsive.css';
 
+/* Logo brand */
+.logo-img {
+  height: 60px;
+  width: auto;
+}
+
+@media (max-width: 991.98px) {
+  .logo-img {
+    height: 48px;
+  }
+}
+
 /* Layout pagini auth */
 .auth-page {
   min-height: 100vh;

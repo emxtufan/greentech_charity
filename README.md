@@ -1,6 +1,6 @@
-# webcharity
+# Greentech Charity
 
-Site-ul Hopeu (non profit charity) rescris în Vite + React (JSX) pornind de la template-ul HTML din `legacy/index.html`.
+Site-ul Greentech Charity (non profit charity) rescris în Vite + React (JSX) pornind de la template-ul HTML din `legacy/index.html`.
 
 ## Instalare și rulare
 

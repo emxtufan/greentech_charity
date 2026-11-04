@@ -7,7 +7,7 @@ import { img } from '../../utils/helpers'
 
 let preloaderShown = false
 
-const PRELOADER_LETTERS = ['H', 'O', 'P', 'E', 'U']
+const PRELOADER_LETTERS = ['G', 'R', 'E', 'E', 'N', 'T', 'E', 'C', 'H']
 
 export default function MainLayout() {
   const [showPreloader, setShowPreloader] = useState(() => !preloaderShown)
@@ -44,11 +44,15 @@ export default function MainLayout() {
         <div id="preloader">
           <div id="ctn-preloader" className="ctn-preloader">
             <div className="icon">
-              <img src={img('loader.png')} alt="" className="m-auto d-block" /> <span></span>
+              <img src={img('logo-icon.png')} alt="" className="m-auto d-block" /> <span></span>
             </div>
             <div className="txt-loading">
-              {PRELOADER_LETTERS.map((letter) => (
-                <span data-text-preloader={letter} className="letters-loading" key={letter}>
+              {PRELOADER_LETTERS.map((letter, index) => (
+                <span
+                  data-text-preloader={letter}
+                  className="letters-loading"
+                  key={`${letter}-${index}`}
+                >
                   {letter}
                 </span>
               ))}

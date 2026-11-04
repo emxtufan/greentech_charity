@@ -57,7 +57,7 @@ export default function Login() {
       <div className="auth-card">
         <div className="text-center mb-30">
           <Link to="/" className="d-inline-block">
-            <img src={img('logo_02.png')} alt="" />
+            <img src={img('logo-full.png')} alt="Greentech Charity" style={{ height: 110 }} />
           </Link>
         </div>
 
