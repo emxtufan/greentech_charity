@@ -622,6 +622,13 @@ button.cms-ui:hover {
   }
 }
 
+@media (min-width: 992px) {
+  .hero-banner-one .media-wrapper::after {
+    top: auto;
+    bottom: -115px;
+  }
+}
+
 /* Lățime maximă site */
 :root {
   --site-max: 1480px;
