@@ -14,3 +14,8 @@ dist
 
 # local env
 .env.local
+
+# server runtime (upload-uri și backup-uri de conținut)
+server/uploads/*
+!server/uploads/.gitkeep
+server/data/backups/

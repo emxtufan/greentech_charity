@@ -1,0 +1,17 @@
+{
+  "site": {
+    "name": "Greentech Charity",
+    "nav": [],
+    "header": {},
+    "footer": {}
+  },
+  "pages": [
+    {
+      "id": "home",
+      "slug": "/",
+      "title": "Home",
+      "showInNav": true,
+      "sections": []
+    }
+  ]
+}
