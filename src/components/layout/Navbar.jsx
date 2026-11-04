@@ -6,7 +6,6 @@ import {
   AddItemButton,
   EditableImage,
   EditableLink,
-  EditableText,
   ListItem,
   Scope,
   useField,
@@ -61,7 +60,7 @@ function NavbarContent() {
               <Link to="/" className="d-flex align-items-center">
                 <EditableImage
                   field="header.logo"
-                  alt="Greentech Charity"
+                  alt="GreenTech Charity"
                   className="logo-img"
                 />
               </Link>
@@ -69,33 +68,8 @@ function NavbarContent() {
             {/* logo */}
             <div className="right-widget ms-auto me-3 me-lg-0 order-lg-3">
               <ul className="d-flex align-items-center style-none">
-                <li className="d-none d-xxl-block me-3">
-                  <Link
-                    to={isAuthenticated ? '/dashboard' : '/login'}
-                    className="cta-text font-amita text-white"
-                  >
-                    {isAuthenticated ? 'Dashboard' : <EditableText field="header.loginLabel" />}
-                  </Link>
-                </li>
                 <li className="me-3 d-none d-md-block">
-                  {isAuthenticated ? (
-                    <button type="button" className="cta-btn-one" onClick={handleLogout}>
-                      Logout
-                    </button>
-                  ) : (
-                    <EditableLink field="header.cta" className="cta-btn-one" />
-                  )}
-                </li>
-                <li className="d-none d-sm-block">
-                  <form
-                    className="search-form-one position-relative z-1"
-                    onSubmit={(event) => event.preventDefault()}
-                  >
-                    <input type="text" placeholder={searchPlaceholder} />
-                    <button type="submit" className="tran3s rounded-circle">
-                      <i className="fa-regular fa-search"></i>
-                    </button>
-                  </form>
+                  <EditableLink field="header.cta" className="cta-btn-one" />
                 </li>
               </ul>
             </div>
@@ -117,7 +91,7 @@ function NavbarContent() {
                       <Link to="/" className="d-block" onClick={closeMenu}>
                         <EditableImage
                           field="header.logo"
-                          alt="Greentech Charity"
+                          alt="GreenTech Charity"
                           className="logo-img"
                         />
                       </Link>
@@ -136,17 +110,6 @@ function NavbarContent() {
                       className="cta-btn-one w-100"
                       onClick={closeMenu}
                     />
-                  </li>
-                  <li className="d-sm-none ps-3 pe-3 mt-20">
-                    <form
-                      className="search-form-one position-relative z-1"
-                      onSubmit={(event) => event.preventDefault()}
-                    >
-                      <input type="text" placeholder={searchPlaceholder} />
-                      <button type="submit" className="tran3s rounded-circle">
-                        <i className="fa-regular fa-search"></i>
-                      </button>
-                    </form>
                   </li>
                 </ul>
                 <div className="d-none d-lg-block">
