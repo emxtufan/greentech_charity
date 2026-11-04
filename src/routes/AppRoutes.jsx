@@ -3,7 +3,7 @@ import MainLayout from '../components/layout/MainLayout'
 import ProtectedRoute from './ProtectedRoute'
 import useAuth from '../hooks/useAuth'
 import DynamicPage from '../pages/DynamicPage'
-import AdminLogin from '../pages/AdminLogin'
+import AdminDashboard from '../pages/AdminDashboard'
 import Login from '../pages/Login'
 import Register from '../pages/Register'
 import Dashboard from '../pages/Dashboard'
@@ -23,9 +23,10 @@ export default function AppRoutes() {
           path="register"
           element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Register />}
         />
-        <Route path="admin" element={<AdminLogin />} />
         <Route path="*" element={<DynamicPage />} />
       </Route>
+
+      <Route path="/admin" element={<AdminDashboard />} />
 
       <Route
         path="dashboard"
