@@ -141,12 +141,22 @@ export function OrgDataView({ onCancel }) {
           {saving ? 'Se salvează…' : 'Salvează pe site'}
         </button>
 
-        <button type="button" className="btn btn-sm btn-outline-secondary" onClick={onClose}>
-          Anulează
-        </button>
+        {onCancel && (
+          <button type="button" className="btn btn-sm btn-outline-secondary" onClick={onCancel}>
+            Anulează
+          </button>
+        )}
 
         {saved && <span className="text-success small">Salvat ✓</span>}
       </div>
+    </>
+  )
+}
+
+export default function OrgDataPanel({ open, onClose }) {
+  return (
+    <Modal open={open} onClose={onClose} title="Date asociație">
+      {open && <OrgDataView onCancel={onClose} />}
     </Modal>
   )
 }
