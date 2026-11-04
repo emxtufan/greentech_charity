@@ -830,4 +830,16 @@ body:not(:has(.fancy-banner-one)) .main-footer.top-space{margin-top:0 !important
   white-space: nowrap;
 }
 
+/* Formular 230 online */
+.gt-fieldset{border:0;padding:0;margin:0 0 28px}
+.gt-legend{font-size:15px;font-weight:600;color:#1b6943;text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid rgba(20,71,52,.12);width:100%}
+.gt-label{white-space:nowrap;font-size:15px;margin-bottom:6px}
+.gt-req{color:#c0392b;margin-left:2px}
+.gt-form-card .form-control,.gt-form-card .form-select{height:50px}
+.gt-form-card textarea.form-control{height:auto}
+.gt-option{display:flex;gap:12px;align-items:flex-start;border:1px solid rgba(20,71,52,.15);border-radius:14px;padding:14px 16px;margin-bottom:12px;cursor:pointer;transition:border-color .2s,background .2s;font-size:15px;line-height:1.5}
+.gt-option .form-check-input{margin-top:3px;flex:0 0 auto}
+.gt-option.is-checked{border-color:#2e8b57;background:#f3faf6}
+@media (max-width:575px){.gt-btn-block-sm{width:100%}}
+
 

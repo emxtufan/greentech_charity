@@ -38,6 +38,60 @@ const POSTAL_CODE_RE = /^\d{6}$/
 const REQUIRED_MESSAGE = 'Câmp obligatoriu.'
 const REQUIRED_FIELDS = ['lastName', 'firstName', 'cnp', 'street', 'number', 'county', 'city']
 
+const COUNTIES = [
+  'Alba',
+  'Arad',
+  'Argeș',
+  'Bacău',
+  'Bihor',
+  'Bistrița-Năsăud',
+  'Botoșani',
+  'Brașov',
+  'Brăila',
+  'Buzău',
+  'Caraș-Severin',
+  'Călărași',
+  'Cluj',
+  'Constanța',
+  'Covasna',
+  'Dâmbovița',
+  'Dolj',
+  'Galați',
+  'Giurgiu',
+  'Gorj',
+  'Harghita',
+  'Hunedoara',
+  'Ialomița',
+  'Iași',
+  'Ilfov',
+  'Maramureș',
+  'Mehedinți',
+  'Mureș',
+  'Neamț',
+  'Olt',
+  'Prahova',
+  'Satu Mare',
+  'Sălaj',
+  'Sibiu',
+  'Suceava',
+  'Teleorman',
+  'Timiș',
+  'Tulcea',
+  'Vaslui',
+  'Vâlcea',
+  'Vrancea',
+  'București Sector 1',
+  'București Sector 2',
+  'București Sector 3',
+  'București Sector 4',
+  'București Sector 5',
+  'București Sector 6',
+]
+
+// majusculă la începutul fiecărui cuvânt (după spațiu sau cratimă), restul literelor neschimbate
+const capitalizeWords = (value) =>
+  value.replace(/(^|[\s-])([a-zăâîșțşţ])/g, (match, before, letter) => before + letter.toUpperCase())
+
 // cheia stării blocată -> câmpul cu textul afișat în locul formularului
 const BLOCKED_FIELDS = {
   disabled: 'disabledText',
@@ -80,11 +134,12 @@ const isValidCnp = (cnp) => {
   return control === Number(cnp[12])
 }
 
-function TextField({ id, col, label, error, inputMode, ...rest }) {
+function TextField({ id, col, label, error, inputMode, required, ...rest }) {
   return (
     <div className={col}>
-      <label className="form-label" htmlFor={id}>
+      <label className="form-label gt-label" htmlFor={id}>
         {label}
+        {required && <span className="gt-req">*</span>}
       </label>
       <input
         id={id}
@@ -155,6 +210,33 @@ export default function Form230Online() {
 
     setForm((previous) => ({ ...previous, [name]: value }))
     setErrors((previous) => (previous[name] ? { ...previous, [name]: '' } : previous))
+  }
+
+  // doar formatarea câmpurilor; validarea și trimiterea rămân aceleași
+  const changeDigits = (name) => (event) => {
+    const value = event.target.value.replace(/\D/g, '')
+
+    setForm((previous) => ({ ...previous, [name]: value }))
+    setErrors((previous) => (previous[name] ? { ...previous, [name]: '' } : previous))
+  }
+
+  const changeCounty = (event) => {
+    const value = event.target.value
+
+    setForm((previous) => ({
+      ...previous,
+      county: value,
+      city: value.startsWith('București') ? 'București' : previous.city,
+    }))
+    setErrors((previous) => (previous.county ? { ...previous, county: '' } : previous))
+  }
+
+  const blurCapitalize = (name) => () => {
+    setForm((previous) => ({ ...previous, [name]: capitalizeWords(previous[name]) }))
+  }
+
+  const blurUpperCase = (name) => () => {
+    setForm((previous) => ({ ...previous, [name]: previous[name].toUpperCase() }))
   }
 
   const validate = () => {
@@ -295,168 +377,214 @@ export default function Form230Online() {
                       <>
                         <EditableText field="step1Title" as="h4" />
 
-                        <div className="row g-3">
-                          <TextField
-                            col="col-md-5"
-                            id="gt-f230-last-name"
-                            name="lastName"
-                            label="Nume*"
-                            autoComplete="family-name"
-                            maxLength={75}
-                            value={form.lastName}
-                            onChange={change('lastName')}
-                            error={errors.lastName}
-                          />
-                          <TextField
-                            col="col-md-2"
-                            id="gt-f230-father-initial"
-                            name="fatherInitial"
-                            label="Inițiala tatălui"
-                            maxLength={3}
-                            value={form.fatherInitial}
-                            onChange={change('fatherInitial')}
-                            error={errors.fatherInitial}
-                          />
-                          <TextField
-                            col="col-md-5"
-                            id="gt-f230-first-name"
-                            name="firstName"
-                            label="Prenume*"
-                            autoComplete="given-name"
-                            maxLength={75}
-                            value={form.firstName}
-                            onChange={change('firstName')}
-                            error={errors.firstName}
-                          />
-                          <TextField
-                            col="col-md-6"
-                            id="gt-f230-cnp"
-                            name="cnp"
-                            label="CNP*"
-                            inputMode="numeric"
-                            maxLength={13}
-                            value={form.cnp}
-                            onChange={change('cnp')}
-                            error={errors.cnp}
-                          />
-                          <TextField
-                            col="col-md-6"
-                            id="gt-f230-phone"
-                            name="phone"
-                            type="tel"
-                            label="Telefon (opțional)"
-                            autoComplete="tel"
-                            maxLength={30}
-                            value={form.phone}
-                            onChange={change('phone')}
-                            error={errors.phone}
-                          />
-                          <TextField
-                            col="col-md-8"
-                            id="gt-f230-street"
-                            name="street"
-                            label="Strada*"
-                            autoComplete="address-line1"
-                            maxLength={100}
-                            value={form.street}
-                            onChange={change('street')}
-                            error={errors.street}
-                          />
-                          <TextField
-                            col="col-md-4"
-                            id="gt-f230-number"
-                            name="number"
-                            label="Număr*"
-                            maxLength={100}
-                            value={form.number}
-                            onChange={change('number')}
-                            error={errors.number}
-                          />
-                          <TextField
-                            col="col-6 col-md-3"
-                            id="gt-f230-block"
-                            name="block"
-                            label="Bloc"
-                            maxLength={10}
-                            value={form.block}
-                            onChange={change('block')}
-                            error={errors.block}
-                          />
-                          <TextField
-                            col="col-6 col-md-3"
-                            id="gt-f230-staircase"
-                            name="staircase"
-                            label="Scara"
-                            maxLength={10}
-                            value={form.staircase}
-                            onChange={change('staircase')}
-                            error={errors.staircase}
-                          />
-                          <TextField
-                            col="col-6 col-md-3"
-                            id="gt-f230-floor"
-                            name="floor"
-                            label="Etaj"
-                            maxLength={10}
-                            value={form.floor}
-                            onChange={change('floor')}
-                            error={errors.floor}
-                          />
-                          <TextField
-                            col="col-6 col-md-3"
-                            id="gt-f230-apartment"
-                            name="apartment"
-                            label="Ap."
-                            maxLength={10}
-                            value={form.apartment}
-                            onChange={change('apartment')}
-                            error={errors.apartment}
-                          />
-                          <TextField
-                            col="col-md-6"
-                            id="gt-f230-county"
-                            name="county"
-                            label="Județ / Sector*"
-                            maxLength={100}
-                            value={form.county}
-                            onChange={change('county')}
-                            error={errors.county}
-                          />
-                          <TextField
-                            col="col-md-6"
-                            id="gt-f230-city"
-                            name="city"
-                            label="Localitate*"
-                            maxLength={100}
-                            value={form.city}
-                            onChange={change('city')}
-                            error={errors.city}
-                          />
-                          <TextField
-                            col="col-md-6"
-                            id="gt-f230-postal-code"
-                            name="postalCode"
-                            label="Cod poștal"
-                            maxLength={6}
-                            value={form.postalCode}
-                            onChange={change('postalCode')}
-                            error={errors.postalCode}
-                          />
-                          <TextField
-                            col="col-md-6"
-                            id="gt-f230-email"
-                            name="email"
-                            type="email"
-                            label="Email (opțional)"
-                            autoComplete="email"
-                            maxLength={150}
-                            value={form.email}
-                            onChange={change('email')}
-                            error={errors.email}
-                          />
-                        </div>
+                        <fieldset className="gt-fieldset">
+                          <legend className="gt-legend">Cine ești</legend>
 
-                        <div className="form-check mt-20">
+                          <div className="row g-3">
+                            <TextField
+                              col="col-md-4"
+                              id="gt-f230-last-name"
+                              name="lastName"
+                              label="Nume"
+                              required
+                              autoComplete="family-name"
+                              maxLength={75}
+                              value={form.lastName}
+                              onChange={change('lastName')}
+                              onBlur={blurCapitalize('lastName')}
+                              error={errors.lastName}
+                            />
+                            <TextField
+                              col="col-md-3"
+                              id="gt-f230-father-initial"
+                              name="fatherInitial"
+                              label="Inițiala tatălui"
+                              autoComplete="off"
+                              maxLength={3}
+                              value={form.fatherInitial}
+                              onChange={change('fatherInitial')}
+                              onBlur={blurUpperCase('fatherInitial')}
+                              error={errors.fatherInitial}
+                            />
+                            <TextField
+                              col="col-md-5"
+                              id="gt-f230-first-name"
+                              name="firstName"
+                              label="Prenume"
+                              required
+                              autoComplete="given-name"
+                              maxLength={75}
+                              value={form.firstName}
+                              onChange={change('firstName')}
+                              onBlur={blurCapitalize('firstName')}
+                              error={errors.firstName}
+                            />
+                            <TextField
+                              col="col-md-6"
+                              id="gt-f230-cnp"
+                              name="cnp"
+                              label="CNP"
+                              required
+                              inputMode="numeric"
+                              maxLength={13}
+                              autoComplete="off"
+                              value={form.cnp}
+                              onChange={changeDigits('cnp')}
+                              error={errors.cnp}
+                            />
+                          </div>
+                        </fieldset>
+
+                        <fieldset className="gt-fieldset">
+                          <legend className="gt-legend">Adresa de domiciliu</legend>
+
+                            <div className="row g-3">
+                              <TextField
+                                col="col-md-8"
+                                id="gt-f230-street"
+                                name="street"
+                                label="Strada"
+                                required
+                                autoComplete="address-line1"
+                                maxLength={100}
+                                value={form.street}
+                                onChange={change('street')}
+                                onBlur={blurCapitalize('street')}
+                                error={errors.street}
+                              />
+                              <TextField
+                                col="col-md-4"
+                                id="gt-f230-number"
+                                name="number"
+                                label="Număr"
+                                required
+                                maxLength={100}
+                                value={form.number}
+                                onChange={change('number')}
+                                error={errors.number}
+                              />
+                              <TextField
+                                col="col-6 col-md-3"
+                                id="gt-f230-block"
+                                name="block"
+                                label="Bloc"
+                                maxLength={10}
+                                value={form.block}
+                                onChange={change('block')}
+                                error={errors.block}
+                              />
+                              <TextField
+                                col="col-6 col-md-3"
+                                id="gt-f230-staircase"
+                                name="staircase"
+                                label="Scara"
+                                maxLength={10}
+                                value={form.staircase}
+                                onChange={change('staircase')}
+                                error={errors.staircase}
+                              />
+                              <TextField
+                                col="col-6 col-md-3"
+                                id="gt-f230-floor"
+                                name="floor"
+                                label="Etaj"
+                                maxLength={10}
+                                value={form.floor}
+                                onChange={change('floor')}
+                                error={errors.floor}
+                              />
+                              <TextField
+                                col="col-6 col-md-3"
+                                id="gt-f230-apartment"
+                                name="apartment"
+                                label="Ap."
+                                maxLength={10}
+                                value={form.apartment}
+                                onChange={change('apartment')}
+                                error={errors.apartment}
+                              />
+                              <div className="col-md-6">
+                                <label className="form-label gt-label" htmlFor="gt-f230-county">
+                                  Județ / Sector
+                                  <span className="gt-req">*</span>
+                                </label>
+                                <select
+                                  id="gt-f230-county"
+                                  name="county"
+                                  className={`form-select${errors.county ? ' is-invalid' : ''}`}
+                                  autoComplete="address-level1"
+                                  value={form.county}
+                                  onChange={changeCounty}
+                                >
+                                  <option value="">Alege județul</option>
+                                  {COUNTIES.map((county) => (
+                                    <option key={county} value={county}>
+                                      {county}
+                                    </option>
+                                  ))}
+                                </select>
+                                <div className="invalid-feedback">{errors.county}</div>
+                              </div>
+                              <TextField
+                                col="col-md-6"
+                                id="gt-f230-city"
+                                name="city"
+                                label="Localitate"
+                                required
+                                autoComplete="address-level2"
+                                maxLength={100}
+                                value={form.city}
+                                onChange={change('city')}
+                                onBlur={blurCapitalize('city')}
+                                error={errors.city}
+                              />
+                              <TextField
+                                col="col-md-6"
+                                id="gt-f230-postal-code"
+                                name="postalCode"
+                                label="Cod poștal"
+                                inputMode="numeric"
+                                maxLength={6}
+                                autoComplete="postal-code"
+                                value={form.postalCode}
+                                onChange={changeDigits('postalCode')}
+                                error={errors.postalCode}
+                              />
+                            </div>
+                        </fieldset>
+
+                        <fieldset className="gt-fieldset">
+                          <legend className="gt-legend">Cum te putem contacta (opțional)</legend>
+
+                          <div className="row g-3">
+                            <TextField
+                              col="col-md-6"
+                              id="gt-f230-phone"
+                              name="phone"
+                              type="tel"
+                              label="Telefon"
+                              autoComplete="tel"
+                              maxLength={30}
+                              value={form.phone}
+                              onChange={change('phone')}
+                              error={errors.phone}
+                            />
+                            <TextField
+                              col="col-md-6"
+                              id="gt-f230-email"
+                              name="email"
+                              type="email"
+                              label="Email"
+                              autoComplete="email"
+                              maxLength={150}
+                              value={form.email}
+                              onChange={change('email')}
+                              error={errors.email}
+                            />
+                          </div>
+                        </fieldset>
+
+                        <label className={`gt-option${form.twoYears ? ' is-checked' : ''}`}>
                           <input
                             id="gt-f230-two-years"
                             name="twoYears"
@@ -465,12 +593,10 @@ export default function Form230Online() {
                             checked={form.twoYears}
                             onChange={change('twoYears')}
                           />
-                          <label className="form-check-label" htmlFor="gt-f230-two-years">
-                            <EditableText field="twoYearsText" as="span" />
-                          </label>
-                        </div>
+                          <EditableText field="twoYearsText" as="span" />
+                        </label>
 
-                        <div className="form-check">
+                        <label className={`gt-option${form.shareData ? ' is-checked' : ''}`}>
                           <input
                             id="gt-f230-share-data"
                             name="shareData"
@@ -479,14 +605,18 @@ export default function Form230Online() {
                             checked={form.shareData}
                             onChange={change('shareData')}
                           />
-                          <label className="form-check-label" htmlFor="gt-f230-share-data">
-                            <EditableText field="shareDataText" as="span" />
-                          </label>
-                        </div>
+                          <EditableText field="shareDataText" as="span" />
+                        </label>
 
-                        <button type="button" className="btn-one mt-20" onClick={goNext}>
-                          {nextLabel}
-                        </button>
+                        <div className="d-flex justify-content-end mt-30">
+                          <button
+                            type="button"
+                            className="btn-one gt-btn-block-sm"
+                            onClick={goNext}
+                          >
+                            {nextLabel}
+                          </button>
+                        </div>
                       </>
                     ) : (
                       <>
