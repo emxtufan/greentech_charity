@@ -758,6 +758,7 @@ button.cms-ui:hover {
 @media (max-width:575px){.gt-section.gt-section-compact{padding:28px 0}}
 .gt-intro-hero{padding:70px 0 110px;background:linear-gradient(180deg,#fff 0%,#f3faf6 100%)}
 .gt-hero-title{font-size:clamp(36px,5vw,62px);line-height:1.08;font-weight:600;color:#144734;margin:0}
+.gt-hero-title{font-size:clamp(34px,4.4vw,56px)}
 .gt-page-header{padding:80px 0 60px;background:#f3faf6}
 .gt-page-title{font-size:clamp(32px,4vw,52px);line-height:1.12;font-weight:600;color:#144734;margin:0}
 .gt-narrow{max-width:780px}
@@ -804,7 +805,8 @@ button.cms-ui:hover {
 .gt-update h5{font-size:20px;font-weight:600;color:#144734;margin-bottom:8px}
 .gt-update-date{font-size:14px;color:#6b7c74}
 .gt-badge{display:inline-block;font-size:13px;font-weight:500;background:#e4f8f2;color:#1b6943;border-radius:999px;padding:4px 12px}
-.gt-info-card{background:#fff;border-radius:20px;padding:32px;box-shadow:0 10px 30px rgba(16,75,89,.07);height:100%}
+.gt-info-card{background:#fff;border-radius:20px;padding:32px;box-shadow:0 10px 30px rgba(16,75,89,.07);height:auto}
+.row > [class*="col-"] > .gt-info-card:only-child{height:100%}
 .gt-info-card h4{font-size:22px;font-weight:600;color:#144734;margin-bottom:18px}
 .gt-info-list{margin:0}
 .gt-info-list dt{font-size:14px;font-weight:500;color:#6b7c74;margin-top:14px}
@@ -818,5 +820,8 @@ button.cms-ui:hover {
 .gt-error{color:#b42318;font-size:15px}
 .gt-hp{position:absolute!important;left:-10000px!important;width:1px;height:1px;overflow:hidden}
 @media (max-width:767px){.gt-cta-band{padding:36px 26px}.gt-form-card{padding:26px 20px}}
+/* footer-ul temei urca cu -240px peste conținut (gândit pentru bannerul de newsletter vechi) */
+.main-footer.top-space{margin-top:0 !important;padding-top:100px !important}
+@media (max-width:767px){.main-footer.top-space{padding-top:70px !important}}
 
 

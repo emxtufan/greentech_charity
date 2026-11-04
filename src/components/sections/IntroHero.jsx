@@ -22,7 +22,7 @@ export default function IntroHero({ bg }) {
     <section id={anchor || undefined} className={`gt-intro-hero gt-bg-${bg || 'white'}`}>
       <div className="container">
         <div className="row align-items-center gy-5">
-          <div className="col-lg-6">
+          <div className="col-lg-7">
             <EditableText field="eyebrow" as="div" className="upper-title font-amita mb-15" />
             <EditableText field="title" as="h1" className="gt-hero-title" />
             <EditableParagraphs field="text" className="gt-lead mt-25" />
@@ -31,7 +31,7 @@ export default function IntroHero({ bg }) {
               <EditableLink field="secondary" className="btn-two" />
             </div>
           </div>
-          <div className="col-lg-6">
+          <div className="col-lg-5">
             <figure className="gt-illustration m-0">
               {image ? (
                 <EditableImage field="image" className="img-fluid rounded-4" />
