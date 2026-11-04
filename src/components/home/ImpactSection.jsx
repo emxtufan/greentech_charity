@@ -33,6 +33,7 @@ const SHAPES = [
 ]
 
 export default function ImpactSection() {
+  const { value: amount } = useField('amount')
   const { value: progress = 0 } = useField('progress')
   const { value: count } = useField('count')
   const { value: years } = useField('years')
@@ -50,25 +51,27 @@ export default function ImpactSection() {
               </div>
               {/* /.title-one */}
               <EditableText field="text" as="p" />
-              <div className="card-one d-flex align-items-center mt-30 mb-50 lg-mb-30">
-                <div className="icon rounded-circle d-flex align-items-center justify-content-center">
-                  <img src={img('icon_06.png')} alt="" />
-                </div>
-                <div className="text">
-                  <div className="main-count font-amita">
-                    <EditableText field="amountPrefix" />
-                    <EditableText
-                      field="amount"
-                      numeric
-                      render={(v) => (
-                        <Counter end={v} decimals={Number.isInteger(Number(v)) ? 0 : 1} />
-                      )}
-                    />
-                    <EditableText field="amountSuffix" />
+              {(editMode || (amount !== '' && amount !== null && amount !== undefined)) && (
+                <div className="card-one d-flex align-items-center mt-30 mb-50 lg-mb-30">
+                  <div className="icon rounded-circle d-flex align-items-center justify-content-center">
+                    <img src={img('icon_06.png')} alt="" />
                   </div>
-                  <EditableText field="amountLabel" as="p" className="fs-16 fw-500" />
+                  <div className="text">
+                    <div className="main-count font-amita">
+                      <EditableText field="amountPrefix" />
+                      <EditableText
+                        field="amount"
+                        numeric
+                        render={(v) => (
+                          <Counter end={v} decimals={Number.isInteger(Number(v)) ? 0 : 1} />
+                        )}
+                      />
+                      <EditableText field="amountSuffix" />
+                    </div>
+                    <EditableText field="amountLabel" as="p" className="fs-16 fw-500" />
+                  </div>
                 </div>
-              </div>
+              )}
               {/* /.card-one */}
               <EditableList
                 field="items"
