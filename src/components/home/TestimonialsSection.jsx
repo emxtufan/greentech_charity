@@ -1,31 +1,42 @@
 import { useRef } from 'react'
 import Carousel from '../common/Carousel'
 import Reveal from '../common/Reveal'
+import {
+  AddItemButton,
+  EditableImage,
+  EditableText,
+  ListItem,
+  useField,
+} from '../editable'
 import { img } from '../../utils/helpers'
 
-const TESTIMONIALS = [
-  {
-    id: 1,
-    avatar: 'img_13.jpg',
-    name: 'Elena M., Ukraine',
-    role: 'Charity Volunteer',
-    text: 'I never thought I’d be able to go back to school. Their support changed my life and gave me a future I can be proud of.',
-  },
-  {
-    id: 2,
-    avatar: 'img_13.jpg',
-    name: 'John D., Canada',
-    role: 'Charity Volunteer',
-    text: 'I never thought I’d be able to go back to school. Their support changed my life and gave me a future I can be proud of.',
-  },
-  {
-    id: 3,
-    avatar: 'img_13.jpg',
-    name: 'Aisha K., Kenya',
-    role: 'Charity Volunteer',
-    text: 'I never thought I’d be able to go back to school. Their support changed my life and gave me a future I can be proud of.',
-  },
-]
+export const defaultData = {
+  subtitle: 'Testimonial',
+  title: 'Real feedback, Real results',
+  items: [
+    {
+      id: 1,
+      avatar: 'img_13.jpg',
+      name: 'Elena M., Ukraine',
+      role: 'Charity Volunteer',
+      text: 'I never thought I’d be able to go back to school. Their support changed my life and gave me a future I can be proud of.',
+    },
+    {
+      id: 2,
+      avatar: 'img_13.jpg',
+      name: 'John D., Canada',
+      role: 'Charity Volunteer',
+      text: 'I never thought I’d be able to go back to school. Their support changed my life and gave me a future I can be proud of.',
+    },
+    {
+      id: 3,
+      avatar: 'img_13.jpg',
+      name: 'Aisha K., Kenya',
+      role: 'Charity Volunteer',
+      text: 'I never thought I’d be able to go back to school. Their support changed my life and gave me a future I can be proud of.',
+    },
+  ],
+}
 
 const SHAPES = [
   { src: 'shape_13.png', className: 'shape_01' },
