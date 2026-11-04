@@ -5,6 +5,7 @@ import { cx } from '../../utils/helpers'
 const ARROW_PREV = '\u2039'
 const ARROW_NEXT = '\u203A'
 const DRAG_THRESHOLD = 40
+const TRANSITION_MS = 500
 
 const perViewFor = (width, { xs = 1, md = 2, xl = 3 } = {}) => {
   if (width >= 1200) return xl
@@ -34,14 +35,23 @@ export default function Carousel({
     typeof window === 'undefined' ? xs : perViewFor(window.innerWidth, { xs, md, xl })
   )
   const [index, setIndex] = useState(0)
+  // animate=false doar în timpul saltului instant de la capătul buclei
+  const [animate, setAnimate] = useState(true)
   const [dragOffset, setDragOffset] = useState(0)
   const [paused, setPaused] = useState(false)
 
   const drag = useRef({ active: false, startX: 0, startY: 0, moved: false })
   const suppressClickUntil = useRef(0)
+  const jumpFrames = useRef({ first: 0, second: 0 })
+  // true cât timp index === count e doar poziția temporară folosită de prev()
+  const prevJump = useRef(false)
 
   const count = items.length
   const maxIndex = Math.max(count - perView, 0)
+  // buclă infinită doar în afara edit mode, când sunt mai multe elemente decât încap
+  const loopEnabled = !editMode && loop !== false && count > perView
+  // clonele de la final fac trecerea de la ultimul card la primul fără salt vizibil
+  const renderedItems = loopEnabled ? [...items, ...items.slice(0, perView)] : items
   const dragging = dragOffset !== 0
 
   // autoplay: true -> 5000ms, număr -> acel număr de ms, false/0 -> oprit (oprit și în edit mode)
@@ -57,30 +67,109 @@ export default function Carousel({
   }, [xs, md, xl])
 
   useEffect(() => {
+    if (loopEnabled) return
     setIndex((current) => Math.min(current, maxIndex))
-  }, [maxIndex])
+  }, [loopEnabled, maxIndex])
 
   const goTo = useCallback(
     (target) => {
+      if (loopEnabled) {
+        setAnimate(true)
+        setIndex(((target % count) + count) % count)
+        return
+      }
+
       const total = maxIndex + 1
       if (total <= 1) {
         setIndex(0)
         return
       }
-      if (loop) {
-        setIndex(((target % total) + total) % total)
-        return
-      }
       setIndex(Math.min(Math.max(target, 0), maxIndex))
     },
-    [loop, maxIndex]
+    [loopEnabled, count, maxIndex]
   )
 
-  const next = useCallback(() => goTo(index + 1), [goTo, index])
-  const prev = useCallback(() => goTo(index - 1), [goTo, index])
+  // salt instant (fără tranziție); după ce browserul a pictat cadrul, tranziția e repornită pe dublu rAF
+  const jumpTo = useCallback((target, after) => {
+    setAnimate(false)
+    setIndex(target)
+
+    cancelAnimationFrame(jumpFrames.current.first)
+    cancelAnimationFrame(jumpFrames.current.second)
+
+    jumpFrames.current.first = window.requestAnimationFrame(() => {
+      jumpFrames.current.second = window.requestAnimationFrame(() => {
+        setAnimate(true)
+        if (after) after()
+      })
+    })
+  }, [])
+
+  useEffect(
+    () => () => {
+      cancelAnimationFrame(jumpFrames.current.first)
+      cancelAnimationFrame(jumpFrames.current.second)
+    },
+    []
+  )
+
+  const next = useCallback(() => {
+    if (loopEnabled) {
+      // suntem pe clone, așteptăm resetarea
+      if (index >= count) return
+      setAnimate(true)
+      setIndex(index + 1)
+      return
+    }
+    goTo(index + 1)
+  }, [loopEnabled, index, count, goTo])
+
+  const prev = useCallback(() => {
+    if (loopEnabled) {
+      if (index === 0) {
+        // sări instant pe poziția echivalentă din clone, apoi animă înapoi la count - 1
+        prevJump.current = true
+        jumpTo(count, () => {
+          prevJump.current = false
+          setIndex(count - 1)
+        })
+        return
+      }
+      setAnimate(true)
+      setIndex(index - 1)
+      return
+    }
+    goTo(index - 1)
+  }, [loopEnabled, index, count, goTo, jumpTo])
 
   const handlerRef = useRef({ prev, next })
   handlerRef.current = { prev, next }
+
+  // după ce tranziția spre clone s-a terminat, sari la început fără animație
+  // (transitionend pe track, cu timeout ca plasă de siguranță)
+  useEffect(() => {
+    if (!loopEnabled || index !== count || prevJump.current) return undefined
+
+    let done = false
+    const finish = () => {
+      if (done) return
+      done = true
+      jumpTo(0)
+    }
+    const timer = window.setTimeout(finish, TRANSITION_MS + 50)
+
+    return () => {
+      done = true
+      window.clearTimeout(timer)
+    }
+  }, [loopEnabled, index, count, jumpTo])
+
+  const handleTransitionEnd = (event) => {
+    if (!loopEnabled || index !== count || prevJump.current) return
+    if (event.target !== event.currentTarget) return
+    if (event.propertyName !== 'transform') return
+    jumpTo(0)
+  }
 
   // navigare prin butoane din afara componentei (prevRef / nextRef)
   // în edit mode săgețile externe nu sunt legate (slide-urile sunt afișate toate, static)
@@ -186,7 +275,7 @@ export default function Carousel({
         gap: `${gap}px`,
         willChange: 'transform',
         transform: `translate3d(calc(${-index} * (${step})${dragPart}), 0, 0)`,
-        transition: dragging ? 'none' : 'transform 500ms ease',
+        transition: dragging || !animate ? 'none' : `transform ${TRANSITION_MS}ms ease`,
       }
 
   // margin:0 inline - bate `.slick-slide{margin:0 15px}` din tema (vendor CSS);
@@ -214,21 +303,28 @@ export default function Carousel({
         onPointerCancel={handlePointerUp}
         onClickCapture={handleClickCapture}
       >
-        <div className="slick-track" style={trackStyle}>
-          {items.map((item, itemIndex) => (
-            <div
-              key={item && item.id != null ? item.id : itemIndex}
-              className={cx(
-                'item',
-                'slick-slide',
-                itemIndex === index && 'slick-current',
-                itemIndex >= index && itemIndex < index + perView && 'slick-active'
-              )}
-              style={slideStyle}
-            >
-              {renderItem ? renderItem(item, itemIndex) : null}
-            </div>
-          ))}
+        <div className="slick-track" style={trackStyle} onTransitionEnd={handleTransitionEnd}>
+          {renderedItems.map((item, position) => {
+            const cloned = position >= count
+            const itemIndex = cloned ? position - count : position
+
+            return (
+              <div
+                key={cloned ? `clone-${itemIndex}` : item && item.id != null ? item.id : position}
+                className={cx(
+                  'item',
+                  'slick-slide',
+                  cloned && 'slick-cloned',
+                  position === index && 'slick-current',
+                  position >= index && position < index + perView && 'slick-active'
+                )}
+                style={slideStyle}
+                aria-hidden={cloned ? 'true' : undefined}
+              >
+                {renderItem ? renderItem(item, itemIndex) : null}
+              </div>
+            )
+          })}
         </div>
       </div>
 
@@ -245,8 +341,11 @@ export default function Carousel({
 
       {dots && !editMode && maxIndex > 0 && (
         <ul className="slick-dots d-flex justify-content-center style-none">
-          {Array.from({ length: maxIndex + 1 }).map((_, dotIndex) => (
-            <li key={dotIndex} className={dotIndex === index ? 'slick-active' : undefined}>
+          {Array.from({ length: loopEnabled ? count : maxIndex + 1 }).map((_, dotIndex) => (
+            <li
+              key={dotIndex}
+              className={dotIndex === (loopEnabled ? index % count : index) ? 'slick-active' : undefined}
+            >
               <button
                 type="button"
                 onClick={() => goTo(dotIndex)}
