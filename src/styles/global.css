@@ -853,3 +853,21 @@ body:not(:has(.fancy-banner-one)) .main-footer.top-space{margin-top:0 !important
 .gt-cookie-row p{margin:0;font-size:14px;color:#47504d}
 .gt-modal-text p{font-size:16px;line-height:1.7;color:#1c2b20}
 body.cms-admin-active .gt-cookie-banner{bottom:90px}
+
+/* Admin dashboard */
+.gt-admin{display:flex;min-height:100vh;background:#f4f7f2;font-size:15px}
+.gt-admin-sidebar{width:250px;flex:0 0 250px;background:#14402a;color:#fff;padding:24px 18px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:18px;overflow-y:auto}
+.gt-admin-sidebar p{color:rgba(255,255,255,.65);margin:6px 0 0;font-size:13px}
+.gt-admin-nav{display:flex;flex-direction:column;gap:4px}
+.gt-admin-nav button{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:transparent;border:0;color:rgba(255,255,255,.8);border-radius:10px;padding:10px 14px;font-size:15px;transition:background .15s}
+.gt-admin-nav button:hover{background:rgba(255,255,255,.08);color:#fff}
+.gt-admin-nav button.active{background:rgba(255,255,255,.14);color:#fff;font-weight:500}
+.gt-admin-sidebar-footer{margin-top:auto;display:flex;flex-direction:column;gap:8px}
+.gt-admin-sidebar-footer a,.gt-admin-sidebar-footer button{color:rgba(255,255,255,.85);background:transparent;border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:8px 12px;text-align:center;font-size:14px;text-decoration:none}
+.gt-admin-sidebar-footer .gt-admin-primary{background:#6fae4a;border-color:#6fae4a;color:#fff;font-weight:500}
+.gt-admin-main{flex:1;min-width:0;padding:32px 40px;max-width:1240px}
+.gt-admin-title{font-size:28px;font-weight:600;color:#14402a;margin-bottom:24px}
+.gt-admin-card{background:#fff;border-radius:16px;padding:24px;box-shadow:0 4px 18px rgba(20,64,42,.06);margin-bottom:20px}
+.gt-admin-card h5{font-weight:600;color:#14402a;margin-bottom:16px}
+.gt-stat{font-size:32px;font-weight:700;color:#1b6943;line-height:1.2;margin:6px 0}
+@media (max-width:991px){.gt-admin{flex-direction:column}.gt-admin-sidebar{width:100%;flex:none;height:auto;position:static}.gt-admin-nav{flex-direction:row;flex-wrap:wrap}.gt-admin-nav button{width:auto}.gt-admin-main{padding:20px}}

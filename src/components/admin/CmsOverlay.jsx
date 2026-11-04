@@ -244,12 +244,12 @@ export default function CmsOverlay() {
   }, [editor])
 
   useEffect(() => {
-    if (!editMode) return undefined
+    if (!editMode || onAdmin) return undefined
 
     document.body.classList.add('cms-edit-mode')
 
     return () => document.body.classList.remove('cms-edit-mode')
-  }, [editMode])
+  }, [editMode, onAdmin])
 
   // ieșirea din edit mode deselectează
   useEffect(() => {
