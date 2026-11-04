@@ -629,6 +629,42 @@ button.cms-ui:hover {
   }
 }
 
+/* rama/umbra pozelor nu mai sunt tăiate: spațiu lateral în coloane + zona măștii mai lată */
+.hero-marquee {
+  margin-left: -40px;
+  margin-right: -40px;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+.hero-marquee__col {
+  padding-left: 16px;
+  padding-right: 16px;
+  max-width: 262px;
+}
+
+.hero-marquee__tilt {
+  gap: 4px;
+}
+
+@media (max-width: 575px) {
+  .hero-marquee {
+    margin-left: -16px;
+    margin-right: -16px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .hero-marquee__col {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .hero-marquee__tilt {
+    gap: 0;
+  }
+}
+
 /* Lățime maximă site */
 :root {
   --site-max: 1480px;
