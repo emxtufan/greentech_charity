@@ -83,7 +83,10 @@ export default function Carousel({
   handlerRef.current = { prev, next }
 
   // navigare prin butoane din afara componentei (prevRef / nextRef)
+  // în edit mode săgețile externe nu sunt legate (slide-urile sunt afișate toate, static)
   useEffect(() => {
+    if (editMode) return undefined
+
     const prevEl = prevRef && prevRef.current
     const nextEl = nextRef && nextRef.current
 
@@ -103,7 +106,7 @@ export default function Carousel({
       if (prevEl) prevEl.removeEventListener('click', handlePrev)
       if (nextEl) nextEl.removeEventListener('click', handleNext)
     }
-  }, [prevRef, nextRef])
+  }, [prevRef, nextRef, editMode])
 
   // autoplay cu pauză la hover / în timpul drag-ului
   useEffect(() => {
@@ -169,13 +172,22 @@ export default function Carousel({
   const dragPart =
     dragOffset === 0 ? '' : dragOffset > 0 ? ` + ${dragOffset}px` : ` - ${Math.abs(dragOffset)}px`
 
-  const trackStyle = {
-    display: 'flex',
-    gap: `${gap}px`,
-    willChange: 'transform',
-    transform: `translate3d(calc(${-index} * (${step})${dragPart}), 0, 0)`,
-    transition: dragging ? 'none' : 'transform 500ms ease',
-  }
+  const trackStyle = editMode
+    ? {
+        // edit mode: toate slide-urile ca grilă statică (fără translate / tranziție)
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: `${gap}px`,
+        transform: 'none',
+        transition: 'none',
+      }
+    : {
+        display: 'flex',
+        gap: `${gap}px`,
+        willChange: 'transform',
+        transform: `translate3d(calc(${-index} * (${step})${dragPart}), 0, 0)`,
+        transition: dragging ? 'none' : 'transform 500ms ease',
+      }
 
   // margin:0 inline - bate `.slick-slide{margin:0 15px}` din tema (vendor CSS);
   // spațierea dintre slide-uri e asigurată exclusiv de `gap` pe track
@@ -184,7 +196,7 @@ export default function Carousel({
   // marginLeft/marginRight:0 inline - bate `.slick-slider{margin:0 -15px}` din tema (vendor CSS)
   return (
     <div
-      className={cx('slick-slider slick-initialized', dots && 'slick-dotted', className)}
+      className={cx('slick-slider slick-initialized', dots && !editMode && 'slick-dotted', className)}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       style={{
@@ -195,7 +207,7 @@ export default function Carousel({
     >
       <div
         className="slick-list"
-        style={{ overflow: 'hidden', touchAction: 'pan-y' }}
+        style={{ overflow: editMode ? 'visible' : 'hidden', touchAction: 'pan-y' }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
@@ -231,7 +243,7 @@ export default function Carousel({
         </div>
       )}
 
-      {dots && maxIndex > 0 && (
+      {dots && !editMode && maxIndex > 0 && (
         <ul className="slick-dots d-flex justify-content-center style-none">
           {Array.from({ length: maxIndex + 1 }).map((_, dotIndex) => (
             <li key={dotIndex} className={dotIndex === index ? 'slick-active' : undefined}>
