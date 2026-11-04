@@ -103,7 +103,7 @@ export default function TestimonialsSection() {
               )}
             />
             {/* /.feedback-slider-one */}
-            <AddItemButton field="items" />
+            <AddItemButton field="items" bulkImageField="avatar" />
           </div>
         </div>
 

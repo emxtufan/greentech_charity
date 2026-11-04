@@ -219,6 +219,29 @@ button.cms-ui:hover {
   background-color: rgba(46, 139, 87, 0.1);
 }
 
+.cms-add-row {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cms-bulk-btn {
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+.cms-bulk-btn.is-drag {
+  background: rgba(111, 174, 74, 0.18);
+  border-style: solid;
+}
+
+.cms-bulk-errors {
+  color: #c62828;
+  font-size: 13px;
+  margin-top: 6px;
+}
+
 /* CMS — bară de selecție (click = selectare) */
 .cms-selection-bar {
   display: flex;

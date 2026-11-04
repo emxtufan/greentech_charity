@@ -137,7 +137,7 @@ export default function EventsSection() {
             </ListItem>
           )}
         />
-        <AddItemButton field="items" />
+        <AddItemButton field="items" bulkImageField="image" />
 
         <div className="text-center mt-65 md-mt-50">
           <EditableLink field="cta" className="btn-two" />

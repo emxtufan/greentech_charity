@@ -80,7 +80,7 @@ export default function HeroSection() {
                   <EditableText field="avatarsText" />
                 </li>
               </ul>
-              <AddItemButton field="avatars" />
+              <AddItemButton field="avatars" bulkImageField="image" />
             </Reveal>
             {/* /.avatar-group */}
           </div>
@@ -111,7 +111,9 @@ export default function HeroSection() {
               ))}
             </div>
           </div>
-          {editMode && <AddItemButton field="gallery" label="+ Add photo" />}
+          {editMode && (
+            <AddItemButton field="gallery" label="+ Add photo" bulkImageField="image" />
+          )}
           <div className="card-wrapper d-flex align-items-center">
             <div className="icon rounded-circle d-flex align-items-center justify-content-center">
               <i className="fa-solid fa-arrow-up-right"></i>

@@ -116,7 +116,7 @@ export default function BlogSection() {
             </ListItem>
           ))}
         </div>
-        <AddItemButton field="items" />
+        <AddItemButton field="items" bulkImageField="image" />
       </div>
     </div>
   )

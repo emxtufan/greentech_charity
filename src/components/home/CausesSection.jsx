@@ -120,7 +120,7 @@ export default function CausesSection() {
             </ListItem>
           )}
         />
-        <AddItemButton field="items" />
+        <AddItemButton field="items" bulkImageField="image" />
       </div>
       {/* /.box-layout-one */}
     </div>
