@@ -692,15 +692,18 @@ button.cms-ui:hover {
 @media (min-width: 992px) {
   :root { --site-pad: 30px; }
 }
-/* Pagina max 1920px */
-.main-page-wrapper { max-width: 1920px; margin-left: auto; margin-right: auto; position: relative; }
-.theme-main-menu.fixed { max-width: 1920px; margin-left: auto; margin-right: auto; }
+/* Ecrane foarte late: fundal full-width, decor max 1920px */
+.main-page-wrapper { position: relative; }
 @media (min-width: 992px) {
   .feature-block-four .media-bg { position: relative !important; right: auto !important; left: auto !important; top: auto !important; margin-left: auto; margin-right: 0; transform: none !important; margin-top: 0 !important; }
   .feature-block-four .row { align-items: center; }
 }
 @media (min-width: 992px) and (max-width: 1199px) {
   .feature-block-two .card-one { right: -10px !important; left: auto !important; }
+}
+@media (min-width: 1921px) {
+  .feature-block-two, .feature-block-three, .feature-block-four, .feedback-section-one { max-width: 1920px; margin-left: auto; margin-right: auto; }
+  .feedback-section-one::after { content: ''; position: absolute; top: 0; bottom: 0; left: calc((100vw - 100%) / -2); right: calc((100vw - 100%) / -2); background: inherit; z-index: -1; pointer-events: none; }
 }
 
 
