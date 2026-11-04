@@ -7,3 +7,10 @@
 .ai/CODEMAP.md
 .ai/codemap.json
 __pycache__/
+
+# dependencies / build
+node_modules
+dist
+
+# local env
+.env.local
