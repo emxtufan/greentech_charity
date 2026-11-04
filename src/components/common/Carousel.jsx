@@ -177,14 +177,21 @@ export default function Carousel({
     transition: dragging ? 'none' : 'transform 500ms ease',
   }
 
-  const slideStyle = { flex: `0 0 ${slideWidth}` }
+  // margin:0 inline - bate `.slick-slide{margin:0 15px}` din tema (vendor CSS);
+  // spațierea dintre slide-uri e asigurată exclusiv de `gap` pe track
+  const slideStyle = { flex: `0 0 ${slideWidth}`, margin: 0 }
 
+  // marginLeft/marginRight:0 inline - bate `.slick-slider{margin:0 -15px}` din tema (vendor CSS)
   return (
     <div
       className={cx('slick-slider slick-initialized', dots && 'slick-dotted', className)}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
-      style={{ userSelect: dragging ? 'none' : undefined }}
+      style={{
+        userSelect: dragging ? 'none' : undefined,
+        marginLeft: 0,
+        marginRight: 0,
+      }}
     >
       <div
         className="slick-list"
