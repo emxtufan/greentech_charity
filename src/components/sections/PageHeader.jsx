@@ -1,0 +1,24 @@
+import { EditableParagraphs, EditableText, useField } from '../editable'
+
+export const defaultData = {
+  anchor: 'page-header',
+  eyebrow: 'Subtitlu',
+  title: 'Titlu',
+  text: 'Scrie aici textul.',
+}
+
+export default function PageHeader({ bg }) {
+  const { value: anchor } = useField('anchor')
+
+  return (
+    <section id={anchor || undefined} className={`gt-page-header gt-bg-${bg || 'white'}`}>
+      <div className="container">
+        <div className="gt-narrow">
+          <EditableText field="eyebrow" as="div" className="upper-title font-amita" />
+          <EditableText field="title" as="h1" className="gt-page-title" />
+          <EditableParagraphs field="text" className="gt-lead mt-20" />
+        </div>
+      </div>
+    </section>
+  )
+}

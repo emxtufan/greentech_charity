@@ -749,4 +749,37 @@ button.cms-ui:hover {
   .feedback-section-one::after { content: ''; position: absolute; top: 0; bottom: 0; left: calc((100vw - 100%) / -2); right: calc((100vw - 100%) / -2); background: inherit; z-index: -2; pointer-events: none; }
 }
 
+/* Secțiuni GreenTech */
+.gt-bg-white{background:#fff}.gt-bg-cream{background:#f9f4d6}.gt-bg-mint{background:#e4f8f2}.gt-bg-light{background:#f8f7f4}
+.gt-section{padding:110px 0}
+.gt-intro-hero{padding:70px 0 110px;background:linear-gradient(180deg,#fff 0%,#f3faf6 100%)}
+.gt-hero-title{font-size:clamp(36px,5vw,62px);line-height:1.08;font-weight:600;color:#144734;margin:0}
+.gt-page-header{padding:80px 0 60px;background:#f3faf6}
+.gt-page-title{font-size:clamp(32px,4vw,52px);line-height:1.12;font-weight:600;color:#144734;margin:0}
+.gt-narrow{max-width:780px}
+.gt-lead p{font-size:20px;line-height:1.65;color:#47504d;margin-bottom:14px}
+.gt-text p{font-size:18px;line-height:1.75;color:#47504d;margin-bottom:16px}
+.gt-illustration{text-align:center}.gt-illustration svg{width:100%;height:auto;max-width:560px}
+.gt-illustration figcaption,.gt-figure figcaption{font-size:13px;color:#6b7c74;margin-top:10px}
+.gt-figure img{border-radius:24px;width:100%}
+.gt-card{background:#fff;border-radius:20px;padding:32px;box-shadow:0 10px 30px rgba(16,75,89,.07);height:100%;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s}
+.gt-card:hover{transform:translateY(-4px);box-shadow:0 16px 36px rgba(16,75,89,.11)}
+.gt-card-icon{width:56px;height:56px;border-radius:50%;background:#e4f8f2;color:#1b6943;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:22px}
+.gt-bg-mint .gt-card-icon{background:#f3faf6}
+.gt-card h4{font-size:22px;font-weight:600;color:#144734;margin-bottom:12px}
+.gt-card p{font-size:16px;line-height:1.7;color:#47504d;margin-bottom:12px}
+.gt-card-link{margin-top:auto;padding-top:8px;color:#1b6943;font-weight:500;display:inline-flex;align-items:center;gap:8px}
+.gt-card-link:hover{color:#0f2f22}
+.gt-intro{max-width:720px;margin:18px auto 0}
+.gt-steps{list-style:none;padding:0;margin:40px 0 0;counter-reset:none}
+.gt-steps li{display:flex;gap:22px;padding:22px 0;border-bottom:1px solid rgba(20,71,52,.1)}
+.gt-steps li:last-child{border-bottom:0}
+.gt-step-num{flex:0 0 48px;width:48px;height:48px;border-radius:50%;background:#1b6943;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:18px}
+.gt-steps h5{font-size:20px;font-weight:600;color:#144734;margin-bottom:6px}
+.gt-steps p{font-size:16px;line-height:1.7;color:#47504d;margin-bottom:8px}
+.gt-note{background:#f9f4d6;border-radius:16px;padding:20px 24px;margin-top:30px}
+.gt-note p{margin:0 0 8px;font-size:16px;line-height:1.7;color:#3c4a44}
+@media (max-width:991px){.gt-section{padding:80px 0}.gt-intro-hero{padding:40px 0 80px}.gt-page-header{padding:50px 0 40px}}
+@media (max-width:575px){.gt-section{padding:60px 0}.gt-card{padding:24px}.gt-lead p{font-size:18px}}
+
 
