@@ -87,7 +87,7 @@ export default function EventsSection() {
         <Carousel
           className="event-slider-one"
           items={items}
-          slidesToShow={{ xs: 1, md: 2, xl: 3 }}
+          slidesToShow={{ xs: 1, md: 1, xl: 2 }}
           autoplay
           renderItem={(event, index) => (
             <ListItem field="items" index={index}>
