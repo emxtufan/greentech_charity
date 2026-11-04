@@ -119,7 +119,7 @@ function DetailRow({ label, children }) {
   )
 }
 
-export default function F230Panel({ open, onClose }) {
+export function F230View() {
   const { content } = useContent()
 
   const [forms, setForms] = useState([])
@@ -130,8 +130,6 @@ export default function F230Panel({ open, onClose }) {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    if (!open) return undefined
-
     let active = true
 
     setLoading(true)
@@ -154,7 +152,7 @@ export default function F230Panel({ open, onClose }) {
     return () => {
       active = false
     }
-  }, [open])
+  }, [])
 
   const legal = content?.site?.legal || {}
 
@@ -243,7 +241,7 @@ export default function F230Panel({ open, onClose }) {
   }
 
   return (
-    <Modal open={open} onClose={onClose} title="Formulare 230">
+    <>
       {error && <p className="text-danger">{error}</p>}
 
       <div className="d-flex flex-wrap align-items-center gap-2 mb-3">
@@ -412,6 +410,14 @@ export default function F230Panel({ open, onClose }) {
           ))}
         </ul>
       )}
+    </>
+  )
+}
+
+export default function F230Panel({ open, onClose }) {
+  return (
+    <Modal open={open} onClose={onClose} title="Formulare 230">
+      {open && <F230View />}
     </Modal>
   )
 }

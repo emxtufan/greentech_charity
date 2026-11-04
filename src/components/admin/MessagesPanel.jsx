@@ -17,14 +17,12 @@ const formatDate = (value) => {
   return date.toLocaleString('ro-RO')
 }
 
-export default function MessagesPanel({ open, onClose }) {
+export function MessagesView() {
   const [messages, setMessages] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
   useEffect(() => {
-    if (!open) return undefined
-
     let active = true
 
     setLoading(true)
@@ -46,7 +44,7 @@ export default function MessagesPanel({ open, onClose }) {
     return () => {
       active = false
     }
-  }, [open])
+  }, [])
 
   const handleDelete = async (message) => {
     if (!window.confirm('Ștergi acest mesaj?')) return
@@ -62,7 +60,7 @@ export default function MessagesPanel({ open, onClose }) {
   }
 
   return (
-    <Modal open={open} onClose={onClose} title="Mesaje">
+    <>
       {error && <p className="text-danger">{error}</p>}
       {loading && <p>Se încarcă…</p>}
       {!loading && messages.length === 0 && <p>Nu ai mesaje.</p>}
@@ -96,6 +94,14 @@ export default function MessagesPanel({ open, onClose }) {
           ))}
         </ul>
       )}
+    </>
+  )
+}
+
+export default function MessagesPanel({ open, onClose }) {
+  return (
+    <Modal open={open} onClose={onClose} title="Mesaje">
+      {open && <MessagesView />}
     </Modal>
   )
 }

@@ -32,7 +32,7 @@ const pickFields = (source, fields) => {
 
 const normalizeIban = (value) => String(value ?? '').replace(/\s+/g, '').toUpperCase()
 
-export default function OrgDataPanel({ open, onClose }) {
+export function OrgDataView({ onCancel }) {
   const { content, update, save } = useContent()
 
   const [legalLocal, setLegalLocal] = useState(() => pickFields(null, LEGAL_FIELDS))
@@ -42,17 +42,15 @@ export default function OrgDataPanel({ open, onClose }) {
   const [formError, setFormError] = useState('')
 
   useEffect(() => {
-    if (!open) return
-
     const site = content?.site || {}
 
     setLegalLocal(pickFields(site.legal, LEGAL_FIELDS))
     setContactLocal(pickFields(site.contact, CONTACT_FIELDS))
     setFormError('')
     setSaved(false)
-    // se reîncarcă doar la deschidere, ca să nu pierdem modificările locale
+    // se reîncarcă doar la montare, ca să nu pierdem modificările locale
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open])
+  }, [])
 
   const handleLegalChange = (key, value) => {
     setLegalLocal((prev) => ({ ...prev, [key]: value }))
@@ -91,7 +89,7 @@ export default function OrgDataPanel({ open, onClose }) {
   }
 
   return (
-    <Modal open={open} onClose={onClose} title="Date asociație">
+    <>
       <p className="text-muted small">
         Datele apar pe site (pagina de contact, footer, Formularul 230). Formularul 230 online se
         activează doar când sunt completate denumirea, CIF-ul și IBAN-ul.
