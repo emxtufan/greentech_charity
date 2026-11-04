@@ -5,50 +5,38 @@ import {
   EditableImage,
   EditableLink,
   EditableList,
+  EditableParagraphs,
   EditableText,
   ListItem,
   Scope,
   useField,
 } from '../editable'
+import useContent from '../../hooks/useContent'
 
 export const defaultFooter = {
   logo: 'logo-horizontal-light.png',
-  text: 'Our Greentech Charity at vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium',
-  joinCta: { label: 'Join Now', to: '/#about' },
-  exploreTitle: 'Explore Link',
-  exploreLinks: [
-    { label: 'Charity', to: '/#causes' },
-    { label: 'Donation', to: '/#causes' },
-    { label: 'Fundrising', to: '/#causes' },
-    { label: 'Our Campaign', to: '/#causes' },
-    { label: 'Volunteer', to: '/register' },
-    { label: 'About us', to: '/#about' },
+  text: 'GreenTech Charity vrea să construiască case modulare pentru persoane și familii care au nevoie de un loc sigur în care să locuiască.',
+  linksTitle: 'Pagini',
+  links: [
+    { label: 'Povestea noastră', to: '/#poveste' },
+    { label: 'Case modulare', to: '/case-modulare' },
+    { label: 'Formularul 230', to: '/formular-230' },
+    { label: 'Proiecte și noutăți', to: '/proiecte' },
+    { label: 'Contact', to: '/contact' },
   ],
-  supportTitle: 'Support',
-  phones: ['+ 92 (888) 616110 000', '+ 1 (954) 546-3403'],
-  address: '101 Merritt 5, north tower 14851 New York, USA',
-  postsTitle: 'Latest Post',
-  posts: [
-    {
-      image: 'blog_img_05.jpg',
-      date: '12 Nov 2025',
-      title: { label: '18 Best Charity Marketing Campaigns', to: '/#blog' },
-    },
-    {
-      image: 'blog_img_06.jpg',
-      date: '12 Nov 2025',
-      title: { label: 'Charity Of The Month Golden Futures', to: '/#blog' },
-    },
-  ],
+  contactTitle: 'Contact',
+  contactMissing: 'Ne poți scrie prin formularul de pe pagina de contact.',
+  socials: [],
   bottomLinks: [
-    { label: 'Privacy & Terms', to: '#' },
-    { label: 'Cookies', to: '#' },
-    { label: 'Contact Us', to: '/#contact' },
+    { label: 'Confidențialitate', to: '/confidentialitate' },
+    { label: 'Date de identificare', to: '/contact#date-asociatie' },
   ],
-  copyright: 'Greentech Charity. All Rights Reserved',
+  copyright: 'GreenTech Charity',
 }
 
-const SOCIALS = ['fa-facebook-f', 'fa-twitter', 'fa-pinterest-p', 'fa-instagram']
+const hasValue = (value) => value !== undefined && value !== null && String(value).trim() !== ''
+
+const socialNewItem = { icon: 'bi-facebook', to: 'https://', label: 'Facebook' }
 
 export default function Footer() {
   return (
@@ -60,37 +48,33 @@ export default function Footer() {
 
 function FooterContent() {
   const year = new Date().getFullYear()
-  const { value: phones = [] } = useField('phones')
+  const { content } = useContent()
+  const { value: socialsValue } = useField('socials')
+
+  const contact = content?.site?.contact || {}
+  const legal = content?.site?.legal || {}
+  const socials = Array.isArray(socialsValue) ? socialsValue : []
+  const hasContact =
+    hasValue(contact.email) || hasValue(contact.phone) || hasValue(contact.address)
 
   return (
-    <div id="contact" className="main-footer bg-one top-space">
+    <div id="footer" className="main-footer bg-one top-space">
       <div className="container">
         <div className="position-relative top-footer">
           <div className="row">
-            <div className="col-lg-3">
+            <div className="col-lg-4">
               <div className="footer-intro mb-30 md-mb-50">
                 <Link to="/">
-                  <EditableImage field="logo" alt="Greentech Charity" style={{ height: 70 }} />
+                  <EditableImage field="logo" alt="GreenTech Charity" style={{ height: 70 }} />
                 </Link>
-                <EditableText field="text" as="p" className="mt-20 mb-30 fs-16" />
-                <ul className="style-none social-icon d-flex align-items-center">
-                  <li className="text-white">Social </li>
-                  {SOCIALS.map((icon) => (
-                    <li key={icon}>
-                      <a href="#">
-                        <i className={`fa-brands ${icon}`}></i>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-                <EditableLink field="joinCta" className="btn-three" />
+                <EditableParagraphs field="text" className="mt-20 mb-30 fs-16" />
               </div>
             </div>
-            <div className="col-lg-2 col-md-3">
+            <div className="col-lg-3 col-sm-6 offset-lg-1">
               <div className="footer-nav ps-xxl-4 mb-30">
-                <EditableText field="exploreTitle" as="h6" className="footer-title" />
+                <EditableText field="linksTitle" as="h6" className="footer-title" />
                 <EditableList
-                  field="exploreLinks"
+                  field="links"
                   as="ul"
                   className="footer-nav-link style-none"
                   renderItem={() => (
@@ -98,65 +82,54 @@ function FooterContent() {
                       <EditableLink />
                     </li>
                   )}
+                  newItem={{ label: 'Pagină', to: '/' }}
                 />
               </div>
             </div>
 
-            <div className="col-lg-3 col-md-5">
+            <div className="col-lg-4 col-sm-6">
               <div className="ps-xxl-4 mb-30">
-                <EditableText field="supportTitle" as="h6" className="footer-title" />
-                <ul className="contact-info style-none">
-                  <li>
-                    <div className="icon d-flex align-items-center justify-content-center rounded-circle">
-                      <img src={img('icon_13.png')} alt="" />
-                    </div>
-                    <p className="m0 d-flex flex-column">
-                      {phones.map((phone, index) => (
-                        <ListItem key={index} field="phones" index={index}>
-                          <a href={`tel:${phone.replace(/[^\d+]/g, '')}`}>
-                            <EditableText as="span" />
-                          </a>
-                        </ListItem>
-                      ))}
-                      <AddItemButton field="phones" />
-                    </p>
-                  </li>
-                  <li>
-                    <div className="icon d-flex align-items-center justify-content-center rounded-circle">
-                      <img src={img('icon_14.png')} alt="" />
-                    </div>
-                    <EditableText field="address" />
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div className="col-lg-4 col-md-4">
-              <div className="footer-news mb-30 ps-xxl-4">
-                <EditableText field="postsTitle" as="h6" className="footer-title" />
-                <EditableList
-                  field="posts"
-                  as="ul"
-                  className="style-none"
-                  renderItem={() => (
-                    <li>
-                      <article className="d-flex align-items-center">
-                        <EditableImage
-                          field="image"
-                          as="figure"
-                          asBackground
-                          className="post-img"
-                        />
-                        <div className="post-data">
-                          <EditableText field="date" as="div" className="date" />
-                          <h5 className="blog-title m0">
-                            <EditableLink field="title" className="line-bg inverse" />
-                          </h5>
-                        </div>
-                      </article>
-                    </li>
-                  )}
-                />
+                <EditableText field="contactTitle" as="h6" className="footer-title" />
+                {hasContact ? (
+                  <ul className="contact-info style-none">
+                    {hasValue(contact.email) && (
+                      <li>
+                        <i className="bi bi-envelope me-2" />
+                        <a href={`mailto:${contact.email}`}>{contact.email}</a>
+                      </li>
+                    )}
+                    {hasValue(contact.phone) && (
+                      <li>
+                        <i className="bi bi-telephone me-2" />
+                        <a href={`tel:${String(contact.phone).replace(/\s/g, '')}`}>
+                          {contact.phone}
+                        </a>
+                      </li>
+                    )}
+                    {hasValue(contact.address) && (
+                      <li>
+                        <i className="bi bi-geo-alt me-2" />
+                        {contact.address}
+                      </li>
+                    )}
+                  </ul>
+                ) : (
+                  <EditableParagraphs field="contactMissing" />
+                )}
+                {socials.length > 0 && (
+                  <ul className="style-none social-icon d-flex align-items-center mt-20">
+                    {socials.map((social, index) => (
+                      <ListItem key={index} field="socials" index={index}>
+                        <li>
+                          <EditableLink aria-label={social.label || social.icon}>
+                            <i className={`bi ${social.icon}`} />
+                          </EditableLink>
+                        </li>
+                      </ListItem>
+                    ))}
+                  </ul>
+                )}
+                <AddItemButton field="socials" newItem={socialNewItem} label="+ Rețea socială" />
               </div>
             </div>
           </div>
@@ -181,6 +154,11 @@ function FooterContent() {
               ©{year} <EditableText field="copyright" />
             </p>
           </div>
+          {hasValue(legal.name) && hasValue(legal.cif) && (
+            <p className="small mt-10 mb-0" style={{ opacity: 0.7 }}>
+              {legal.name} · CIF {legal.cif}
+            </p>
+          )}
         </div>
       </div>
       <img src={img('shape_18.png')} alt="" className="shapes shape_01" />
