@@ -624,7 +624,7 @@ button.cms-ui:hover {
 
 /* Lățime maximă site */
 :root {
-  --site-max: 1400px;
+  --site-max: 1480px;
   --site-pad: 24px;
 }
 
@@ -637,12 +637,14 @@ button.cms-ui:hover {
   padding-right: var(--site-pad) !important;
 }
 
-.theme-main-menu .inner-content {
+.theme-main-menu .bottom-header > .d-flex {
   max-width: var(--site-max);
   margin-left: auto;
   margin-right: auto;
-  padding-left: var(--site-pad);
-  padding-right: var(--site-pad);
+}
+
+.theme-main-menu .cta-btn-one {
+  white-space: nowrap;
 }
 
 .hero-banner-one .box-layout-one {
