@@ -44,3 +44,25 @@ Admin logat vede site-ul normal; în „Edit mode” fiecare text/imagine/link a
 ## Probleme deschise
 - Parola admin: utilizatorul setează ADMIN_PASSWORD (și JWT_SECRET) în .env.local
 - Navbar se aglomerează când se adaugă multe pagini în meniu (CTA trece pe 2 rânduri ~1440px)
+
+# Etapa 2 — Misiunea „case modulare” + Formularul 230
+## Decizii
+- Tot conținutul public în română, scris de șef; muncitorul doar îl inserează.
+- Secțiuni noi generice în src/components/sections/: IntroHero, PageHeader, TextBlock, CardsGrid, Steps, Faq, CtaBand, Updates, ContactForm, OrgInfo, Form230Data. Fiecare: export default + defaultData, editabile prin src/components/editable, acceptă `anchor` (id pe root).
+- Secțiunile vechi din șablon (cifre, testimoniale, evenimente inventate) rămân în registry ca `legacy`, ascunse din pickerul de secțiuni.
+- Fără colectare online de Formulare 230: lipsesc semnătura validă, sistemul securizat și datele legale confirmate. Pagina /formular-230 explică, trimite la formularul oficial ANAF și afișează datele asociației din site.legal doar când sunt completate.
+- Date asociație în content.site.legal {name, cif, registry, address, iban, bank, representative} și content.site.contact {email, phone, address}. Câmpurile goale nu se afișează public.
+- Formular de contact real: POST /api/messages → server/data/messages.json (gitignored), acces doar admin (JWT), ștergere automată după 12 luni, fără logarea conținutului.
+- Pagini: / , /case-modulare , /formular-230 , /proiecte , /contact , /confidentialitate.
+
+## Pași
+1. [ ] API mesaje + admin inbox
+2. [ ] Secțiuni generice
+3. [ ] Registry, Navbar, Footer, meta, NotFound în română
+4. [ ] Conținut content.json (toate paginile)
+5. [ ] Verificare desktop/mobil, recitire texte
+
+## De confirmat de organizație
+- Denumirea legală, CIF, sediu, nr. Registrul asociațiilor, IBAN, email, telefon
+- Înscrierea în Registrul entităților/unităților de cult pentru care se acordă deduceri fiscale (Formular 163)
+- Dacă formularea „Suntem la început” descrie situația reală
