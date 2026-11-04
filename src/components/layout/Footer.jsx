@@ -43,7 +43,7 @@ export default function Footer() {
                   />
                 </Link>
                 <p className="mt-20 mb-30 fs-16">
-                  Our Gifall charity at vero eos et accusamus et iusto odio dignissimos ducimus qui
+                  Our Greentech Charity at vero eos et accusamus et iusto odio dignissimos ducimus qui
                   blanditiis praesentium
                 </p>
                 <ul className="style-none social-icon d-flex align-items-center">
