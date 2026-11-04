@@ -1,3 +1,14 @@
+import IntroHero, { defaultData as introHeroData } from '../components/sections/IntroHero'
+import PageHeader, { defaultData as pageHeaderData } from '../components/sections/PageHeader'
+import TextBlock, { defaultData as textBlockData } from '../components/sections/TextBlock'
+import CardsGrid, { defaultData as cardsGridData } from '../components/sections/CardsGrid'
+import Steps, { defaultData as stepsData } from '../components/sections/Steps'
+import Faq, { defaultData as faqData } from '../components/sections/Faq'
+import CtaBand, { defaultData as ctaBandData } from '../components/sections/CtaBand'
+import Updates, { defaultData as updatesData } from '../components/sections/Updates'
+import ContactForm, { defaultData as contactFormData } from '../components/sections/ContactForm'
+import OrgInfo, { defaultData as orgInfoData } from '../components/sections/OrgInfo'
+import Form230Data, { defaultData as form230Data } from '../components/sections/Form230Data'
 import HeroSection, { defaultData as heroData } from '../components/home/HeroSection'
 import FeaturesSection, { defaultData as featuresData } from '../components/home/FeaturesSection'
 import AboutSection, { defaultData as aboutData } from '../components/home/AboutSection'
@@ -14,18 +25,29 @@ import { defaultSite } from '../components/layout/Navbar'
 import { defaultFooter } from '../components/layout/Footer'
 
 export const sectionTypes = {
-  hero: { label: 'Hero', component: HeroSection, defaultData: heroData },
-  features: { label: 'Features', component: FeaturesSection, defaultData: featuresData },
-  about: { label: 'About', component: AboutSection, defaultData: aboutData },
-  stats: { label: 'Stats', component: StatsSection, defaultData: statsData },
-  causes: { label: 'Causes', component: CausesSection, defaultData: causesData },
-  impact: { label: 'Impact', component: ImpactSection, defaultData: impactData },
-  events: { label: 'Events', component: EventsSection, defaultData: eventsData },
-  testimonials: { label: 'Testimonials', component: TestimonialsSection, defaultData: testimonialsData },
-  donate: { label: 'Donate', component: DonateSection, defaultData: donateData },
-  blog: { label: 'Blog', component: BlogSection, defaultData: blogData },
-  newsletter: { label: 'Newsletter', component: NewsletterSection, defaultData: newsletterData },
-  richText: { label: 'Text + image', component: RichTextSection, defaultData: richTextData },
+  introHero: { label: 'Prezentare principală', component: IntroHero, defaultData: introHeroData },
+  pageHeader: { label: 'Antet de pagină', component: PageHeader, defaultData: pageHeaderData },
+  textBlock: { label: 'Text și imagine', component: TextBlock, defaultData: textBlockData },
+  cardsGrid: { label: 'Carduri', component: CardsGrid, defaultData: cardsGridData },
+  steps: { label: 'Pași', component: Steps, defaultData: stepsData },
+  faq: { label: 'Întrebări frecvente', component: Faq, defaultData: faqData },
+  ctaBand: { label: 'Bandă cu îndemn', component: CtaBand, defaultData: ctaBandData },
+  updates: { label: 'Actualizări', component: Updates, defaultData: updatesData },
+  contactForm: { label: 'Formular de contact', component: ContactForm, defaultData: contactFormData },
+  orgInfo: { label: 'Date de contact și identificare', component: OrgInfo, defaultData: orgInfoData },
+  form230Data: { label: 'Date pentru Formularul 230', component: Form230Data, defaultData: form230Data },
+  hero: { label: 'Hero', component: HeroSection, defaultData: heroData, legacy: true },
+  features: { label: 'Features', component: FeaturesSection, defaultData: featuresData, legacy: true },
+  about: { label: 'About', component: AboutSection, defaultData: aboutData, legacy: true },
+  stats: { label: 'Stats', component: StatsSection, defaultData: statsData, legacy: true },
+  causes: { label: 'Causes', component: CausesSection, defaultData: causesData, legacy: true },
+  impact: { label: 'Impact', component: ImpactSection, defaultData: impactData, legacy: true },
+  events: { label: 'Events', component: EventsSection, defaultData: eventsData, legacy: true },
+  testimonials: { label: 'Testimonials', component: TestimonialsSection, defaultData: testimonialsData, legacy: true },
+  donate: { label: 'Donate', component: DonateSection, defaultData: donateData, legacy: true },
+  blog: { label: 'Blog', component: BlogSection, defaultData: blogData, legacy: true },
+  newsletter: { label: 'Newsletter', component: NewsletterSection, defaultData: newsletterData, legacy: true },
+  richText: { label: 'Text + image', component: RichTextSection, defaultData: richTextData, legacy: true },
 }
 
 const createId = (type) =>

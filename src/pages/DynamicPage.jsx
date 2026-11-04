@@ -25,8 +25,21 @@ export default function DynamicPage() {
 
   useEffect(() => {
     if (!page) return
-    document.title = `${page.title} | ${siteName}`
-  }, [page, siteName])
+
+    document.title =
+      page.slug === '/' ? content?.site?.title || siteName : `${page.title} | ${siteName}`
+
+    const description = page.description || content?.site?.description || ''
+    let meta = document.querySelector('meta[name="description"]')
+
+    if (!meta) {
+      meta = document.createElement('meta')
+      meta.setAttribute('name', 'description')
+      document.head.appendChild(meta)
+    }
+
+    meta.setAttribute('content', description)
+  }, [page, content, siteName])
 
   if (loading && !content) return null
 
