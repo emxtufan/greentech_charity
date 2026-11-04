@@ -841,5 +841,6 @@ body:not(:has(.fancy-banner-one)) .main-footer.top-space{margin-top:0 !important
 .gt-option .form-check-input{margin-top:3px;flex:0 0 auto}
 .gt-option.is-checked{border-color:#2e8b57;background:#f3faf6}
 @media (max-width:575px){.gt-btn-block-sm{width:100%}}
+.gt-form-card .form-select{-webkit-appearance:none;appearance:none;background-color:#fff;background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%231b6943' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;background-repeat:no-repeat !important;background-position:right 16px center !important;background-size:14px 10px !important;padding-right:42px;cursor:pointer}
 
 
