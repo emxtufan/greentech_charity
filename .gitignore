@@ -24,3 +24,6 @@ server/data/messages.json.tmp
 server/data/f230.json
 server/data/f230.json.tmp
 server/data/f230.key
+
+# secrete locale
+.env
