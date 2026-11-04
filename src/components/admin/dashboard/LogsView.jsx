@@ -81,8 +81,6 @@ export default function LogsView() {
 
   return (
     <div className="gt-admin-card mb-3">
-      <h5 className="mb-3">Loguri</h5>
-
       <div className="d-flex flex-wrap align-items-center gap-2 mb-3">
         <select
           className="form-select form-select-sm w-auto"

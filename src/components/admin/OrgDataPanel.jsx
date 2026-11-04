@@ -134,7 +134,7 @@ export function OrgDataView({ onCancel }) {
       <div className="d-flex align-items-center gap-2 mt-3">
         <button
           type="button"
-          className="btn btn-sm btn-primary"
+          className="btn btn-sm btn-success"
           onClick={handleSave}
           disabled={saving}
         >
