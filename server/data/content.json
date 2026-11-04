@@ -11,7 +11,19 @@
       "slug": "/",
       "title": "Home",
       "showInNav": true,
-      "sections": []
+      "sections": [
+        { "id": "hero-1", "type": "hero", "hidden": false },
+        { "id": "features-1", "type": "features", "hidden": false },
+        { "id": "about-1", "type": "about", "hidden": false },
+        { "id": "stats-1", "type": "stats", "hidden": false },
+        { "id": "causes-1", "type": "causes", "hidden": false },
+        { "id": "impact-1", "type": "impact", "hidden": false },
+        { "id": "events-1", "type": "events", "hidden": false },
+        { "id": "testimonials-1", "type": "testimonials", "hidden": false },
+        { "id": "donate-1", "type": "donate", "hidden": false },
+        { "id": "blog-1", "type": "blog", "hidden": false },
+        { "id": "newsletter-1", "type": "newsletter", "hidden": false }
+      ]
     }
   ]
 }

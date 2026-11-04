@@ -1,6 +1,7 @@
 import { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import adminService from '../services/adminService'
 import contentService from '../services/contentService'
+import { normalizeContent } from '../sections/registry'
 import { getIn, setIn } from '../utils/path'
 
 export const ContentContext = createContext(null)
@@ -62,8 +63,9 @@ export function ContentProvider({ children }) {
       .getContent()
       .then((data) => {
         if (!active) return
-        contentRef.current = data
-        setContent(data)
+        const normalized = normalizeContent(data)
+        contentRef.current = normalized
+        setContent(normalized)
         setError(null)
       })
       .catch((err) => {
@@ -169,11 +171,12 @@ export function ContentProvider({ children }) {
 
   const discard = useCallback(async () => {
     const data = await contentService.getContent()
-    applyContent(data)
+    const normalized = normalizeContent(data)
+    applyContent(normalized)
     clearHistory()
     setError(null)
     setDirty(false)
-    return data
+    return normalized
   }, [applyContent, clearHistory])
 
   const save = useCallback(async () => {
