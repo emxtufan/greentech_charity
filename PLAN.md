@@ -56,13 +56,15 @@ Admin logat vede site-ul normal; în „Edit mode” fiecare text/imagine/link a
 - Pagini: / , /case-modulare , /formular-230 , /proiecte , /contact , /confidentialitate.
 
 ## Pași
-1. [ ] API mesaje + admin inbox
-2. [ ] Secțiuni generice
-3. [ ] Registry, Navbar, Footer, meta, NotFound în română
-4. [ ] Conținut content.json (toate paginile)
-5. [ ] Verificare desktop/mobil, recitire texte
+1. [x] API mesaje + admin inbox
+2. [x] Secțiuni generice
+3. [x] Registry, Navbar, Footer, meta, NotFound în română
+4. [x] Conținut content.json (toate paginile)
+5. [x] Verificare desktop/mobil, recitire texte
 
 ## De confirmat de organizație
 - Denumirea legală, CIF, sediu, nr. Registrul asociațiilor, IBAN, email, telefon
 - Înscrierea în Registrul entităților/unităților de cult pentru care se acordă deduceri fiscale (Formular 163)
 - Dacă formularea „Suntem la început” descrie situația reală
+- Imaginea de fundal din footer (copil, din șablon) poate fi înlocuită cu o fotografie proprie sau cu fundal simplu
+- Paginile vechi /login, /register, /dashboard (conturi de vizitatori simulate, în engleză) nu mai apar în meniu; de decis dacă se șterg
