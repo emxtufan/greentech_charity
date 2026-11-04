@@ -8,6 +8,7 @@ import {
   ListItem,
   useField,
 } from '../editable'
+import useContent from '../../hooks/useContent'
 import { img } from '../../utils/helpers'
 
 export const defaultData = {
@@ -68,8 +69,10 @@ export const defaultData = {
 }
 
 export default function EventsSection() {
+  const { editMode } = useContent()
   const { value: items = [] } = useField('items')
   const { value: tags = [] } = useField('tags')
+  const { value: cta } = useField('cta')
 
   return (
     <div
@@ -100,36 +103,46 @@ export default function EventsSection() {
                   />
                   <div className="text position-relative">
                     <div className="bg-wrapper position-relative h-100">
-                      <EditableText field="date" as="div" className="date" />
+                      {(event.date || editMode) && (
+                        <EditableText field="date" as="div" className="date" />
+                      )}
                       <h4>
                         <EditableLink field="title" className="line-bg" />
                       </h4>
                       <EditableText field="text" as="p" multiline />
-                      <ul className="style-none">
-                        <li>
-                          <i className="fa-regular fa-clock"></i>{' '}
-                          <EditableText
-                            field="time"
-                            as="span"
-                            style={{ background: event.timeBg }}
-                          />
-                        </li>
-                        <li>
-                          <i className="fa-regular fa-location-dot"></i>{' '}
-                          <EditableText
-                            field="location"
-                            as="span"
-                            style={{ background: event.locationBg }}
-                          />
-                        </li>
-                      </ul>
+                      {(event.time || event.location || editMode) && (
+                        <ul className="style-none">
+                          {(event.time || editMode) && (
+                            <li>
+                              <i className="fa-regular fa-clock"></i>{' '}
+                              <EditableText
+                                field="time"
+                                as="span"
+                                style={{ background: event.timeBg }}
+                              />
+                            </li>
+                          )}
+                          {(event.location || editMode) && (
+                            <li>
+                              <i className="fa-regular fa-location-dot"></i>{' '}
+                              <EditableText
+                                field="location"
+                                as="span"
+                                style={{ background: event.locationBg }}
+                              />
+                            </li>
+                          )}
+                        </ul>
+                      )}
 
-                      <EditableLink field="cta" className="details-cta d-flex align-items-center">
-                        <div className="icon rounded-circle d-flex align-items-center justify-content-center tran3s">
-                          <i className="fa-solid fa-angle-right"></i>
-                        </div>
-                        <span className="line-bg">{event.cta?.label}</span>
-                      </EditableLink>
+                      {(event.cta?.label || editMode) && (
+                        <EditableLink field="cta" className="details-cta d-flex align-items-center">
+                          <div className="icon rounded-circle d-flex align-items-center justify-content-center tran3s">
+                            <i className="fa-solid fa-angle-right"></i>
+                          </div>
+                          <span className="line-bg">{event.cta?.label}</span>
+                        </EditableLink>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -139,9 +152,11 @@ export default function EventsSection() {
         />
         <AddItemButton field="items" bulkImageField="image" />
 
-        <div className="text-center mt-65 md-mt-50">
-          <EditableLink field="cta" className="btn-two" />
-        </div>
+        {(cta?.label || editMode) && (
+          <div className="text-center mt-65 md-mt-50">
+            <EditableLink field="cta" className="btn-two" />
+          </div>
+        )}
       </div>
       {/* /.box-layout-one */}
 

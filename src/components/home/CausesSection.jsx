@@ -6,13 +6,20 @@ import {
   EditableLink,
   EditableText,
   ListItem,
+  Scope,
   useField,
+  useScopePath,
 } from '../editable'
+import useContent from '../../hooks/useContent'
 import { img } from '../../utils/helpers'
 
 export const defaultData = {
   subtitle: 'Begin Giving To Them',
   title: 'Explore These Causes',
+  raisedOfLabel: 'raised of',
+  goalLabel: 'goal',
+  supportersPrefix: 'Our active',
+  supportersSuffix: 'supporters',
   items: [
     {
       id: 1,
@@ -66,6 +73,8 @@ export const defaultData = {
 }
 
 export default function CausesSection() {
+  const { editMode } = useContent()
+  const sectionPath = useScopePath()
   const { value: items = [] } = useField('items')
 
   return (
@@ -92,27 +101,47 @@ export default function CausesSection() {
               <div className="card-style-two">
                 <EditableImage field="image" asBackground className="media-bg" />
                 <div className="info-meta position-relative z-1">
-                  <EditableText field="tag" as="div" className="tags" />
+                  {(cause.tag || editMode) && (
+                    <EditableText field="tag" as="div" className="tags" />
+                  )}
                   <h4>
                     <EditableLink field="title" className="line-bg" />
                   </h4>
                   <EditableText field="text" as="p" className="fs-16" />
-                  <div className="fs-16 fund-goal">
-                    <EditableText field="raised" /> raised of{' '}
-                    <EditableText field="goal" numeric /> goal
-                  </div>
-                  <div className="progress-bar position-relative">
-                    <div
-                      className="progress position-relative"
-                      style={{ width: `${cause.progress}%` }}
-                    >
-                      <EditableText field="percent" as="span" />
+                  {(cause.raised || cause.goal || editMode) && (
+                    <>
+                      <div className="fs-16 fund-goal">
+                        <EditableText field="raised" />{' '}
+                        <Scope path={sectionPath}>
+                          <EditableText field="raisedOfLabel" />
+                        </Scope>{' '}
+                        <EditableText field="goal" numeric />{' '}
+                        <Scope path={sectionPath}>
+                          <EditableText field="goalLabel" />
+                        </Scope>
+                      </div>
+                      <div className="progress-bar position-relative">
+                        <div
+                          className="progress position-relative"
+                          style={{ width: `${cause.progress}%` }}
+                        >
+                          <EditableText field="percent" as="span" />
+                        </div>
+                      </div>
+                      {/* /.progress-bar */}
+                    </>
+                  )}
+                  {(cause.supporters || editMode) && (
+                    <div className="supporters fs-16">
+                      <Scope path={sectionPath}>
+                        <EditableText field="supportersPrefix" />
+                      </Scope>{' '}
+                      <EditableText field="supporters" numeric />{' '}
+                      <Scope path={sectionPath}>
+                        <EditableText field="supportersSuffix" />
+                      </Scope>
                     </div>
-                  </div>
-                  {/* /.progress-bar */}
-                  <div className="supporters fs-16">
-                    Our active <EditableText field="supporters" numeric /> supporters{' '}
-                  </div>
+                  )}
                   <img src={img('shape_07.png')} alt="shape" className="shapes shape_01" />
                 </div>
                 {/* /.info-meta */}
