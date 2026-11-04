@@ -1,11 +1,25 @@
 import Counter from '../common/Counter'
 import Reveal from '../common/Reveal'
-import { bg, img } from '../../utils/helpers'
+import { EditableImage, EditableList, EditableText, useField } from '../editable'
+import { img } from '../../utils/helpers'
 
-const MISSION_LIST = [
-  'Our mission, vision, and the heart behind it all',
-  'GivenGain is the global leader in online fundraising.',
-]
+export const defaultData = {
+  subtitle: 'Make A Difference Today',
+  title: 'Make A Difference Today Join Mission ',
+  text: 'There are many variations of passages of lorem Ipsum available, but the majority have suffered alteration dolore magna. We started charity in 2001 with a simple idea: to enable global philanthropy by empowering',
+  amount: 1023,
+  amountLabel: 'Dollar giving more than 15 years',
+  items: [
+    'Our mission, vision, and the heart behind it all',
+    'GivenGain is the global leader in online fundraising.',
+  ],
+  progressLabel: 'Success Case',
+  progress: 65,
+  count: 39976,
+  countLabel: 'Project Done',
+  years: 12,
+  image: 'img_09.jpg',
+}
 
 const SHAPES = [
   { src: 'shape_08.png', className: 'shape_01' },
@@ -15,6 +29,8 @@ const SHAPES = [
 ]
 
 export default function ImpactSection() {
+  const { value: progress = 0 } = useField('progress')
+
   return (
     <div className="feature-block-three position-relative z-1 pt-140 lg-pt-80 pb-140 lg-pb-80">
       <div className="container">
@@ -22,41 +38,40 @@ export default function ImpactSection() {
           <Reveal className="col-lg-7 d-flex order-lg-last" anim="slide-left" duration={900}>
             <div className="ps-lg-5 w-100">
               <div className="title-one mb-30">
-                <div className="upper-title">Make A Difference Today</div>
-                <h2>Make A Difference Today Join Mission </h2>
+                <EditableText field="subtitle" as="div" className="upper-title" />
+                <EditableText field="title" as="h2" />
               </div>
               {/* /.title-one */}
-              <p>
-                There are many variations of passages of lorem Ipsum available, but the majority
-                have suffered alteration dolore magna. We started charity in 2001 with a simple
-                idea: to enable global philanthropy by empowering
-              </p>
+              <EditableText field="text" as="p" />
               <div className="card-one d-flex align-items-center mt-30 mb-50 lg-mb-30">
                 <div className="icon rounded-circle d-flex align-items-center justify-content-center">
                   <img src={img('icon_06.png')} alt="" />
                 </div>
                 <div className="text">
                   <div className="main-count font-amita">
-                    $<Counter end={1023} />M
+                    $<EditableText field="amount" numeric render={(v) => <Counter end={v} />} />M
                   </div>
-                  <p className="fs-16 fw-500">Dollar giving more than 15 years</p>
+                  <EditableText field="amountLabel" as="p" className="fs-16 fw-500" />
                 </div>
               </div>
               {/* /.card-one */}
-              <ul className="style-none list-style-two d-flex flex-wrap">
-                {MISSION_LIST.map((item) => (
-                  <li key={item}>
-                    <span>{item}</span>
+              <EditableList
+                field="items"
+                as="ul"
+                className="style-none list-style-two d-flex flex-wrap"
+                renderItem={() => (
+                  <li>
+                    <EditableText as="span" />
                   </li>
-                ))}
-              </ul>
+                )}
+              />
               {/* /.list-style-two */}
 
               <div className="sucess-score mt-35">
-                <p>Success Case</p>
+                <EditableText field="progressLabel" as="p" />
                 <div className="progress-bar position-relative">
-                  <div className="progress position-relative" style={{ width: '65%' }}>
-                    <span>65%</span>
+                  <div className="progress position-relative" style={{ width: `${progress}%` }}>
+                    <span>{progress}%</span>
                   </div>
                 </div>
                 {/* /.progress-bar */}
@@ -68,25 +83,29 @@ export default function ImpactSection() {
             anim="slide-right"
             duration={900}
           >
-            <div className="media-bg position-relative z-1 w-100" style={bg('img_09.jpg')}>
+            <EditableImage
+              field="image"
+              asBackground
+              className="media-bg position-relative z-1 w-100"
+            >
               <div className="card-one d-flex align-items-center">
                 <div className="icon rounded-circle d-flex align-items-center justify-content-center">
                   <img src={img('icon_05.png')} alt="" />
                 </div>
                 <div className="text">
                   <div className="main-count">
-                    <Counter end={39976} />+
+                    <EditableText field="count" numeric render={(v) => <Counter end={v} />} />+
                   </div>
-                  <p>Project Done</p>
+                  <EditableText field="countLabel" as="p" />
                 </div>
               </div>
               {/* /.card-one */}
 
               <div className="years">
                 <img src={img('sticker.png')} alt="" />
-                <Counter end={12} />
+                <EditableText field="years" numeric render={(v) => <Counter end={v} />} />
               </div>
-            </div>
+            </EditableImage>
             {/* /.media-bg */}
           </Reveal>
         </div>
