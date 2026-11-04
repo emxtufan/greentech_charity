@@ -649,10 +649,10 @@ button.cms-ui:hover {
 
 @media (max-width: 575px) {
   .hero-marquee {
-    margin-left: -16px;
-    margin-right: -16px;
-    padding-left: 16px;
-    padding-right: 16px;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 6px;
+    padding-right: 14px;
   }
 
   .hero-marquee__col {
