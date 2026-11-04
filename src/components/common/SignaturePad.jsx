@@ -10,7 +10,7 @@ const canvasStyle = {
   width: '100%',
   height: `${HEIGHT}px`,
   background: BACKGROUND,
-  border: '2px dashed #9fd8c5',
+  border: '2px dashed #b5d99c',
   borderRadius: 12,
   touchAction: 'none',
   cursor: 'crosshair',
