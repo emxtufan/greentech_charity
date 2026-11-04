@@ -96,6 +96,7 @@ export default function CausesSection() {
           slidesToShow={{ xs: 1, md: 2, xl: 3 }}
           autoplay
           dots
+          loop
           renderItem={(cause, index) => (
             <ListItem field="items" index={index}>
               <div className="card-style-two">

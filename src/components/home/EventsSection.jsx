@@ -92,6 +92,7 @@ export default function EventsSection() {
           items={items}
           slidesToShow={{ xs: 1, md: 1, xl: 2 }}
           autoplay
+          loop
           renderItem={(event, index) => (
             <ListItem field="items" index={index}>
               <div className="card-style-three">
