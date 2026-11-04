@@ -1,18 +1,38 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Button from '../common/Button'
 import Modal from '../common/Modal'
 import useContent from '../../hooks/useContent'
 import contentService from '../../services/contentService'
-import { resolveImg } from '../../utils/helpers'
+import { isInternal, resolveImg } from '../../utils/helpers'
 import { getIn, insertAt, moveItem, removeAt, toPath } from '../../utils/path'
 
 const OVERLAY_Z_INDEX = 100000
+const SELECTION_BOX_Z_INDEX = 99998
+const SELECTION_BOX_PADDING = 3
+const SELECTION_BAR_OFFSET = 44
+const SELECTION_BAR_MARGIN = 8
+
+const IGNORE_SELECTOR = '.cms-ui, .app-modal, .cms-add-btn'
 
 const EDITOR_TITLES = {
   text: 'Editează text',
   number: 'Editează număr',
   link: 'Editează link',
   image: 'Editează imagine',
+}
+
+const TYPE_LABELS = {
+  text: 'Text',
+  number: 'Number',
+  image: 'Image',
+  link: 'Link',
+  item: 'Item',
+}
+
+const sameItem = (a, b) => {
+  if (a === b) return true
+  return Boolean(a && b && a.list === b.list && a.index === b.index)
 }
 
 const rectOf = (el) => {
@@ -204,9 +224,23 @@ function CmsEditor({ editor, onClose, onSave }) {
 
 export default function CmsOverlay() {
   const { content, editMode, update, mutateList } = useContent()
-  const [hover, setHover] = useState({ target: null, item: null })
-  const [position, setPosition] = useState({ target: null, item: null })
+  const navigate = useNavigate()
+  const [selection, setSelection] = useState(null)
+  const [itemParent, setItemParent] = useState(null)
   const [editor, setEditor] = useState(null)
+  const boxRef = useRef(null)
+  const barRef = useRef(null)
+  const contentRef = useRef(content)
+  const editorRef = useRef(false)
+
+  // referințe pentru listenerele de document (fără re-înregistrare la fiecare randare)
+  useEffect(() => {
+    contentRef.current = content
+  }, [content])
+
+  useEffect(() => {
+    editorRef.current = Boolean(editor)
+  }, [editor])
 
   useEffect(() => {
     if (!editMode) return undefined
@@ -216,67 +250,188 @@ export default function CmsOverlay() {
     return () => document.body.classList.remove('cms-edit-mode')
   }, [editMode])
 
-  // hover: ținta = cel mai apropiat [data-cms-path], itemul = cel mai apropiat [data-cms-list]
+  // ieșirea din edit mode deselectează
   useEffect(() => {
-    if (!editMode) {
-      setHover({ target: null, item: null })
-      return undefined
+    if (editMode) return
+
+    setSelection(null)
+    setItemParent(null)
+    setEditor(null)
+  }, [editMode])
+
+  // click = selectare, dblclick = selectare + editor, Esc = deselect
+  useEffect(() => {
+    if (!editMode) return undefined
+
+    const selectField = (el) => {
+      const path = el.dataset.cmsPath
+      if (!path) return
+
+      setSelection({ kind: 'field', path, type: el.dataset.cmsType || 'text' })
     }
 
-    const handleMouseOver = (event) => {
-      const node = event.target
+    const openEditorFor = (el) => {
+      const pathAttr = el.dataset.cmsPath
+      if (!pathAttr) return
 
-      if (!(node instanceof Element) || node.closest('.cms-ui')) return
+      const path = toPath(pathAttr)
+      setEditor({ path, type: el.dataset.cmsType || 'text', value: getIn(contentRef.current, path) })
+    }
 
-      const targetEl = node.closest('[data-cms-path]')
-      const itemEl = node.closest('[data-cms-list]')
-      const nextTarget = rectOf(targetEl) ? targetEl : null
-      const nextItem = rectOf(itemEl) ? itemEl : null
+    const handleClick = (event) => {
+      const target = event.target
 
-      setHover((prev) =>
-        prev.target === nextTarget && prev.item === nextItem
-          ? prev
-          : { target: nextTarget, item: nextItem }
+      if (!(target instanceof Element) || target.closest(IGNORE_SELECTOR)) return
+
+      const fieldEl = target.closest('[data-cms-path]')
+
+      if (fieldEl) {
+        event.preventDefault()
+        event.stopPropagation()
+        selectField(fieldEl)
+        return
+      }
+
+      const itemEl = target.closest('[data-cms-list]')
+
+      if (itemEl) {
+        event.preventDefault()
+        event.stopPropagation()
+
+        const list = itemEl.dataset.cmsList
+        const index = Number(itemEl.dataset.cmsIndex)
+
+        setSelection(list && Number.isInteger(index) ? { kind: 'item', list, index } : null)
+        return
+      }
+
+      // nimic editabil → deselect, dar fără preventDefault (linkurile normale rămân funcționale)
+      setSelection(null)
+    }
+
+    const handleDoubleClick = (event) => {
+      const target = event.target
+
+      if (!(target instanceof Element) || target.closest(IGNORE_SELECTOR)) return
+
+      const fieldEl = target.closest('[data-cms-path]')
+
+      if (!fieldEl) return
+
+      event.preventDefault()
+      event.stopPropagation()
+      selectField(fieldEl)
+      openEditorFor(fieldEl)
+    }
+
+    const handleKeyDown = (event) => {
+      if (event.key !== 'Escape') return
+      if (editorRef.current) return
+
+      setSelection(null)
+    }
+
+    document.addEventListener('click', handleClick, true)
+    document.addEventListener('dblclick', handleDoubleClick, true)
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.removeEventListener('click', handleClick, true)
+      document.removeEventListener('dblclick', handleDoubleClick, true)
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [editMode])
+
+  // urmărirea selecției: elementul e re-găsit la fiecare frame, apoi desenăm conturul + bara
+  useLayoutEffect(() => {
+    if (!selection) return undefined
+
+    const findTarget = () => {
+      if (selection.kind === 'field') {
+        return document.querySelector(`[data-cms-path="${CSS.escape(selection.path)}"]`)
+      }
+
+      return document.querySelector(
+        `[data-cms-list="${CSS.escape(selection.list)}"][data-cms-index="${selection.index}"]`
       )
     }
 
-    document.addEventListener('mouseover', handleMouseOver)
+    const apply = () => {
+      const el = findTarget()
+      const rect = rectOf(el)
 
-    return () => document.removeEventListener('mouseover', handleMouseOver)
-  }, [editMode])
+      if (!rect) {
+        setSelection(null)
+        return false
+      }
 
-  // repoziționare din getBoundingClientRect la scroll/resize și după modificări de conținut
-  useEffect(() => {
-    if (!editMode || (!hover.target && !hover.item)) {
-      setPosition({ target: null, item: null })
-      return undefined
+      if (selection.kind === 'field') {
+        const parentEl = el.closest('[data-cms-list]')
+        const parent = parentEl
+          ? { list: parentEl.dataset.cmsList, index: Number(parentEl.dataset.cmsIndex) }
+          : null
+
+        setItemParent((prev) => (sameItem(prev, parent) ? prev : parent))
+      }
+
+      const box = boxRef.current
+
+      if (box) {
+        box.style.top = `${rect.top - SELECTION_BOX_PADDING}px`
+        box.style.left = `${rect.left - SELECTION_BOX_PADDING}px`
+        box.style.width = `${rect.width + SELECTION_BOX_PADDING * 2}px`
+        box.style.height = `${rect.height + SELECTION_BOX_PADDING * 2}px`
+      }
+
+      const bar = barRef.current
+
+      if (bar) {
+        const maxLeft = window.innerWidth - bar.offsetWidth - SELECTION_BAR_MARGIN
+        const left = Math.max(SELECTION_BAR_MARGIN, Math.min(rect.left, maxLeft))
+        const above = rect.top - SELECTION_BAR_OFFSET
+
+        bar.style.top = `${above < SELECTION_BAR_MARGIN ? rect.bottom + SELECTION_BAR_MARGIN : above}px`
+        bar.style.left = `${left}px`
+      }
+
+      return true
     }
 
-    const reposition = () => {
-      setPosition({ target: rectOf(hover.target), item: rectOf(hover.item) })
+    let frame = 0
+
+    const loop = () => {
+      if (!apply()) return
+      frame = requestAnimationFrame(loop)
     }
 
-    reposition()
-    window.addEventListener('scroll', reposition, true)
-    window.addEventListener('resize', reposition)
+    apply()
+    frame = requestAnimationFrame(loop)
 
-    return () => {
-      window.removeEventListener('scroll', reposition, true)
-      window.removeEventListener('resize', reposition)
-    }
-  }, [editMode, hover, content])
+    return () => cancelAnimationFrame(frame)
+  }, [selection])
 
-  const openEditor = () => {
-    if (!hover.target) return
+  const actions = !selection
+    ? null
+    : selection.kind === 'item'
+      ? { list: selection.list, index: selection.index }
+      : itemParent
 
-    const pathAttr = hover.target.getAttribute('data-cms-path')
-    if (!pathAttr) return
+  const typeLabel = selection
+    ? selection.kind === 'item'
+      ? TYPE_LABELS.item
+      : TYPE_LABELS[selection.type] || TYPE_LABELS.text
+    : ''
 
-    const path = toPath(pathAttr)
-    const type = hover.target.getAttribute('data-cms-type') || 'text'
+  const selectedValue =
+    selection && selection.kind === 'field' ? getIn(content, toPath(selection.path)) : null
 
-    setEditor({ path, type, value: getIn(content, path) })
-  }
+  const canOpen =
+    Boolean(selection) &&
+    selection.kind === 'field' &&
+    selection.type === 'link' &&
+    Boolean(selectedValue) &&
+    typeof selectedValue === 'object' &&
+    isInternal(selectedValue.to)
 
   const handleEditorSave = (nextValue) => {
     if (!editor) return
@@ -285,75 +440,160 @@ export default function CmsOverlay() {
     setEditor(null)
   }
 
-  const runItemAction = (fn) => {
-    if (!hover.item) return
+  const handleEdit = () => {
+    if (!selection || selection.kind !== 'field') return
 
-    const listPath = toPath(hover.item.getAttribute('data-cms-list'))
-    const index = Number(hover.item.getAttribute('data-cms-index'))
+    const path = toPath(selection.path)
+
+    setEditor({ path, type: selection.type || 'text', value: getIn(content, path) })
+  }
+
+  const handleOpen = () => {
+    if (!selection || selection.kind !== 'field') return
+
+    const value = getIn(content, toPath(selection.path))
+    const to = value && typeof value === 'object' ? value.to : ''
+
+    if (!isInternal(to)) return
+
+    setSelection(null)
+    navigate(to)
+  }
+
+  const runItemAction = (fn) => {
+    if (!actions) return
+
+    const { list, index } = actions
 
     if (!Number.isInteger(index)) return
 
-    mutateList(listPath, (arr) => fn(arr, index))
+    mutateList(toPath(list), (arr) => fn(arr, index))
   }
 
-  const handleMoveUp = () => runItemAction((arr, index) => moveItem(arr, index, index - 1))
+  const shiftItem = (delta) => {
+    if (!actions) return
 
-  const handleMoveDown = () => runItemAction((arr, index) => moveItem(arr, index, index + 1))
+    const { list, index } = actions
+
+    if (!Number.isInteger(index)) return
+
+    const items = getIn(content, toPath(list))
+    const length = Array.isArray(items) ? items.length : 0
+    const nextIndex = Math.max(0, Math.min(Math.max(length - 1, 0), index + delta))
+
+    mutateList(toPath(list), (arr) => moveItem(arr, index, nextIndex))
+
+    if (selection.kind === 'item' && nextIndex !== index) {
+      setSelection({ kind: 'item', list: selection.list, index: nextIndex })
+    }
+  }
+
+  const handleMoveUp = () => shiftItem(-1)
+
+  const handleMoveDown = () => shiftItem(1)
 
   const handleDuplicate = () =>
     runItemAction((arr, index) => insertAt(arr, index + 1, structuredClone(arr[index])))
 
   const handleRemove = () => {
+    if (!actions) return
     if (!window.confirm('Ștergi acest element?')) return
 
     runItemAction((arr, index) => removeAt(arr, index))
+    setSelection(null)
   }
 
   if (!editMode) return null
 
   return (
     <>
-      {position.target && (
-        <button
-          type="button"
-          className="cms-ui cms-edit-btn"
-          aria-label="Editează"
-          title="Editează"
-          onClick={openEditor}
-          style={{
-            top: position.target.top + 4,
-            left: position.target.right - 36,
-            position: 'fixed',
-            zIndex: OVERLAY_Z_INDEX,
-          }}
-        >
-          ✎
-        </button>
-      )}
+      {selection && (
+        <>
+          <div
+            ref={boxRef}
+            className="cms-ui cms-selection-box"
+            style={{
+              position: 'fixed',
+              pointerEvents: 'none',
+              border: '2px solid #2e8b57',
+              borderRadius: 4,
+              boxShadow: '0 0 0 4px rgba(46, 139, 87, .15)',
+              zIndex: SELECTION_BOX_Z_INDEX,
+            }}
+          />
+          <div
+            ref={barRef}
+            className="cms-ui cms-selection-bar"
+            style={{ position: 'fixed', zIndex: OVERLAY_Z_INDEX }}
+          >
+            <span className="cms-sel-label">{typeLabel}</span>
 
-      {position.item && (
-        <div
-          className="cms-ui cms-item-toolbar"
-          style={{
-            top: position.item.top + 4,
-            left: position.item.left + 4,
-            position: 'fixed',
-            zIndex: OVERLAY_Z_INDEX,
-          }}
-        >
-          <button type="button" className="cms-ui" aria-label="Mută mai sus" title="Mută mai sus" onClick={handleMoveUp}>
-            ↑
-          </button>
-          <button type="button" className="cms-ui" aria-label="Mută mai jos" title="Mută mai jos" onClick={handleMoveDown}>
-            ↓
-          </button>
-          <button type="button" className="cms-ui" aria-label="Duplică" title="Duplică" onClick={handleDuplicate}>
-            ⧉
-          </button>
-          <button type="button" className="cms-ui" aria-label="Șterge" title="Șterge" onClick={handleRemove}>
-            🗑
-          </button>
-        </div>
+            {selection.kind === 'field' && (
+              <button type="button" className="cms-sel-btn primary" title="Edit" onClick={handleEdit}>
+                ✎ Edit
+              </button>
+            )}
+
+            {canOpen && (
+              <button type="button" className="cms-sel-btn" title="Open" onClick={handleOpen}>
+                ↗ Open
+              </button>
+            )}
+
+            {actions && (
+              <>
+                <span className="cms-sel-sep" />
+                <button
+                  type="button"
+                  className="cms-sel-btn"
+                  aria-label="Move up"
+                  title="Move up"
+                  onClick={handleMoveUp}
+                >
+                  ↑
+                </button>
+                <button
+                  type="button"
+                  className="cms-sel-btn"
+                  aria-label="Move down"
+                  title="Move down"
+                  onClick={handleMoveDown}
+                >
+                  ↓
+                </button>
+                <button
+                  type="button"
+                  className="cms-sel-btn"
+                  aria-label="Duplicate"
+                  title="Duplicate"
+                  onClick={handleDuplicate}
+                >
+                  ⧉
+                </button>
+                <button
+                  type="button"
+                  className="cms-sel-btn"
+                  aria-label="Delete"
+                  title="Delete"
+                  onClick={handleRemove}
+                >
+                  🗑
+                </button>
+              </>
+            )}
+
+            <span className="cms-sel-sep" />
+            <button
+              type="button"
+              className="cms-sel-btn"
+              aria-label="Deselect"
+              title="Deselect"
+              onClick={() => setSelection(null)}
+            >
+              ×
+            </button>
+          </div>
+        </>
       )}
 
       {editor && (

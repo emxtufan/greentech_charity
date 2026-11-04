@@ -169,6 +169,11 @@
   outline: 1px dashed #f5c518;
 }
 
+.cms-edit-mode [data-cms-path],
+.cms-edit-mode [data-cms-list] {
+  cursor: pointer;
+}
+
 .cms-ui {
   display: flex;
   align-items: center;
@@ -212,6 +217,52 @@ button.cms-ui:hover {
 
 .cms-add-btn:hover {
   background-color: rgba(46, 139, 87, 0.1);
+}
+
+/* CMS — bară de selecție (click = selectare) */
+.cms-selection-bar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #0f2f22;
+  color: #fff;
+  border-radius: 8px;
+  padding: 4px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.cms-selection-bar .cms-sel-label {
+  padding: 0 8px;
+  opacity: 0.7;
+  font-size: 12px;
+}
+
+.cms-selection-bar .cms-sel-btn {
+  width: auto;
+  height: 30px;
+  border-radius: 6px;
+  padding: 0 10px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+.cms-selection-bar .cms-sel-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.cms-selection-bar .cms-sel-btn.primary {
+  background: #6fae4a;
+}
+
+.cms-sel-sep {
+  width: 1px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 0 2px;
 }
 
 /* CMS — secțiuni (edit mode) */
