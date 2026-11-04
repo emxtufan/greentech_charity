@@ -39,7 +39,7 @@ export default function MainLayout() {
   const scrollTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
 
   return (
-    <>
+    <div className="main-page-wrapper">
       {showPreloader && (
         <div id="preloader">
           <div id="ctn-preloader" className="ctn-preloader">
@@ -70,6 +70,6 @@ export default function MainLayout() {
           <i className="bi bi-arrow-up-short"></i>
         </button>
       )}
-    </>
+    </div>
   )
 }
