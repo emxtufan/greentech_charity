@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import useContent from '../../hooks/useContent'
 import { cx } from '../../utils/helpers'
 
 const ARROW_PREV = '\u2039'
@@ -26,6 +27,9 @@ export default function Carousel({
 }) {
   const { xs = 1, md = 2, xl = 3 } = slidesToShow
 
+  // în edit mode carousel-ul nu se mișca singur și nu poate fi târât
+  const { editMode } = useContent()
+
   const [perView, setPerView] = useState(() =>
     typeof window === 'undefined' ? xs : perViewFor(window.innerWidth, { xs, md, xl })
   )
@@ -40,8 +44,8 @@ export default function Carousel({
   const maxIndex = Math.max(count - perView, 0)
   const dragging = dragOffset !== 0
 
-  // autoplay: true -> 5000ms, număr -> acel număr de ms, false/0 -> oprit
-  const autoplayDelay = autoplay === true ? 5000 : Number(autoplay) || 0
+  // autoplay: true -> 5000ms, număr -> acel număr de ms, false/0 -> oprit (oprit și în edit mode)
+  const autoplayDelay = editMode ? 0 : autoplay === true ? 5000 : Number(autoplay) || 0
 
   useEffect(() => {
     const handleResize = () => setPerView(perViewFor(window.innerWidth, { xs, md, xl }))
@@ -111,7 +115,7 @@ export default function Carousel({
   }, [autoplayDelay, paused, dragging, maxIndex, next])
 
   const handlePointerDown = (event) => {
-    if (maxIndex < 1) return
+    if (editMode || maxIndex < 1) return
     drag.current = { active: true, startX: event.clientX, startY: event.clientY, moved: false }
     if (event.currentTarget.setPointerCapture) {
       event.currentTarget.setPointerCapture(event.pointerId)
