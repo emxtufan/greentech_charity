@@ -266,22 +266,6 @@ export default function CmsOverlay() {
     }
   }, [editMode, hover, content])
 
-  // în edit mode linkurile nu navighează
-  useEffect(() => {
-    if (!editMode) return undefined
-
-    const handleClick = (event) => {
-      const node = event.target
-
-      if (!(node instanceof Element) || node.closest('.cms-ui')) return
-      if (node.closest('a')) event.preventDefault()
-    }
-
-    document.addEventListener('click', handleClick, true)
-
-    return () => document.removeEventListener('click', handleClick, true)
-  }, [editMode])
-
   const openEditor = () => {
     if (!hover.target) return
 

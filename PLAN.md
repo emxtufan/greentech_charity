@@ -28,17 +28,17 @@ Admin logat vede site-ul normal; în „Edit mode” fiecare text/imagine/link a
 - `src/utils/path.js`: getIn(obj,path), setIn(obj,path,value) imutabil, moveItem, removeAt, insertAt.
 - `src/context/ContentContext.jsx` + `src/hooks/useContent.js`: content, loading, isAdmin, editMode, setEditMode, update(path,value), dirty, save(), discard(), undo() (istoric 50).
 - `src/components/editable/`: `Scope` (context cu path de bază), `EditableText` (field, as, className, multiline, numeric), `EditableImage` (field, asBackground, className, alt), `EditableLink` (field → {label,to}), `EditableList` (field, renderItem, newItem, className, as) cu toolbar per item (↑ ↓ ⧉ 🗑) și „+ Add”. Toate: în afara edit mode randează normal.
-- Edit mode: contur punctat la hover + buton ✎; linkurile nu navighează; carousel fără autoplay/drag.
+- Edit mode: contur punctat la hover + buton ✎; linkurile navighează normal (editare doar prin ✎); carousel fără autoplay/drag.
 - Admin UI: `/admin` (login), `AdminBar` fix jos (Edit mode on/off, Pages, Undo, Discard, Save cu indicator nesalvat, Logout), `SectionToolbar` per secțiune (↑ ↓ ascunde ⧉ 🗑 „+ Secțiune dedesubt” cu picker de tipuri), `PagesPanel` (listă pagini, adaugă {title, slug}, șterge (nu home), showInNav, deschide).
 - Rute: paginile din content randate de `PageRenderer` după slug; /login, /register, /dashboard, /admin rămân fixe; altfel NotFound.
 
 ## Pași
-1. [ ] Backend server/ + proxy + scripts (concurrently) + .env.example
-2. [ ] Seed content.json extras din componentele actuale
-3. [ ] Core front: path utils, ContentContext, services, editable/*
-4. [ ] Refactor secțiuni → data + editables, registry
-5. [ ] Navbar/Footer din content.site
-6. [ ] Admin UI: /admin, AdminBar, SectionToolbar, PagesPanel, PageRenderer, rute
+1. [x] Backend server/ + proxy + scripts (concurrently) + .env.example
+2. [x] Seed content.json extras din componentele actuale
+3. [x] Core front: path utils, ContentContext, services, editable/*
+4. [x] Refactor secțiuni → data + editables, registry
+5. [x] Navbar/Footer din content.site
+6. [x] Admin UI: /admin, AdminBar, SectionToolbar, PagesPanel, PageRenderer, rute
 7. [ ] Build + test vizual + rebuild_map
 
 ## Probleme deschise
