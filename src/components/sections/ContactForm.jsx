@@ -46,8 +46,10 @@ export default function ContactForm() {
     return items.some((item) => item?.key === key) ? key : items[0]?.key || ''
   }
 
+  const emailFromLocation = () => new URLSearchParams(location.search).get('email') || ''
+
   const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState(() => emailFromLocation())
   const [phone, setPhone] = useState('')
   const [topic, setTopic] = useState(() => topicFromLocation(topics))
   const [message, setMessage] = useState('')
@@ -60,6 +62,9 @@ export default function ContactForm() {
   // subiectul se ia din query (?subiect=...) doar când se schimbă adresa
   useEffect(() => {
     setTopic(topicFromLocation(topics))
+
+    const emailFromQuery = emailFromLocation()
+    if (emailFromQuery) setEmail(emailFromQuery)
   }, [location.search])
 
   const clearError = (field) => {

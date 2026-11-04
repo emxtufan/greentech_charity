@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import Modal from '../common/Modal'
+import { useNavigate } from 'react-router-dom'
 import Reveal from '../common/Reveal'
 import { EditableText, useField } from '../editable'
 import useContent from '../../hooks/useContent'
@@ -19,10 +19,9 @@ export const defaultData = {
 export default function NewsletterSection() {
   const [email, setEmail] = useState('')
   const [error, setError] = useState(false)
-  const [open, setOpen] = useState(false)
 
+  const navigate = useNavigate()
   const { editMode } = useContent()
-  const { value: modalTitle } = useField('modalTitle')
   const p = useField('placeholder')
 
   const placeholderProps = editMode
@@ -38,8 +37,7 @@ export default function NewsletterSection() {
     }
 
     setError(false)
-    setOpen(true)
-    setEmail('')
+    navigate(`/contact?subiect=altceva&email=${encodeURIComponent(email)}`)
   }
 
   return (
@@ -74,10 +72,6 @@ export default function NewsletterSection() {
         {/* /.bg-wrapper */}
       </div>
       {/* /.box-layout-two */}
-
-      <Modal open={open} title={modalTitle} onClose={() => setOpen(false)}>
-        <EditableText field="modalText" />
-      </Modal>
     </div>
   )
 }
