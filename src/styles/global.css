@@ -692,5 +692,11 @@ button.cms-ui:hover {
 @media (min-width: 992px) {
   :root { --site-pad: 30px; }
 }
+/* Pagina max 1920px */
+.main-page-wrapper { max-width: 1920px; margin-left: auto; margin-right: auto; position: relative; }
+.theme-main-menu.fixed { max-width: 1920px; margin-left: auto; margin-right: auto; }
+@media (min-width: 992px) {
+  .feature-block-four .media-bg { position: relative !important; right: auto !important; left: auto !important; top: auto !important; margin-left: auto; margin-right: 0; }
+}
 
 
