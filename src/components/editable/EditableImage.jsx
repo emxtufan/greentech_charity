@@ -1,5 +1,5 @@
 import useContent from '../../hooks/useContent'
-import { resolveImg } from '../../utils/helpers'
+import { cx, resolveImg } from '../../utils/helpers'
 import { pathKey } from '../../utils/path'
 import { useField } from './Scope'
 
@@ -28,6 +28,20 @@ export default function EditableImage({
       >
         {children}
       </As>
+    )
+  }
+
+  if (!value) {
+    if (!editMode) return null
+    return (
+      <div
+        {...rest}
+        {...editProps}
+        className={cx(className, 'cms-img-placeholder')}
+        style={style}
+      >
+        + Add image
+      </div>
     )
   }
 

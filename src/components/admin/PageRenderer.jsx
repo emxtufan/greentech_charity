@@ -19,6 +19,37 @@ export default function PageRenderer({ pageIndex }) {
     setAddOpen(false)
   }
 
+  const firstVisible = sections.find((section) => !section.hidden || editMode)
+  const needsHeaderSpace = !!firstVisible && firstVisible.type !== 'hero'
+
+  const renderedSections = sections.map((section, si) => {
+    const entry = sectionTypes[section.type]
+    if (!entry) return null
+    if (section.hidden && !editMode) return null
+
+    const Component = entry.component
+    const key = section.id ?? `${section.type}-${si}`
+    const inner = (
+      <Scope path={[...sectionsPath, si, 'data']}>
+        <Component />
+      </Scope>
+    )
+
+    if (!editMode) return <Fragment key={key}>{inner}</Fragment>
+
+    return (
+      <SectionToolbar
+        key={key}
+        pageIndex={pageIndex}
+        index={si}
+        section={section}
+        count={sections.length}
+      >
+        {inner}
+      </SectionToolbar>
+    )
+  })
+
   return (
     <>
       {editMode && sections.length === 0 && (
@@ -29,33 +60,11 @@ export default function PageRenderer({ pageIndex }) {
         </div>
       )}
 
-      {sections.map((section, si) => {
-        const entry = sectionTypes[section.type]
-        if (!entry) return null
-        if (section.hidden && !editMode) return null
-
-        const Component = entry.component
-        const key = section.id ?? `${section.type}-${si}`
-        const inner = (
-          <Scope path={[...sectionsPath, si, 'data']}>
-            <Component />
-          </Scope>
-        )
-
-        if (!editMode) return <Fragment key={key}>{inner}</Fragment>
-
-        return (
-          <SectionToolbar
-            key={key}
-            pageIndex={pageIndex}
-            index={si}
-            section={section}
-            count={sections.length}
-          >
-            {inner}
-          </SectionToolbar>
-        )
-      })}
+      {needsHeaderSpace ? (
+        <div className="header-space-fix">{renderedSections}</div>
+      ) : (
+        renderedSections
+      )}
 
       <AddSectionModal
         open={addOpen}

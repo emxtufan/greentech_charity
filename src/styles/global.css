@@ -296,6 +296,19 @@ button.cms-ui:hover {
   padding: 40px 0;
 }
 
+.cms-img-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 160px;
+  width: 100%;
+  border: 2px dashed #6fae4a;
+  border-radius: 12px;
+  color: #1b6943;
+  background: rgba(111, 174, 74, 0.08);
+  font-weight: 500;
+}
+
 /* CMS — picker tipuri de secțiune */
 .cms-section-picker {
   display: grid;
