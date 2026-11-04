@@ -1,5 +1,6 @@
 export { Scope, ScopeContext, useData, useField, useScopePath } from './Scope'
 export { default as EditableText } from './EditableText'
+export { default as EditableParagraphs } from './EditableParagraphs'
 export { default as EditableImage } from './EditableImage'
 export { default as EditableLink } from './EditableLink'
 export { default as EditableList } from './EditableList'
