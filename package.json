@@ -8,6 +8,7 @@
     "dev:web": "vite",
     "server": "node server/index.js",
     "start": "node server/index.js",
+    "prebuild": "node scripts/sync-greencube.mjs",
     "build": "vite build",
     "preview": "vite preview"
   },

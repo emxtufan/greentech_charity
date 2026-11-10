@@ -4,6 +4,7 @@ import ProtectedRoute from './ProtectedRoute'
 import useAuth from '../hooks/useAuth'
 import DynamicPage from '../pages/DynamicPage'
 import AdminDashboard from '../pages/AdminDashboard'
+import GreencubeFrame from '../pages/GreencubeFrame'
 import Login from '../pages/Login'
 import Register from '../pages/Register'
 import Dashboard from '../pages/Dashboard'
@@ -13,6 +14,8 @@ export default function AppRoutes() {
 
   return (
     <Routes>
+      <Route path="greencube/*" element={<GreencubeFrame />} />
+
       <Route element={<MainLayout />}>
         <Route index element={<DynamicPage />} />
         <Route
