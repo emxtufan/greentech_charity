@@ -1,31 +1,69 @@
 
-# boss-worker
-.ai/worker-log.jsonl
-.ai/worker-live.log
-.ai/worker-watch.pid
-.ai/summaries-cache.json
-.ai/CODEMAP.md
-.ai/codemap.json
-__pycache__/
+# AI agents / tooling
+.ai/
+.codex/
+.claude/
+.cursor/
+.windsurf/
+.continue/
+.mcp.json
+AGENTS.md
+AGENTS.override.md
+CLAUDE.md
+GEMINI.md
+.cursorrules
+.windsurfrules
+.aider*
+.github/copilot-instructions.md
+.github/instructions/
+.github/prompts/
 
 # dependencies / build
-node_modules
-dist
+node_modules/
+dist/
+build/
+coverage/
+.vite/
+.cache/
+*.tsbuildinfo
+/public/greencube/
 
-# local env
-.env.local
+# temp / log
+__pycache__/
+*.pyc
+*.log
+*.tmp
+*.temp
+*.swp
+*.swo
+
+# editor / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# local env (orice nivel, cu excepția exemplelor)
+.env
+.env.*
+!.env.example
+!.env.*.example
 
 # server runtime (upload-uri și backup-uri de conținut)
 server/uploads/*
 !server/uploads/.gitkeep
 server/data/backups/
+/server/data/*.bak*
+/server/data/*.tmp*
 server/data/messages.json
-server/data/messages.json.tmp
 server/data/f230.json
-server/data/f230.json.tmp
 server/data/f230.key
-server/data/audit.log
-server/data/audit.log.tmp
+server/data/integrations.json
+server/data/integrations.key
 
-# secrete locale
-.env
+# greencube runtime
+/greencube/storage/*
+!/greencube/storage/.gitkeep
+/greencube/public.zip
+/greencube/zip/
