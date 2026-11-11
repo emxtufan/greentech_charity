@@ -53,6 +53,16 @@ Desktop.ini
 # server runtime (upload-uri și backup-uri de conținut)
 server/uploads/*
 !server/uploads/.gitkeep
+
+# Imagini publice folosite de site
+!/server/uploads/*.jpg
+!/server/uploads/*.jpeg
+!/server/uploads/*.png
+!/server/uploads/*.webp
+!/server/uploads/*.gif
+!/server/uploads/*.avif
+!/server/uploads/*.svg
+!/server/uploads/*.ico
 server/data/backups/
 /server/data/*.bak*
 /server/data/*.tmp*
