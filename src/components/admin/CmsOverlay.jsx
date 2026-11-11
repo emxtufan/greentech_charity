@@ -387,11 +387,17 @@ export default function CmsOverlay() {
       const bar = barRef.current
 
       if (bar) {
-        const maxLeft = window.innerWidth - bar.offsetWidth - SELECTION_BAR_MARGIN
-        const left = Math.max(SELECTION_BAR_MARGIN, Math.min(rect.left, maxLeft))
+        const barWidth = bar.offsetWidth
+        const barHeight = bar.offsetHeight
+        const maxLeft = Math.max(SELECTION_BAR_MARGIN, window.innerWidth - barWidth - SELECTION_BAR_MARGIN)
+        const maxTop = Math.max(SELECTION_BAR_MARGIN, window.innerHeight - barHeight - SELECTION_BAR_MARGIN)
+        const left = Math.min(Math.max(SELECTION_BAR_MARGIN, rect.left), maxLeft)
         const above = rect.top - SELECTION_BAR_OFFSET
+        const preferredTop =
+          above < SELECTION_BAR_MARGIN ? rect.bottom + SELECTION_BAR_MARGIN : above
+        const top = Math.min(Math.max(SELECTION_BAR_MARGIN, preferredTop), maxTop)
 
-        bar.style.top = `${above < SELECTION_BAR_MARGIN ? rect.bottom + SELECTION_BAR_MARGIN : above}px`
+        bar.style.top = `${top}px`
         bar.style.left = `${left}px`
       }
 
