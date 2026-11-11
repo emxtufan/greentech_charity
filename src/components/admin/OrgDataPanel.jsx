@@ -67,16 +67,44 @@ export function OrgDataView({ onCancel }) {
     setSaved(false)
   }
 
+  const handleSocialChange = (key, value) => {
+    setSocialLocal((prev) => ({ ...prev, [key]: value }))
+    setSaved(false)
+  }
+
+  // gol e permis; orice valoare completată trebuie să fie URL absolut http/https
+  const invalidSocial = (key) => {
+    const value = socialLocal[key].trim()
+    return value !== '' && !isValidUrl(value)
+  }
+
   const handleSave = async () => {
     if (!content) {
       setFormError('Conținutul nu este încărcat.')
       return
     }
 
+    const invalidLabels = SOCIAL_FIELDS.filter(({ key }) => invalidSocial(key)).map(
+      ({ label }) => label,
+    )
+
+    if (invalidLabels.length > 0) {
+      setSaved(false)
+      setFormError(
+        `Link invalid (folosește http:// sau https://) pentru: ${invalidLabels.join(', ')}.`,
+      )
+      return
+    }
+
     const nextLegal = { ...legalLocal, iban: normalizeIban(legalLocal.iban) }
     const nextContact = { ...contactLocal }
+    const nextSocial = {}
+    SOCIAL_FIELDS.forEach(({ key }) => {
+      nextSocial[key] = toText(socialLocal[key]).trim()
+    })
 
     setLegalLocal(nextLegal)
+    setSocialLocal(nextSocial)
     setSaving(true)
     setSaved(false)
     setFormError('')
@@ -84,6 +112,7 @@ export function OrgDataView({ onCancel }) {
     try {
       update(['site', 'legal'], { ...content.site?.legal, ...nextLegal })
       update(['site', 'contact'], { ...content.site?.contact, ...nextContact })
+      update(['site', 'social'], { ...content.site?.social, ...nextSocial })
       await save()
       setSaved(true)
     } catch (err) {
@@ -133,6 +162,29 @@ export function OrgDataView({ onCancel }) {
           />
         </div>
       ))}
+
+      <h6 className="mb-3 mt-4">Rețele sociale</h6>
+
+      {SOCIAL_FIELDS.map(({ key, label }) => (
+        <div className="mb-2" key={key}>
+          <label className="form-label small mb-1" htmlFor={`org-social-${key}`}>
+            {label}
+          </label>
+          <input
+            id={`org-social-${key}`}
+            type="url"
+            className={`form-control form-control-sm${invalidSocial(key) ? ' is-invalid' : ''}`}
+            placeholder={`https://www.${key}.com/...`}
+            value={socialLocal[key]}
+            onChange={(event) => handleSocialChange(key, event.target.value)}
+          />
+        </div>
+      ))}
+
+      <p className="text-muted small mt-2 mb-0">
+        Lasă gol dacă nu vrei să afișezi rețeaua. Se acceptă doar linkuri complete (http:// sau
+        https://).
+      </p>
 
       {formError && <p className="text-danger mt-3 mb-0">{formError}</p>}
 

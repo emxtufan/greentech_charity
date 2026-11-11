@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import useContent from '../../hooks/useContent'
 import { img } from '../../utils/helpers'
+import { getSocialLinks } from '../../utils/social'
 import {
   AddItemButton,
   EditableImage,
@@ -49,7 +50,9 @@ export const defaultFooter = {
   copyright: 'Greentech Charity. All Rights Reserved',
 }
 
-const SOCIALS = ['fa-facebook-f', 'fa-twitter', 'fa-pinterest-p', 'fa-instagram']
+const toText = (value) => (value === undefined || value === null ? '' : String(value).trim())
+
+const telHref = (value) => `tel:${value.replace(/[^\d+]/g, '')}`
 
 export default function Footer() {
   return (
@@ -61,9 +64,15 @@ export default function Footer() {
 
 function FooterContent() {
   const year = new Date().getFullYear()
-  const { editMode } = useContent()
+  const { content, editMode } = useContent()
   const { value: phones = [] } = useField('phones')
   const { value: address } = useField('address')
+
+  const site = content?.site || {}
+  const contactEmail = toText(site.contact?.email)
+  const contactPhone = toText(site.contact?.phone)
+  const contactAddress = toText(site.contact?.address) || toText(site.legal?.address)
+  const socialLinks = getSocialLinks(site)
 
   return (
     <div id="contact" className="main-footer bg-one top-space">
@@ -76,16 +85,23 @@ function FooterContent() {
                   <EditableImage field="logo" alt="Greentech Charity" style={{ height: 70 }} />
                 </Link>
                 <EditableText field="text" as="p" className="mt-20 mb-30 fs-16" />
-                <ul className="style-none social-icon d-flex align-items-center">
-                  <li className="text-white">Social </li>
-                  {SOCIALS.map((icon) => (
-                    <li key={icon}>
-                      <a href="#">
-                        <i className={`fa-brands ${icon}`}></i>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
+                {socialLinks.length > 0 && (
+                  <ul className="style-none social-icon d-flex align-items-center">
+                    <li className="text-white">Social </li>
+                    {socialLinks.map(({ key, label, icon, url }) => (
+                      <li key={key}>
+                        <a
+                          href={url}
+                          aria-label={label}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <i className={`fa-brands ${icon}`} aria-hidden="true"></i>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
                 <EditableLink field="joinCta" className="btn-three" />
               </div>
             </div>
@@ -109,30 +125,60 @@ function FooterContent() {
               <div className="ps-xxl-4 mb-30">
                 <EditableText field="supportTitle" as="h6" className="footer-title" />
                 <ul className="contact-info style-none">
-                  {(editMode || phones.length > 0) && (
+                  {contactEmail && (
+                    <li>
+                      <div className="icon d-flex align-items-center justify-content-center rounded-circle">
+                        <i className="fa-solid fa-envelope" aria-hidden="true"></i>
+                      </div>
+                      <p className="m0">
+                        <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
+                      </p>
+                    </li>
+                  )}
+                  {contactPhone ? (
                     <li>
                       <div className="icon d-flex align-items-center justify-content-center rounded-circle">
                         <img src={img('icon_13.png')} alt="" />
                       </div>
-                      <p className="m0 d-flex flex-column">
-                        {phones.map((phone, index) => (
-                          <ListItem key={index} field="phones" index={index}>
-                            <a href={`tel:${phone.replace(/[^\d+]/g, '')}`}>
-                              <EditableText as="span" />
-                            </a>
-                          </ListItem>
-                        ))}
-                        <AddItemButton field="phones" />
+                      <p className="m0">
+                        <a href={telHref(contactPhone)}>{contactPhone}</a>
                       </p>
                     </li>
+                  ) : (
+                    (editMode || phones.length > 0) && (
+                      <li>
+                        <div className="icon d-flex align-items-center justify-content-center rounded-circle">
+                          <img src={img('icon_13.png')} alt="" />
+                        </div>
+                        <p className="m0 d-flex flex-column">
+                          {phones.map((phone, index) => (
+                            <ListItem key={index} field="phones" index={index}>
+                              <a href={`tel:${phone.replace(/[^\d+]/g, '')}`}>
+                                <EditableText as="span" />
+                              </a>
+                            </ListItem>
+                          ))}
+                          <AddItemButton field="phones" />
+                        </p>
+                      </li>
+                    )
                   )}
-                  {(editMode || address) && (
+                  {contactAddress ? (
                     <li>
                       <div className="icon d-flex align-items-center justify-content-center rounded-circle">
                         <img src={img('icon_14.png')} alt="" />
                       </div>
-                      <EditableText field="address" />
+                      <p className="m0">{contactAddress}</p>
                     </li>
+                  ) : (
+                    (editMode || address) && (
+                      <li>
+                        <div className="icon d-flex align-items-center justify-content-center rounded-circle">
+                          <img src={img('icon_14.png')} alt="" />
+                        </div>
+                        <EditableText field="address" />
+                      </li>
+                    )
                   )}
                 </ul>
               </div>
