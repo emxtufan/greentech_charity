@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import Modal from '../common/Modal'
 import useContent from '../../hooks/useContent'
+import { SOCIAL_NETWORKS, isValidUrl } from '../../utils/social'
 
 const LEGAL_FIELDS = [
   { key: 'name', label: 'Denumire legală' },
@@ -17,6 +18,8 @@ const CONTACT_FIELDS = [
   { key: 'phone', label: 'Telefon' },
   { key: 'address', label: 'Adresă' },
 ]
+
+const SOCIAL_FIELDS = SOCIAL_NETWORKS.map(({ key, label }) => ({ key, label }))
 
 const toText = (value) => (value === undefined || value === null ? '' : String(value))
 
@@ -37,6 +40,7 @@ export function OrgDataView({ onCancel }) {
 
   const [legalLocal, setLegalLocal] = useState(() => pickFields(null, LEGAL_FIELDS))
   const [contactLocal, setContactLocal] = useState(() => pickFields(null, CONTACT_FIELDS))
+  const [socialLocal, setSocialLocal] = useState(() => pickFields(null, SOCIAL_FIELDS))
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [formError, setFormError] = useState('')
@@ -46,6 +50,7 @@ export function OrgDataView({ onCancel }) {
 
     setLegalLocal(pickFields(site.legal, LEGAL_FIELDS))
     setContactLocal(pickFields(site.contact, CONTACT_FIELDS))
+    setSocialLocal(pickFields(site.social, SOCIAL_FIELDS))
     setFormError('')
     setSaved(false)
     // se reîncarcă doar la montare, ca să nu pierdem modificările locale

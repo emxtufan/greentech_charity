@@ -2,6 +2,71 @@
 @import './vendor/style.min.css';
 @import './vendor/responsive.css';
 
+/* Paleta comună cu introducerea GreenCube. */
+:root {
+  --brand-green: #1f3a27;
+  --brand-cream: #efede0;
+  --bs-body-color: var(--brand-green);
+  --bs-body-color-rgb: 31, 58, 39;
+  --bs-body-bg: var(--brand-cream);
+  --bs-body-bg-rgb: 239, 237, 224;
+  --bs-white-rgb: 239, 237, 224;
+}
+
+body,
+.main-page-wrapper {
+  background-color: var(--brand-cream);
+  color: var(--brand-green);
+}
+
+.main-page-wrapper .btn-one {
+  border: 1px solid var(--brand-green);
+}
+
+.theme-main-menu .inner-content .cta-btn-one {
+  border: 1px solid var(--brand-cream);
+}
+
+.theme-main-menu .nav-item .nav-link:focus-visible,
+.theme-main-menu .nav-item:hover .nav-link {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+
+.hero-banner-one .media-wrapper .card-wrapper {
+  background: var(--brand-green);
+  color: var(--brand-cream);
+}
+
+.hero-banner-one .media-wrapper .card-wrapper p {
+  color: inherit;
+}
+
+.hero-banner-one .media-wrapper .card-wrapper .icon {
+  background: var(--brand-cream);
+  color: var(--brand-green);
+}
+
+.hero-banner-one .media-wrapper .shapes {
+  filter: brightness(0) saturate(100%) invert(17%) sepia(24%) saturate(846%) hue-rotate(87deg) brightness(93%) contrast(89%);
+  opacity: 0.35;
+}
+
+.main-footer.bg-one {
+  background: var(--brand-green);
+  color: var(--brand-cream);
+}
+
+.main-footer .footer-news article .date {
+  color: rgba(239, 237, 224, 0.75);
+}
+
+.main-footer .contact-info li,
+.main-footer .footer-news li,
+.main-footer .bottom-footer {
+  border-color: rgba(239, 237, 224, 0.2);
+}
+
 /* Logo brand */
 .logo-img {
   height: 60px;
@@ -811,6 +876,10 @@ button.cms-ui:hover {
 .gt-info-list{margin:0}
 .gt-info-list dt{font-size:14px;font-weight:500;color:#6b7c74;margin-top:14px}
 .gt-info-list dd{font-size:17px;color:#1d2b26;margin:2px 0 0;word-break:break-word}
+.gt-info-social{margin:22px 0 0;padding:0;gap:10px}
+.gt-info-social li{margin:0}
+.gt-info-social a{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:#eef4f1;color:#144734;font-size:16px;transition:background .2s,color .2s}
+.gt-info-social a:hover{background:#144734;color:#fff}
 .gt-copy-btn{border:1px solid rgba(20,71,52,.25);background:#fff;color:#1b6943;border-radius:8px;font-size:13px;padding:2px 10px;margin-left:10px;vertical-align:middle}
 .gt-form-card{background:#fff;border-radius:24px;padding:40px;box-shadow:0 10px 30px rgba(16,75,89,.07)}
 .gt-form-card .form-label{font-weight:500;color:#1d2b26}
@@ -871,3 +940,187 @@ body.cms-admin-active .gt-cookie-banner{bottom:90px}
 .gt-admin-card h5{font-weight:600;color:#14402a;margin-bottom:16px}
 .gt-stat{font-size:32px;font-weight:700;color:#1b6943;line-height:1.2;margin:6px 0}
 @media (max-width:991px){.gt-admin{flex-direction:column}.gt-admin-sidebar{width:100%;flex:none;height:auto;position:static}.gt-admin-nav{flex-direction:row;flex-wrap:wrap}.gt-admin-nav button{width:auto}.gt-admin-main{padding:20px}}
+
+/* Scena rămâne montată până se încheie trecerea către pagina pregătită. */
+.gc-scene-shell {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  overflow: hidden;
+  background: var(--brand-cream);
+  opacity: 1;
+  transform: scale(1);
+  transform-origin: center;
+  transition: opacity 900ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 900ms cubic-bezier(0.2, 0.65, 0.3, 1);
+}
+
+.gc-scene-shell.is-leaving {
+  opacity: 0;
+  transform: scale(1.025);
+  pointer-events: none;
+  will-change: opacity, transform;
+}
+
+.gc-website[data-entering='true'] {
+  animation: gc-website-enter 800ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes gc-website-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gc-scene-shell {
+    transition: opacity 160ms ease;
+  }
+
+  .gc-scene-shell.is-leaving {
+    transform: none;
+  }
+
+  .gc-website[data-entering='true'] {
+    animation-duration: 160ms;
+  }
+}
+
+/* Apariții scurte, sincronizate cu vizibilitatea paginii. */
+.site-reveal[data-sal] {
+  --sal-easing: cubic-bezier(0.16, 1, 0.3, 1);
+  transition-duration: var(--sal-duration, 750ms);
+  transition-delay: var(--sal-delay, 0ms);
+  transition-timing-function: var(--sal-easing);
+}
+
+.site-reveal[data-sal='slide-up']:not(.sal-animate) {
+  transform: translate3d(0, 32px, 0);
+}
+
+.site-reveal[data-sal='slide-left']:not(.sal-animate) {
+  transform: translate3d(36px, 0, 0);
+}
+
+.site-reveal[data-sal='slide-right']:not(.sal-animate) {
+  transform: translate3d(-36px, 0, 0);
+}
+
+.site-reveal[data-sal='zoom-in']:not(.sal-animate) {
+  transform: scale(0.97) translateY(18px);
+}
+
+.main-page-wrapper .site-reveal:focus-within {
+  opacity: 1;
+  transform: none;
+  transition-delay: 0ms;
+}
+
+.main-page-wrapper[data-page-active='false'] :is(.marquee__track, .shapes, .card-wrapper),
+.main-page-wrapper[data-edit-mode='true'] * {
+  animation-play-state: paused !important;
+}
+
+.main-page-wrapper[data-edit-mode='true'] .site-reveal {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+.main-page-wrapper :is(.btn-one, .btn-three, .gt-btn-yellow, .gt-btn-outline-light, .cta-btn-one) {
+  transition: transform 260ms ease, box-shadow 260ms ease, background-color 260ms ease, color 260ms ease;
+}
+
+.main-page-wrapper :is(.card-style-one, .card-style-two, .blog-meta-one, .gt-card) {
+  transition: translate 350ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 350ms ease;
+}
+
+.hero-tile img {
+  transition: transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gt-card-link i,
+.hero-banner-one .card-wrapper .icon {
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-banner-one .media-wrapper .card-wrapper {
+  animation: site-badge-float 6s ease-in-out infinite;
+}
+
+.marquee:focus-within .marquee__track,
+.hero-banner-one .card-wrapper:hover {
+  animation-play-state: paused;
+}
+
+@keyframes site-badge-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .main-page-wrapper[data-edit-mode='false'] :is(.btn-one, .btn-three, .gt-btn-yellow, .gt-btn-outline-light, .cta-btn-one):hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(31, 58, 39, 0.16);
+  }
+
+  .main-page-wrapper[data-edit-mode='false'] :is(.card-style-one, .card-style-two, .blog-meta-one, .gt-card):hover {
+    translate: 0 -6px;
+    transform: none;
+    box-shadow: 0 18px 36px rgba(31, 58, 39, 0.1);
+  }
+
+  .main-page-wrapper[data-edit-mode='false'] .hero-tile:hover img {
+    transform: scale(1.055);
+  }
+
+  .gt-card-link:hover i {
+    transform: translateX(5px);
+  }
+
+  .hero-banner-one .card-wrapper:hover .icon {
+    transform: rotate(-12deg);
+  }
+
+  .theme-main-menu .nav-item .nav-link {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-position: center calc(100% - 6px);
+    background-repeat: no-repeat;
+    background-size: 0% 1px;
+    transition: background-size 280ms ease, color 280ms ease;
+  }
+
+  .theme-main-menu .nav-item:hover .nav-link,
+  .theme-main-menu .nav-item .nav-link:focus-visible {
+    text-decoration: none;
+    background-size: calc(100% - 24px) 1px;
+  }
+}
+
+@media (max-width: 767px) {
+  .site-reveal[data-sal] {
+    transition-duration: 600ms;
+    transition-delay: min(var(--sal-delay, 0ms), 180ms);
+  }
+
+  .site-reveal[data-sal|='slide']:not(.sal-animate) {
+    transform: translate3d(0, 22px, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  .main-page-wrapper *,
+  .main-page-wrapper *::before,
+  .main-page-wrapper *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .main-page-wrapper .site-reveal[data-sal] {
+    opacity: 1;
+    transform: none;
+  }
+}

@@ -7,6 +7,7 @@ import Overview from '../components/admin/dashboard/Overview'
 import LogsView from '../components/admin/dashboard/LogsView'
 import ModalsEditor from '../components/admin/dashboard/ModalsEditor'
 import TrackingSettings from '../components/admin/dashboard/TrackingSettings'
+import IntegrationSettings from '../components/admin/dashboard/IntegrationSettings'
 import { MessagesView } from '../components/admin/MessagesPanel'
 import { F230View } from '../components/admin/F230Panel'
 import { OrgDataView } from '../components/admin/OrgDataPanel'
@@ -15,9 +16,10 @@ const TABS = [
   { key: 'prezentare', label: 'Prezentare', icon: 'bi-speedometer2' },
   { key: 'mesaje', label: 'Mesaje', icon: 'bi-envelope' },
   { key: 'formulare', label: 'Formulare 230', icon: 'bi-file-earmark-text' },
-  { key: 'firma', label: 'Date firmă', icon: 'bi-building' },
+  { key: 'firma', label: 'Date asociație', icon: 'bi-building' },
   { key: 'modale', label: 'Modale', icon: 'bi-window' },
   { key: 'tracking', label: 'Tracking', icon: 'bi-graph-up' },
+  { key: 'integrari', label: 'Email și Turnstile', icon: 'bi-shield-check' },
   { key: 'loguri', label: 'Loguri', icon: 'bi-journal-text' },
 ]
 
@@ -136,6 +138,7 @@ export default function AdminDashboard() {
         {tab === 'modale' && <ModalsEditor />}
 
         {tab === 'tracking' && <TrackingSettings />}
+        {tab === 'integrari' && <IntegrationSettings />}
 
         {tab === 'loguri' && <LogsView />}
       </main>
