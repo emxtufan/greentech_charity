@@ -6,10 +6,13 @@
  * server/data/content.json pe baza textelor extrase în .ai/docs-extracted.json.
  *
  * Reguli:
- * - ambele fișiere sunt citite la execuție; textul documentelor nu e hardcodat;
+ * - codul etic și nota GDPR sunt citite la execuție; titlurile secțiunilor GDPR sunt fixe,
+ *   iar granițele intervalelor urmează titlurile reale din sursă;
+ * - /politica-cookies are text fix, aliniat la serviciile configurate în aplicație;
  * - backup al content.json înainte de scriere, apoi scriere atomică (tmp + rename);
  * - upsert după slug: celelalte pagini și setări rămân neatinse;
- * - footer.bottomLinks și site.modals.gdpr se actualizează fără duplicate.
+ * - site.footer.bottomLinks și site.modals.gdpr se actualizează fără duplicate,
+ *   păstrând linkurile existente; cheia orfană content.footer se șterge.
  *
  * Rulare: node .ai/import-association-policies.mjs
  */
@@ -29,8 +32,23 @@ const HREF_KEYS = ['to', 'href', 'url', 'path'];
 
 const COD_ETIC_RANGES = [[20, 31], [32, 74], [75, 114], [115, 131], [132, 200], [201, 211]];
 const CONFIDENTIALITATE_RANGES = [
-  [15, 24], [25, 38], [39, 48], [49, 58], [59, 64],
-  [65, 78], [79, 84], [85, 92], [93, 107],
+  // granițele urmează titlurile reale din „Nota de informare GDPR” (paragrafele 14, 25, 38, 48, 58, 64, 79, 84, 94)
+  [14, 24], [25, 37], [38, 47], [48, 57], [58, 63],
+  [64, 78], [79, 83], [84, 93], [94, 140],
+];
+
+// titluri fixe, în ordinea capitolelor din sursă; capitolele 9 (securitate) și 10
+// (decizii automatizate și transferuri) formează împreună secțiunea a opta
+const CONFIDENTIALITATE_TITLES = [
+  'Scopurile prelucrării',
+  'Categoriile de date',
+  'Temeiurile prelucrării',
+  'Destinatarii datelor',
+  'Durata păstrării',
+  'Drepturile persoanelor',
+  'Furnizarea datelor',
+  'Securitate și decizii automate',
+  'Contact și reclamații',
 ];
 
 const COD_ETIC_CTA = { label: 'Sesizează o problemă de etică', to: '/contact?subiect=altceva' };
@@ -171,6 +189,17 @@ function splitChapterHeading(text) {
   return { title, rest: rest.trim() };
 }
 
+// titluri numerotate de tipul „2. Scopurile prelucrării datelor”
+function splitNumberedHeading(text) {
+  const match = String(text ?? '').match(/^(\d{1,2})[.)]\s+/);
+  if (!match) return null;
+  const rest = text.slice(match[0].length).trim();
+  if (!rest || /[;:,]$/.test(rest)) return null;
+  const title = cleanTitle(rest);
+  if (!title || title.length > 90) return null;
+  return { title, rest: '' };
+}
+
 function cleanTitle(text) {
   return String(text ?? '')
     .replace(/\s+/g, ' ')
@@ -240,7 +269,7 @@ function fallbackTitle(body, index) {
   return short.charAt(0).toUpperCase() + short.slice(1);
 }
 
-function collectChapter({ lines, seenTitles, pageTitle }) {
+function collectChapter({ lines, seenTitles, pageTitle, numberedHeadings = false }) {
   const body = [];
   const ownTitles = new Set();
   let title = '';
@@ -250,7 +279,8 @@ function collectChapter({ lines, seenTitles, pageTitle }) {
     const flat = flattenLine(rawLine);
     if (!flat) continue;
 
-    const heading = splitChapterHeading(flat);
+    const heading = splitChapterHeading(flat)
+      ?? (numberedHeadings ? splitNumberedHeading(flat) : null);
     let line = flat;
 
     if (heading && heading.title.length <= 90) {
@@ -278,10 +308,14 @@ function collectChapter({ lines, seenTitles, pageTitle }) {
   return { title, body };
 }
 
-function buildChapterBlocks({ records, ranges, idPrefix, pageTitle, seenTitles, lastSuffix = '', cta = null, warnings }) {
+function buildChapterBlocks({
+  records, ranges, idPrefix, pageTitle, seenTitles, titles = [],
+  numberedHeadings = false, lastSuffix = '', cta = null, warnings,
+}) {
   const blocks = ranges.map((range, index) => {
     const lines = selectRange(records, range);
-    const { title, body } = collectChapter({ lines, seenTitles, pageTitle });
+    const { title, body } = collectChapter({ lines, seenTitles, pageTitle, numberedHeadings });
+    const fixedTitle = cleanTitle(titles[index] ?? '');
     const isLast = index === ranges.length - 1;
     const textParts = body.slice();
     if (isLast && lastSuffix) textParts.push(lastSuffix);
@@ -290,7 +324,7 @@ function buildChapterBlocks({ records, ranges, idPrefix, pageTitle, seenTitles, 
     }
     return textBlock({
       id: `${idPrefix}-${index + 1}`,
-      title: title || fallbackTitle(body, index),
+      title: fixedTitle || title || fallbackTitle(body, index),
       text: textParts.join('\n\n'),
       cta: isLast && cta ? cta : null,
     });
@@ -350,6 +384,8 @@ function buildConfidentialitate(records, orgInfoSection, warnings) {
     idPrefix: 'confidentialitate-nota',
     pageTitle,
     seenTitles,
+    titles: CONFIDENTIALITATE_TITLES,
+    numberedHeadings: true,
     warnings,
   });
 
@@ -376,68 +412,40 @@ function buildConfidentialitate(records, orgInfoSection, warnings) {
   };
 }
 
-const SESSION_RE = /(sesiune|persistenț|stocare local|localstorage|browser|dezactiv|șterge cookie|sterge cookie|control)/i;
-const CATEGORY_RULES = [
-  {
-    id: 'necesare',
-    title: 'Cookie-uri necesare',
-    re: /(necesar|esențial|esential|strict|autentificare|logare|securitate|turnstile|funcționare|coș|cos de cumpărături)/i,
-  },
-  {
-    id: 'analiza',
-    title: 'Cookie-uri de analiză',
-    re: /(analiz|statistic|performanț|performant|măsurare|masurare|trafic|audienț)/i,
-  },
-  {
-    id: 'marketing',
-    title: 'Cookie-uri de marketing',
-    re: /(marketing|publicit|reclam|promovare|campani|remarketing|social media|meta|tiktok|ads)/i,
-  },
-];
+const COOKIE_CONTACT_EMAIL = 'help@greentechcharity.ro';
 
-const COOKIE_TECHNICAL_PARAGRAPHS = [
-  'Cookie-ul "gt_consent" este salvat în localStorage și păstrează opțiunile tale privind cookie-urile până când le schimbi sau le ștergi.',
-  'Cookie-ul "wc_admin_token" ține sesiunea de administrare: este valabil 8 ore și este stocat până la ieșirea din cont.',
-  'Turnstile (Cloudflare) este folosit ca măsură de securitate pentru formulare și se încarcă doar atunci când este necesar pentru verificarea cererii.',
-];
-
-const COOKIE_OPTIONAL_PARAGRAPHS = [
-  'Servicii opționale care se pot activa: Google Analytics 4, Google Ads, Google Tag Manager, Meta, TikTok și Microsoft Clarity.',
-  'Acestea se activează doar după configurarea lor în aplicație și după acordul tău explicit; până atunci nu se instalează cookie-uri de analiză sau de marketing și nu se colectează date prin ele.',
-  'Denumirile și duratele de stocare folosite sunt numai cele descrise în această pagină; orice serviciu nou este anunțat aici înainte de activare.',
-];
-
-function collectCookieLines(textLines) {
-  const lines = [];
-  for (const rawLine of textLines) {
-    const flat = flattenLine(rawLine);
-    if (!flat) continue;
-    if (splitChapterHeading(flat)) continue; // titluri de capitol: nu fac parte din text
-    if (TEMPLATE_LINE.test(flat)) continue; // șabloane monedă/tarif/telefon/geotargeting
-    const cleaned = polishText(stripPrefixes(flat));
-    if (!cleaned) continue;
-    if (lines.some((existing) => fold(existing) === fold(cleaned))) continue;
-    lines.push(cleaned);
+function collectStrings(value, out = []) {
+  if (typeof value === 'string') {
+    const text = value.trim();
+    if (text) out.push(text);
+    return out;
   }
-  return lines;
+  if (Array.isArray(value)) {
+    for (const item of value) collectStrings(item, out);
+    return out;
+  }
+  if (value && typeof value === 'object') {
+    for (const item of Object.values(value)) collectStrings(item, out);
+  }
+  return out;
 }
 
-function buildPoliticaCookies(records) {
+// numele operatorului, preluat din secțiunea orgInfo a paginii /date-asociatie
+function operatorName(orgInfoSection) {
+  const strings = collectStrings(orgInfoSection?.data ?? {});
+  const legal = strings.find((text) => /^asocia[țȚ]ia\s+\S/.test(text) && text.length <= 200);
+  if (legal) return cleanTitle(legal.split(/[,(;]/)[0]);
+  const brand = strings.find((text) => /greentech/i.test(text) && text.length <= 80);
+  return brand ? cleanTitle(brand) : '';
+}
+
+function buildPoliticaCookies(orgInfoSection) {
   const slug = '/politica-cookies';
   const pageTitle = 'Politica de cookies';
-  const lines = collectCookieLines(records.map((record) => record.text));
-
-  const buckets = { intro: [], sesiune: [], necesare: [], analiza: [], marketing: [] };
-  for (const line of lines) {
-    const rule = CATEGORY_RULES.find((item) => item.re.test(line));
-    if (rule) {
-      buckets[rule.id].push(line);
-    } else if (SESSION_RE.test(line)) {
-      buckets.sesiune.push(line);
-    } else {
-      buckets.intro.push(line);
-    }
-  }
+  const operator = operatorName(orgInfoSection);
+  const operatorText = operator
+    ? `Operatorul aplicației este ${operator}; datele complete de identificare sunt publicate în pagina „Date asociație” (/date-asociatie).`
+    : 'Operatorul aplicației este asociația care administrează site-ul, iar datele complete de identificare sunt publicate în pagina „Date asociație” (/date-asociatie).';
 
   const blocks = [
     headerBlock({
@@ -445,54 +453,73 @@ function buildPoliticaCookies(records) {
       title: pageTitle,
       subtitle: 'Ce cookie-uri folosim, de ce și cum le poți controla',
     }),
+    textBlock({
+      id: 'politica-cookies-1',
+      title: 'Cookie-uri și stocare locală',
+      text: [
+        operatorText,
+        'Aplicația folosește cookie-uri și stocare locală în browser pentru trei scopuri: funcționarea tehnică a site-ului, analiza modului în care este folosit și, numai cu acordul tău, marketing.',
+        'Cookie-urile și înregistrările strict necesare asigură funcționarea și securitatea aplicației și nu pot fi refuzate din setările de consimțământ; cele de analiză și de marketing se activează exclusiv pe baza opțiunilor tale.',
+      ].join('\n\n'),
+    }),
+    textBlock({
+      id: 'politica-cookies-2',
+      title: 'Cookie-uri necesare',
+      text: [
+        'Cookie-urile și înregistrările de stocare locală necesare sunt folosite pentru funcționarea și securitatea aplicației: păstrarea preferințelor, protejarea formularelor și a zonei de administrare.',
+        'Turnstile (Cloudflare) rulează ca măsură de securitate pentru formulare numai când este activ în configurația aplicației.',
+        'Preferințele de consimțământ sunt salvate local, în gt_consent, și rămân pe dispozitiv până când le modifici sau le ștergi.',
+        'wc_admin_token este folosit exclusiv în zona de administrare: sesiunea de administrare este valabilă 8 ore, iar tokenul este stocat până la ieșirea din cont, până când este înlocuit cu unul nou sau până când îl ștergi.',
+      ].join('\n\n'),
+    }),
+    textBlock({
+      id: 'politica-cookies-3',
+      title: 'Cookie-uri de analiză',
+      text: [
+        'Cookie-urile de analiză (Google Analytics 4 și Microsoft Clarity) se instalează numai dacă serviciul respectiv este configurat în aplicație și numai dacă ai dat consimțământ pentru categoria analytics.',
+        'Dacă lipsește oricare dintre aceste condiții, nu se instalează cookie-uri de analiză și nu se colectează date prin ele.',
+      ].join('\n\n'),
+    }),
+    textBlock({
+      id: 'politica-cookies-4',
+      title: 'Cookie-uri de marketing',
+      text: [
+        'Cookie-urile de marketing (Google Ads, Meta, TikTok) se instalează numai dacă serviciul respectiv este configurat în aplicație și numai dacă ai dat consimțământ pentru categoria marketing.',
+        'Google Tag Manager rulează conform categoriilor configurate în aplicație, astfel încât etichetele să fie încărcate doar pentru categoriile pe care le-ai acceptat.',
+      ].join('\n\n'),
+    }),
+    textBlock({
+      id: 'politica-cookies-5',
+      title: 'Alegerea consimțământului',
+      text: [
+        'La prima vizită poți accepta toate cookie-urile, poți refuza cookie-urile opționale sau poți configura separat fiecare categorie.',
+        'Îți poți modifica sau retrage opțiunile oricând, la fel de simplu cum le-ai acordat, din setările cookie de pe această pagină; refuzul cookie-urilor opționale nu îți limitează accesul la conținut și nici posibilitatea de a ne contacta.',
+      ].join('\n\n'),
+      cta: COOKIE_CTA,
+    }),
+    textBlock({
+      id: 'politica-cookies-6',
+      title: 'Durata stocării și controlul din browser',
+      text: [
+        'Durata de stocare diferă de la un serviciu la altul: unele cookie-uri sunt valabile doar cât timp sesiunea din browser este deschisă, altele rămân pe dispozitiv până la expirarea perioadei configurate pentru serviciul respectiv. Duratele exacte depind de configurația aplicației și de serviciile active, iar aici nu sunt prezentate alte termene.',
+        'Poți șterge oricând cookie-urile și datele locale din setările browserului. După ștergere, opțiunile de consimțământ trebuie reconfirmate, iar în zona de administrare poate fi necesară o nouă autentificare.',
+      ].join('\n\n'),
+    }),
+    textBlock({
+      id: 'politica-cookies-7',
+      title: 'Furnizori terți și contact',
+      text: [
+        'Unii furnizori ai serviciilor de analiză și de marketing pot prelucra date în afara Spațiului Economic European, cu garanțiile prevăzute de GDPR, cum ar fi clauzele contractuale standard.',
+        `Detalii despre prelucrarea datelor găsești în politica de confidențialitate (/confidentialitate), iar întrebările despre cookie-uri ne pot fi trimise la ${COOKIE_CONTACT_EMAIL}.`,
+      ].join('\n\n'),
+    }),
   ];
-
-  if (buckets.intro.length) {
-    blocks.push(textBlock({
-      id: 'politica-cookies-intro',
-      title: 'Ce sunt cookie-urile',
-      text: buckets.intro.join('\n\n'),
-    }));
-  }
-
-  for (const rule of CATEGORY_RULES) {
-    if (!buckets[rule.id].length) continue;
-    blocks.push(textBlock({
-      id: `politica-cookies-${rule.id}`,
-      title: rule.title,
-      text: buckets[rule.id].join('\n\n'),
-    }));
-  }
-
-  if (buckets.sesiune.length) {
-    blocks.push(textBlock({
-      id: 'politica-cookies-sesiune',
-      title: 'Sesiune, persistență și control',
-      text: buckets.sesiune.join('\n\n'),
-    }));
-  }
-
-  blocks.push(textBlock({
-    id: 'politica-cookies-tehnice',
-    title: 'Cum stocăm preferințele și sesiunea',
-    text: COOKIE_TECHNICAL_PARAGRAPHS.join('\n\n'),
-  }));
-
-  blocks.push(textBlock({
-    id: 'politica-cookies-servicii',
-    title: 'Servicii opționale',
-    text: COOKIE_OPTIONAL_PARAGRAPHS.join('\n\n'),
-  }));
-
-  const ctaTarget = blocks.find((block) => block.id === 'politica-cookies-sesiune')
-    ?? blocks[blocks.length - 1];
-  ctaTarget.data.cta = { label: COOKIE_CTA.label, to: COOKIE_CTA.to };
 
   return {
     id: 'politica-cookies',
     slug,
     title: pageTitle,
-    description: 'Cookie-urile folosite de aplicație, scopul lor și opțiunile tale de control.',
+    description: 'Cookie-urile și stocarea locală folosite de aplicație, scopurile lor și opțiunile tale de control.',
     showInNav: false,
     sections: blocks,
   };
@@ -581,8 +608,26 @@ const BOTTOM_LINKS = [
 ];
 
 function updateFooter(content) {
-  if (!content.footer || typeof content.footer !== 'object') content.footer = {};
-  const footer = content.footer;
+  if (!content.site || typeof content.site !== 'object') content.site = {};
+  if (!content.site.footer || typeof content.site.footer !== 'object') content.site.footer = {};
+  const footer = content.site.footer;
+
+  // linkurile orfane dintr-o versiune anterioară a scriptului (content.footer) se preiau
+  // o singură dată, împerecheate după „to”; apoi cheia orfană se șterge
+  const orphan = content.footer && typeof content.footer === 'object' ? content.footer : null;
+  if (orphan) {
+    const existing = Array.isArray(footer.bottomLinks) ? footer.bottomLinks.slice() : [];
+    const known = new Set(existing.map((item) => itemHref(item)).filter(Boolean));
+    for (const link of Array.isArray(orphan.bottomLinks) ? orphan.bottomLinks : []) {
+      const target = itemHref(link);
+      if (!target || known.has(target)) continue;
+      known.add(target);
+      existing.push(link);
+    }
+    footer.bottomLinks = existing;
+    delete content.footer;
+  }
+
   footer.bottomLinks = upsertLinks(footer.bottomLinks, BOTTOM_LINKS);
   return footer.bottomLinks.length;
 }
@@ -613,18 +658,16 @@ function main() {
   const content = readJson(CONTENT_FILE);
 
   // numele reale din .ai/docs-extracted.json:
-  // "docs/Cod de etica -21.09.2026- rev 1.docx", "docs/Nota de informare GDPR -GREEN EDU.docx",
-  // "docs/Politica de cookies.docx"
+  // "docs/Cod de etica -21.09.2026- rev 1.docx", "docs/Nota de informare GDPR -GREEN EDU.docx"
   const codEticRecords = documentParagraphs(findDocument(docs, /cod\s*(?:de\s+)?etic/i));
   const confidentialitateRecords = documentParagraphs(findDocument(docs, /confiden|gdpr/i));
-  const cookiesRecords = documentParagraphs(findDocument(docs, /cookie/i));
 
   const orgInfoSection = findOrgInfoSection(content);
 
   const pages = [
     buildCodEtic(codEticRecords, warnings),
     buildConfidentialitate(confidentialitateRecords, orgInfoSection, warnings),
-    buildPoliticaCookies(cookiesRecords),
+    buildPoliticaCookies(orgInfoSection),
   ];
 
   const backupPath = backupContent(CONTENT_FILE);
@@ -637,7 +680,7 @@ function main() {
 
   const footerCount = updateFooter(content);
   updateGdprModal(content);
-  console.log(`footer.bottomLinks: ${footerCount} linkuri; site.modals.gdpr actualizat`);
+  console.log(`site.footer.bottomLinks: ${footerCount} linkuri; site.modals.gdpr actualizat`);
 
   for (const warning of warnings) console.warn(`ATENȚIE: ${warning}`);
 
