@@ -1,0 +1,5 @@
+* text=auto
+
+*.glb binary
+*.glb2 binary
+*.zip binary

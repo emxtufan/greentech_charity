@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="referrer" content="same-origin">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; font-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
+  <meta name="theme-color" content="#183b28">
+  <title>Administrare cereri | GREENTECH Charity</title>
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Sari la continut</a>
+
+  <main id="main-content" class="admin-shell">
+    <section id="auth-view" class="auth-view" aria-labelledby="login-title">
+      <div class="auth-view__visual" aria-hidden="true">
+        <span class="auth-orbit auth-orbit--one"></span>
+        <span class="auth-orbit auth-orbit--two"></span>
+        <p>Case sustenabile.<br>Sanse reale.</p>
+      </div>
+
+      <div class="auth-view__panel">
+        <a class="brand brand--login" href="/" aria-label="GREENTECH Charity, inapoi la site">
+          <img src="/logo-charity.webp" alt="GREENTECH Charity" width="360" height="190">
+        </a>
+        <div class="auth-copy">
+          <p class="eyebrow">Spatiu administrativ</p>
+          <h1 id="login-title">Cererile comunitatii, intr-un singur loc.</h1>
+          <p>Autentifica-te pentru a vedea aplicarile si mesajele trimise prin site.</p>
+        </div>
+
+        <form id="login-form" class="login-form" novalidate>
+          <div class="field">
+            <label for="login-username">Utilizator</label>
+            <input id="login-username" name="username" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required placeholder="Utilizator administrare">
+          </div>
+          <div class="field">
+            <label for="login-password">Parola</label>
+            <div class="password-field">
+              <input id="login-password" name="password" type="password" autocomplete="current-password" required placeholder="Parola ta">
+              <button id="toggle-password" class="icon-button icon-button--password" type="button" aria-label="Afiseaza parola" aria-pressed="false">
+                <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"></path><circle cx="12" cy="12" r="2.7"></circle></svg>
+              </button>
+            </div>
+          </div>
+          <p id="login-error" class="form-message form-message--error" role="alert" hidden></p>
+          <button id="login-submit" class="primary-button" type="submit">
+            <span>Intra in administrare</span>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h13M14 7l5 5-5 5"></path></svg>
+          </button>
+        </form>
+
+        <div id="setup-notice" class="setup-notice" role="status" hidden>
+          <strong>Administrarea nu este configurata.</strong>
+          <span>Adauga utilizatorul si parola de administrare in fisierul .env, apoi reincarca pagina.</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="dashboard-view" class="dashboard" aria-labelledby="dashboard-title" hidden>
+      <header class="dashboard-header">
+        <a class="brand brand--header" href="/" aria-label="GREENTECH Charity, inapoi la site">
+          <img src="/logo-charity.webp" alt="GREENTECH Charity" width="360" height="190">
+        </a>
+        <div class="dashboard-header__copy">
+          <p class="eyebrow">Administrare cereri</p>
+          <h1 id="dashboard-title">Comunitatea GREENTECH</h1>
+        </div>
+        <div class="dashboard-header__actions">
+          <button id="refresh-button" class="secondary-button" type="button">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 5v6h-6"></path></svg>
+            <span>Actualizeaza</span>
+          </button>
+          <button id="logout-button" class="secondary-button secondary-button--quiet" type="button">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M10 5H5v14h5M14 8l4 4-4 4M8 12h10"></path></svg>
+            <span>Iesire</span>
+          </button>
+        </div>
+      </header>
+
+      <div class="dashboard-content">
+        <section class="summary" aria-label="Rezumat cereri">
+          <article class="stat-card stat-card--total">
+            <span class="stat-card__label">Total cereri</span>
+            <strong id="stat-total" class="stat-card__value">0</strong>
+            <span class="stat-card__note">toate solicitarile</span>
+          </article>
+          <article class="stat-card">
+            <span class="stat-card__label">Cereri noi</span>
+            <strong id="stat-new" class="stat-card__value">0</strong>
+            <span class="stat-card__note">asteapta raspuns</span>
+          </article>
+          <article class="stat-card">
+            <span class="stat-card__label">In lucru</span>
+            <strong id="stat-progress" class="stat-card__value">0</strong>
+            <span class="stat-card__note">preluate de echipa</span>
+          </article>
+          <article class="stat-card">
+            <span class="stat-card__label">Finalizate</span>
+            <strong id="stat-done" class="stat-card__value">0</strong>
+            <span class="stat-card__note">rezolvate complet</span>
+          </article>
+        </section>
+
+        <section class="requests-panel" aria-labelledby="requests-title">
+          <div class="requests-panel__heading">
+            <div>
+              <p class="eyebrow">Inbox</p>
+              <h2 id="requests-title">Cereri si aplicari</h2>
+            </div>
+            <span id="results-count" class="results-count" aria-live="polite">0 rezultate</span>
+          </div>
+
+          <form id="filters-form" class="filters" role="search">
+            <div class="search-field">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4 4"></path></svg>
+              <label class="sr-only" for="search-input">Cauta in cereri</label>
+              <input id="search-input" type="search" placeholder="Cauta dupa nume, email sau mesaj..." autocomplete="off">
+            </div>
+            <div class="select-field">
+              <label class="sr-only" for="type-filter">Filtreaza dupa tip</label>
+              <select id="type-filter">
+                <option value="">Toate tipurile</option>
+                <option value="donation">Donatii</option>
+                <option value="volunteer">Voluntariat</option>
+                <option value="partner">Parteneriate</option>
+                <option value="contact">Mesaje</option>
+                <option value="newsletter">Newsletter</option>
+              </select>
+            </div>
+            <div class="select-field">
+              <label class="sr-only" for="status-filter">Filtreaza dupa status</label>
+              <select id="status-filter">
+                <option value="">Toate statusurile</option>
+                <option value="noua">Noua</option>
+                <option value="in_lucru">In lucru</option>
+                <option value="contactata">Contactata</option>
+                <option value="finalizata">Finalizata</option>
+                <option value="spam">Spam</option>
+              </select>
+            </div>
+          </form>
+
+          <div id="requests-loading" class="loading-state" aria-live="polite">
+            <span class="spinner" aria-hidden="true"></span>
+            <span>Se incarca cererile...</span>
+          </div>
+
+          <div id="requests-error" class="error-state" role="alert" hidden>
+            <span>Nu am putut incarca cererile.</span>
+            <button id="retry-button" class="text-button" type="button">Incearca din nou</button>
+          </div>
+
+          <div id="empty-state" class="empty-state" hidden>
+            <span class="empty-state__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 7h16v12H4zM4 8l8 6 8-6"></path></svg>
+            </span>
+            <h3>Nicio cerere aici</h3>
+            <p>Schimba filtrele sau revino dupa ce sunt trimise solicitari noi.</p>
+          </div>
+
+          <div id="requests-list" class="requests-list" hidden></div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <div id="drawer-layer" class="drawer-layer" hidden>
+    <button id="drawer-backdrop" class="drawer-backdrop" type="button" aria-label="Inchide detaliile"></button>
+    <aside id="request-drawer" class="request-drawer" aria-labelledby="drawer-title" aria-modal="true" role="dialog" tabindex="-1">
+      <header class="request-drawer__header">
+        <div>
+          <p id="drawer-kicker" class="eyebrow">Detalii cerere</p>
+          <h2 id="drawer-title">Cerere</h2>
+        </div>
+        <button id="drawer-close" class="icon-button" type="button" aria-label="Inchide">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"></path></svg>
+        </button>
+      </header>
+
+      <div class="request-drawer__body">
+        <div class="drawer-meta">
+          <span id="drawer-type" class="type-badge"></span>
+          <span id="drawer-date" class="drawer-date"></span>
+        </div>
+        <dl id="drawer-details" class="drawer-details"></dl>
+
+        <form id="request-form" class="request-form">
+          <input id="drawer-id" name="id" type="hidden">
+          <div class="field">
+            <label for="drawer-status">Status</label>
+            <div class="select-field select-field--full">
+              <select id="drawer-status" name="status">
+                <option value="noua">Noua</option>
+                <option value="in_lucru">In lucru</option>
+                <option value="contactata">Contactata</option>
+                <option value="finalizata">Finalizata</option>
+                <option value="spam">Spam</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="drawer-notes">Note interne</label>
+            <textarea id="drawer-notes" name="notes" rows="6" maxlength="4000" placeholder="Adauga detalii utile pentru echipa..."></textarea>
+            <span class="field-hint">Notele sunt vizibile doar in administrare.</span>
+          </div>
+          <p id="save-message" class="form-message" role="status" hidden></p>
+          <button id="save-button" class="primary-button" type="submit">
+            <span>Salveaza modificarile</span>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></svg>
+          </button>
+        </form>
+      </div>
+    </aside>
+  </div>
+
+  <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+  <script src="/admin/admin.js" defer></script>
+</body>
+</html>

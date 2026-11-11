@@ -1,0 +1,6 @@
+{
+  "name": "GREENTECH Charity",
+  "description": "Experienta 3D GREENTECH Charity pentru locuinte sustenabile, sprijin pentru familii si impact transparent",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

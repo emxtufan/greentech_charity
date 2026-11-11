@@ -1,0 +1,149 @@
+{
+  "page": {
+    "title": "Proiecte | GREENTECH Charity",
+    "description": "Locuinte sustenabile si initiative construite transparent, alaturi de familii, voluntari si parteneri."
+  },
+  "hero": {
+    "meta": ["Proiecte GREENTECH Charity"],
+    "title": "O casa schimba mai mult decat o adresa.",
+    "lead": "Urmarim drumul fiecarei familii de la nevoie la siguranta: ascultam, proiectam, construim si ramanem aproape.",
+    "image": {
+      "src": "/proiecte/assets/images/hero-child.jpg",
+      "alt": "Copil zambind intr-un moment luminos, imagine editoriala despre speranta",
+      "caption": "In centrul fiecarui proiect se afla viata care va continua in acel camin."
+    }
+  },
+  "story": {
+    "label": "De ce construim",
+    "title": "Nu ridicam doar pereti. Cream loc pentru o viata mai sigura.",
+    "intro": [
+      "O locuinta buna inseamna caldura iarna, aer sanatos, costuri suportabile si un spatiu in care copiii pot invata in liniste.",
+      "Fiecare proiect GREENTECH Charity incepe cu familia si continua printr-o constructie responsabila, masurabila si transparenta."
+    ],
+    "feature": {
+      "eyebrow": "Proiect pilot · Prahova",
+      "title": "Casa 01 — un inceput stabil pentru o familie cu doi copii",
+      "description": "Proiectam o locuinta compacta, luminoasa si eficienta energetic. Solutia combina o anvelopa bine izolata, energie regenerabila si o curte care ramane usor de intretinut.",
+      "image": {
+        "src": "/proiecte/assets/images/family-home.jpg",
+        "alt": "Familie petrecand timp impreuna acasa"
+      },
+      "facts": [
+        {"label": "Suprafata propusa", "value": "86 mp"},
+        {"label": "Etapa curenta", "value": "Proiectare"},
+        {"label": "Obiectiv energetic", "value": "Consum redus"}
+      ]
+    }
+  },
+  "impact": {
+    "label": "Impact",
+    "title": "Fiecare resursa trebuie sa lase o urma buna.",
+    "facts": [
+      {"value": "01", "label": "familie in centrul fiecarui proiect"},
+      {"value": "05", "label": "etape raportate transparent"},
+      {"value": "30%", "label": "tinta minima de reducere a consumului"},
+      {"value": "100%", "label": "contributii urmarite si documentate"}
+    ]
+  },
+  "field": {
+    "label": "Din teren",
+    "title": "Detaliile mici fac diferenta dintre o cladire si un camin.",
+    "gallery": [
+      {
+        "src": "/proiecte/assets/images/construction-team.jpg",
+        "alt": "Echipa de constructori lucrand pe santier",
+        "caption": "Expertiza tehnica transforma intentia buna intr-o constructie sigura."
+      },
+      {
+        "src": "/proiecte/assets/images/solar-panels-green.jpg",
+        "alt": "Panouri solare intr-un peisaj verde",
+        "caption": "Energia curata reduce presiunea costurilor de zi cu zi."
+      },
+      {
+        "src": "/proiecte/assets/images/volunteers-community.jpg",
+        "alt": "Voluntari impreuna intr-o actiune comunitara",
+        "caption": "Un proiect rezista atunci cand comunitatea ramane aproape."
+      }
+    ]
+  },
+  "cases": {
+    "label": "Proiecte active",
+    "title": "La ce lucram acum",
+    "intro": "Patru initiative care transforma siguranta, energia si spatiile comune in schimbari concrete pentru familii.",
+    "items": [
+      {
+        "slug": "casa-01-prahova",
+        "number": "01",
+        "category": "Locuire sustenabila",
+        "location": "Prahova",
+        "status": "In proiectare",
+        "progress": 34,
+        "title": "Casa 01 — loc pentru un nou inceput",
+        "summary": "O locuinta compacta pentru o familie cu doi copii, gandita pentru siguranta, costuri mici si multa lumina naturala.",
+        "image": {
+          "src": "/proiecte/assets/images/house-prahova.jpg",
+          "alt": "Casa contemporana luminoasa inconjurata de vegetatie"
+        },
+        "stats": [{"value": "86 mp", "label": "suprafata"}, {"value": "4", "label": "beneficiari"}, {"value": "34%", "label": "progres"}],
+        "needs": ["Materiale pentru anvelopa termica", "Partener pentru instalatia electrica", "Contributii pentru ferestre eficiente"],
+        "steps": ["Evaluarea nevoilor — finalizata", "Concept si buget — finalizate", "Proiect tehnic — in lucru", "Constructie", "Predare si monitorizare"]
+      },
+      {
+        "slug": "renovare-02-ilfov",
+        "number": "02",
+        "category": "Renovare sanatoasa",
+        "location": "Ilfov",
+        "status": "Evaluare tehnica",
+        "progress": 18,
+        "title": "Renovare 02 — caldura pastrata inauntru",
+        "summary": "Reabilitam o casa existenta pentru a elimina umezeala, a imbunatati izolatia si a reduce consumul familiei.",
+        "image": {
+          "src": "/proiecte/assets/images/renovation-ilfov.jpg",
+          "alt": "Persoana lucrand cu atentie la renovarea unui interior"
+        },
+        "stats": [{"value": "72 mp", "label": "suprafata"}, {"value": "3", "label": "beneficiari"}, {"value": "18%", "label": "progres"}],
+        "needs": ["Audit energetic", "Sistem de ventilatie", "Materiale pentru combaterea umezelii"],
+        "steps": ["Vizita sociala — finalizata", "Expertiza cladirii — in lucru", "Buget si parteneri", "Executie", "Masurarea rezultatelor"]
+      },
+      {
+        "slug": "energie-03-dambovita",
+        "number": "03",
+        "category": "Energie curata",
+        "location": "Dambovita",
+        "status": "Cautam parteneri",
+        "progress": 46,
+        "title": "Energie 03 — facturi mai mici, confort mai mare",
+        "summary": "Completam renovarea unei locuinte cu panouri fotovoltaice si un sistem eficient de producere a apei calde.",
+        "image": {
+          "src": "/proiecte/assets/images/solar-dambovita.jpg",
+          "alt": "Panouri fotovoltaice montate pe acoperisul unei case"
+        },
+        "stats": [{"value": "4.8 kW", "label": "putere tinta"}, {"value": "5", "label": "beneficiari"}, {"value": "46%", "label": "progres"}],
+        "needs": ["Echipamente fotovoltaice", "Montaj autorizat", "Monitorizare energetica pentru 12 luni"],
+        "steps": ["Calcul consum — finalizat", "Dimensionare sistem — finalizata", "Parteneriat tehnic — in lucru", "Instalare", "Monitorizare"]
+      },
+      {
+        "slug": "gradina-04-brasov",
+        "number": "04",
+        "category": "Comunitate si natura",
+        "location": "Brasov",
+        "status": "Planificare",
+        "progress": 12,
+        "title": "Gradina 04 — un loc sigur pentru joaca",
+        "summary": "Transformam curtea comuna intr-un spatiu verde, accesibil si usor de ingrijit de familii si voluntari.",
+        "image": {
+          "src": "/proiecte/assets/images/garden-brasov.jpg",
+          "alt": "Copii petrecand timp impreuna in aer liber"
+        },
+        "stats": [{"value": "420 mp", "label": "spatiu verde"}, {"value": "11", "label": "copii"}, {"value": "12%", "label": "progres"}],
+        "needs": ["Arbori si plante locale", "Elemente de joaca sigure", "O zi de voluntariat pentru amenajare"],
+        "steps": ["Consultare comunitate — in lucru", "Plan de amenajare", "Colectare materiale", "Zi de constructie", "Ingrijire sezoniera"]
+      }
+    ]
+  },
+  "closing": {
+    "label": "Un proiect bun incepe impreuna",
+    "title": "Poti transforma o nevoie concreta intr-un camin care rezista.",
+    "primary": "Spune-ne cum vrei sa te implici"
+  }
+}

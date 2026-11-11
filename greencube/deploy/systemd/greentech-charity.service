@@ -1,0 +1,48 @@
+[Unit]
+Description=GREENTECH Charity Node API
+Documentation=file:/srv/greentech-charity/current/deploy/README-UBUNTU.md
+Wants=network-online.target
+After=network-online.target
+ConditionPathExists=/srv/greentech-charity/current/dist/index.html
+
+[Service]
+Type=simple
+User=greentech-charity
+Group=greentech-charity
+WorkingDirectory=/srv/greentech-charity/current
+
+Environment=NODE_ENV=production
+Environment=HOST=127.0.0.1
+Environment=PORT=3002
+EnvironmentFile=/etc/greentech-charity/greentech-charity.env
+
+ExecStart=/usr/bin/node server.js --production
+ExecStartPost=/usr/bin/node scripts/smoke-production.mjs http://127.0.0.1:3002
+
+Restart=on-failure
+RestartSec=3s
+TimeoutStartSec=45s
+TimeoutStopSec=30s
+KillSignal=SIGTERM
+
+UMask=0077
+StateDirectory=greentech-charity
+StateDirectoryMode=0700
+ReadWritePaths=/var/lib/greentech-charity
+
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+CapabilityBoundingSet=
+AmbientCapabilities=
+
+[Install]
+WantedBy=multi-user.target
