@@ -24,8 +24,7 @@ const DOCS_FILE = path.join(ROOT, '.ai', 'docs-extracted.json');
 const CONTENT_FILE = path.join(ROOT, 'server', 'data', 'content.json');
 
 const WORD_PART = 'word/document.xml';
-// intervalele din specificație sunt 1-based și includ ambele capete
-const RANGE_BASE = 1;
+// intervalele se referă la numerele originale de paragraf (1-based, ambele capete incluse)
 const HREF_KEYS = ['to', 'href', 'url', 'path'];
 
 const COD_ETIC_RANGES = [[20, 31], [32, 74], [75, 114], [115, 131], [132, 200], [201, 211]];
@@ -97,59 +96,33 @@ function cloneSection(section) {
 
 // ------------------------------------------------- citirea extrasului docx
 
+/**
+ * Formatul sursă este un array plat de înregistrări
+ * { source, part, paragraph, text }. Înregistrările se grupează după source,
+ * păstrând ordinea din fișier și numărul original de paragraf.
+ */
 function collectDocuments(root) {
-  if (Array.isArray(root)) return root;
-  if (root && typeof root === 'object') {
-    for (const key of ['documents', 'docs', 'files', 'items', 'extracted', 'sources']) {
-      if (Array.isArray(root[key])) return root[key];
-    }
-    // obiect indexat după numele fișierului: { 'cod-etic.docx': { ... } }
-    return Object.entries(root).map(([name, value]) => (
-      value && typeof value === 'object' ? { name, ...value } : { name, paragraphs: value }
-    ));
+  if (!Array.isArray(root)) {
+    throw new Error('.ai/docs-extracted.json trebuie să fie un array plat de înregistrări { source, part, paragraph, text }.');
   }
-  return [];
-}
-
-function toParagraphs(value) {
-  if (value == null) return [];
-  if (typeof value === 'string') return value.split(/\r?\n/);
-  if (Array.isArray(value)) {
-    return value.flatMap((item) => {
-      if (typeof item === 'string') return item.split(/\r?\n/);
-      if (item && typeof item === 'object') {
-        const inner = item.text ?? item.value ?? item.content ?? item.paragraph ?? null;
-        return inner == null ? [] : toParagraphs(inner);
-      }
-      return [];
+  const bySource = new Map();
+  for (const entry of root) {
+    const source = String(entry?.source ?? '').trim();
+    if (!source) continue;
+    const paragraph = Number(entry?.paragraph);
+    if (!Number.isFinite(paragraph)) continue;
+    if (!bySource.has(source)) bySource.set(source, []);
+    bySource.get(source).push({
+      part: String(entry?.part ?? '').replace(/\\/g, '/'),
+      paragraph,
+      text: String(entry?.text ?? ''),
     });
   }
-  if (typeof value === 'object') {
-    const inner = value.text ?? value.value ?? value.content ?? null;
-    return inner == null ? [] : toParagraphs(inner);
-  }
-  return [];
-}
-
-function collectParts(doc) {
-  const raw = doc.parts ?? doc.part ?? doc.children ?? doc.content ?? null;
-  if (Array.isArray(raw)) {
-    return raw.map((entry) => ({
-      path: String(entry?.part ?? entry?.path ?? entry?.name ?? entry?.file ?? ''),
-      paragraphs: toParagraphs(entry?.paragraphs ?? entry?.lines ?? entry?.text ?? entry),
-    }));
-  }
-  if (raw && typeof raw === 'object') {
-    return Object.entries(raw).map(([key, value]) => ({
-      path: key,
-      paragraphs: toParagraphs(value?.paragraphs ?? value?.text ?? value),
-    }));
-  }
-  return [{ path: WORD_PART, paragraphs: toParagraphs(doc.paragraphs ?? doc.lines ?? doc.text) }];
+  return [...bySource.entries()].map(([source, records]) => ({ source, records }));
 }
 
 function documentName(doc) {
-  return String(doc?.name ?? doc?.file ?? doc?.filename ?? doc?.title ?? doc?.id ?? '');
+  return String(doc?.source ?? '');
 }
 
 function findDocument(docs, matcher) {
@@ -160,22 +133,16 @@ function findDocument(docs, matcher) {
   return doc;
 }
 
+// înregistrările părții principale, cu numărul original de paragraf păstrat
 function documentParagraphs(doc) {
-  const parts = collectParts(doc);
-  const part = parts.find((entry) => entry.path.replace(/\\/g, '/').endsWith(WORD_PART))
-    ?? parts.find((entry) => !entry.path)
-    ?? parts[0];
-  if (!part) return [];
-  return part.paragraphs
-    .map((line) => String(line ?? ''))
-    .filter((line) => line.trim() !== '');
+  return (doc?.records ?? []).filter((record) => record.part === WORD_PART);
 }
 
-function selectRange(paragraphs, range) {
+function selectRange(records, range) {
   const [start, end] = range;
-  const from = Math.max(0, start - RANGE_BASE);
-  const to = Math.max(from, end - RANGE_BASE + 1);
-  return paragraphs.slice(from, to);
+  return records
+    .filter((record) => record.part === WORD_PART && record.paragraph >= start && record.paragraph <= end)
+    .map((record) => record.text);
 }
 
 // ------------------------------------------------------ curățarea textelor
@@ -311,9 +278,9 @@ function collectChapter({ lines, seenTitles, pageTitle }) {
   return { title, body };
 }
 
-function buildChapterBlocks({ paragraphs, ranges, idPrefix, pageTitle, seenTitles, lastSuffix = '', cta = null, warnings }) {
+function buildChapterBlocks({ records, ranges, idPrefix, pageTitle, seenTitles, lastSuffix = '', cta = null, warnings }) {
   const blocks = ranges.map((range, index) => {
-    const lines = selectRange(paragraphs, range);
+    const lines = selectRange(records, range);
     const { title, body } = collectChapter({ lines, seenTitles, pageTitle });
     const isLast = index === ranges.length - 1;
     const textParts = body.slice();
@@ -333,12 +300,12 @@ function buildChapterBlocks({ paragraphs, ranges, idPrefix, pageTitle, seenTitle
 
 // ------------------------------------------------------------ paginile
 
-function buildCodEtic(paragraphs, warnings) {
+function buildCodEtic(records, warnings) {
   const slug = '/cod-etic';
   const pageTitle = 'Cod etic';
   const seenTitles = new Set();
   const blocks = buildChapterBlocks({
-    paragraphs,
+    records,
     ranges: COD_ETIC_RANGES,
     idPrefix: 'cod-etic-cap',
     pageTitle,
@@ -373,12 +340,12 @@ const CONFIDENTIALITATE_WEB_PARAGRAPHS = [
   'Celelalte documente se păstrează potrivit obligațiilor legale aplicabile asociației.',
 ];
 
-function buildConfidentialitate(paragraphs, orgInfoSection, warnings) {
+function buildConfidentialitate(records, orgInfoSection, warnings) {
   const slug = '/confidentialitate';
   const pageTitle = 'Politica de confidențialitate';
   const seenTitles = new Set();
   const blocks = buildChapterBlocks({
-    paragraphs,
+    records,
     ranges: CONFIDENTIALITATE_RANGES,
     idPrefix: 'confidentialitate-nota',
     pageTitle,
@@ -440,9 +407,9 @@ const COOKIE_OPTIONAL_PARAGRAPHS = [
   'Denumirile și duratele de stocare folosite sunt numai cele descrise în această pagină; orice serviciu nou este anunțat aici înainte de activare.',
 ];
 
-function collectCookieLines(paragraphs) {
+function collectCookieLines(textLines) {
   const lines = [];
-  for (const rawLine of paragraphs) {
+  for (const rawLine of textLines) {
     const flat = flattenLine(rawLine);
     if (!flat) continue;
     if (splitChapterHeading(flat)) continue; // titluri de capitol: nu fac parte din text
@@ -455,10 +422,10 @@ function collectCookieLines(paragraphs) {
   return lines;
 }
 
-function buildPoliticaCookies(paragraphs) {
+function buildPoliticaCookies(records) {
   const slug = '/politica-cookies';
   const pageTitle = 'Politica de cookies';
-  const lines = collectCookieLines(paragraphs);
+  const lines = collectCookieLines(records.map((record) => record.text));
 
   const buckets = { intro: [], sesiune: [], necesare: [], analiza: [], marketing: [] };
   for (const line of lines) {
@@ -645,16 +612,19 @@ function main() {
   const docs = collectDocuments(readJson(DOCS_FILE));
   const content = readJson(CONTENT_FILE);
 
-  const codEticParagraphs = documentParagraphs(findDocument(docs, /cod[-_ ]?etic/i));
-  const confidentialitateParagraphs = documentParagraphs(findDocument(docs, /confiden/i));
-  const cookiesParagraphs = documentParagraphs(findDocument(docs, /cookie/i));
+  // numele reale din .ai/docs-extracted.json:
+  // "docs/Cod de etica -21.09.2026- rev 1.docx", "docs/Nota de informare GDPR -GREEN EDU.docx",
+  // "docs/Politica de cookies.docx"
+  const codEticRecords = documentParagraphs(findDocument(docs, /cod\s*(?:de\s+)?etic/i));
+  const confidentialitateRecords = documentParagraphs(findDocument(docs, /confiden|gdpr/i));
+  const cookiesRecords = documentParagraphs(findDocument(docs, /cookie/i));
 
   const orgInfoSection = findOrgInfoSection(content);
 
   const pages = [
-    buildCodEtic(codEticParagraphs, warnings),
-    buildConfidentialitate(confidentialitateParagraphs, orgInfoSection, warnings),
-    buildPoliticaCookies(cookiesParagraphs),
+    buildCodEtic(codEticRecords, warnings),
+    buildConfidentialitate(confidentialitateRecords, orgInfoSection, warnings),
+    buildPoliticaCookies(cookiesRecords),
   ];
 
   const backupPath = backupContent(CONTENT_FILE);
