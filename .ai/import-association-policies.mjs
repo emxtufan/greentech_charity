@@ -170,7 +170,6 @@ const CHAPTER_RE = /^cap(?:itol(?:ul)?)?\.?\s*(?:[IVXLC]+|\d+)(?:\s*[.):\-–—
 const ARTICLE_RE = /^art(?:icol(?:ul)?)?\.?\s*\d+(?:\.\d+)*(?:\s*[.):\-–—]\s*|\s+)?/i;
 const SUBNUMBER_RE = /^(?:\d+(?:\.\d+)+\.?\s*|\d+[.)]\s+|\d+\)\s*)/;
 const BULLET_RE = /^[•▪◦*\-–—]\s*/;
-const TEMPLATE_LINE = /(\bRON\b|\bEUR\b|\bUSD\b|\blei\b|tarif|preț|pret\b|\+\d[\d\s().-]{7,}|geotarget|geonivel|targetare geografică)/i;
 
 function flattenLine(rawLine) {
   return String(rawLine ?? '')
@@ -414,38 +413,9 @@ function buildConfidentialitate(records, orgInfoSection, warnings) {
 
 const COOKIE_CONTACT_EMAIL = 'help@greentechcharity.ro';
 
-function collectStrings(value, out = []) {
-  if (typeof value === 'string') {
-    const text = value.trim();
-    if (text) out.push(text);
-    return out;
-  }
-  if (Array.isArray(value)) {
-    for (const item of value) collectStrings(item, out);
-    return out;
-  }
-  if (value && typeof value === 'object') {
-    for (const item of Object.values(value)) collectStrings(item, out);
-  }
-  return out;
-}
-
-// numele operatorului, preluat din secțiunea orgInfo a paginii /date-asociatie
-function operatorName(orgInfoSection) {
-  const strings = collectStrings(orgInfoSection?.data ?? {});
-  const legal = strings.find((text) => /^asocia[țȚ]ia\s+\S/.test(text) && text.length <= 200);
-  if (legal) return cleanTitle(legal.split(/[,(;]/)[0]);
-  const brand = strings.find((text) => /greentech/i.test(text) && text.length <= 80);
-  return brand ? cleanTitle(brand) : '';
-}
-
-function buildPoliticaCookies(orgInfoSection) {
+function buildPoliticaCookies() {
   const slug = '/politica-cookies';
   const pageTitle = 'Politica de cookies';
-  const operator = operatorName(orgInfoSection);
-  const operatorText = operator
-    ? `Operatorul aplicației este ${operator}; datele complete de identificare sunt publicate în pagina „Date asociație” (/date-asociatie).`
-    : 'Operatorul aplicației este asociația care administrează site-ul, iar datele complete de identificare sunt publicate în pagina „Date asociație” (/date-asociatie).';
 
   const blocks = [
     headerBlock({
@@ -457,8 +427,8 @@ function buildPoliticaCookies(orgInfoSection) {
       id: 'politica-cookies-1',
       title: 'Cookie-uri și stocare locală',
       text: [
-        operatorText,
-        'Aplicația folosește cookie-uri și stocare locală în browser pentru trei scopuri: funcționarea tehnică a site-ului, analiza modului în care este folosit și, numai cu acordul tău, marketing.',
+        'Datele operatorului, ASOCIAȚIA GREENTECH EDU, sunt disponibile în pagina de identificare a asociației.',
+        'Aplicația folosește cookie-uri și stocare locală în browser pentru trei scopuri, și anume funcționarea tehnică a site-ului, analiza modului în care este folosit și, numai cu acordul tău, marketing.',
         'Cookie-urile și înregistrările strict necesare asigură funcționarea și securitatea aplicației și nu pot fi refuzate din setările de consimțământ; cele de analiză și de marketing se activează exclusiv pe baza opțiunilor tale.',
       ].join('\n\n'),
     }),
@@ -466,17 +436,17 @@ function buildPoliticaCookies(orgInfoSection) {
       id: 'politica-cookies-2',
       title: 'Cookie-uri necesare',
       text: [
-        'Cookie-urile și înregistrările de stocare locală necesare sunt folosite pentru funcționarea și securitatea aplicației: păstrarea preferințelor, protejarea formularelor și a zonei de administrare.',
+        'Cookie-urile și înregistrările de stocare locală necesare sunt folosite pentru funcționarea și securitatea aplicației, adică păstrarea preferințelor, protejarea formularelor și a zonei de administrare.',
         'Turnstile (Cloudflare) rulează ca măsură de securitate pentru formulare numai când este activ în configurația aplicației.',
         'Preferințele de consimțământ sunt salvate local, în gt_consent, și rămân pe dispozitiv până când le modifici sau le ștergi.',
-        'wc_admin_token este folosit exclusiv în zona de administrare: sesiunea de administrare este valabilă 8 ore, iar tokenul este stocat până la ieșirea din cont, până când este înlocuit cu unul nou sau până când îl ștergi.',
+        'wc_admin_token este folosit exclusiv în zona de administrare. Sesiunea de administrare este valabilă 8 ore, iar tokenul este stocat până la ieșirea din cont, până când este înlocuit cu unul nou sau până când îl ștergi.',
       ].join('\n\n'),
     }),
     textBlock({
       id: 'politica-cookies-3',
       title: 'Cookie-uri de analiză',
       text: [
-        'Cookie-urile de analiză (Google Analytics 4 și Microsoft Clarity) se instalează numai dacă serviciul respectiv este configurat în aplicație și numai dacă ai dat consimțământ pentru categoria analytics.',
+        'Cookie-urile de analiză (Google Analytics 4 și Microsoft Clarity) se instalează numai dacă serviciul respectiv este configurat în aplicație și numai dacă ai dat consimțământ pentru categoria de analiză.',
         'Dacă lipsește oricare dintre aceste condiții, nu se instalează cookie-uri de analiză și nu se colectează date prin ele.',
       ].join('\n\n'),
     }),
@@ -484,7 +454,7 @@ function buildPoliticaCookies(orgInfoSection) {
       id: 'politica-cookies-4',
       title: 'Cookie-uri de marketing',
       text: [
-        'Cookie-urile de marketing (Google Ads, Meta, TikTok) se instalează numai dacă serviciul respectiv este configurat în aplicație și numai dacă ai dat consimțământ pentru categoria marketing.',
+        'Cookie-urile de marketing (Google Ads, Meta, TikTok) se instalează numai dacă serviciul respectiv este configurat în aplicație și numai dacă ai dat consimțământ pentru categoria de marketing.',
         'Google Tag Manager rulează conform categoriilor configurate în aplicație, astfel încât etichetele să fie încărcate doar pentru categoriile pe care le-ai acceptat.',
       ].join('\n\n'),
     }),
@@ -501,7 +471,7 @@ function buildPoliticaCookies(orgInfoSection) {
       id: 'politica-cookies-6',
       title: 'Durata stocării și controlul din browser',
       text: [
-        'Durata de stocare diferă de la un serviciu la altul: unele cookie-uri sunt valabile doar cât timp sesiunea din browser este deschisă, altele rămân pe dispozitiv până la expirarea perioadei configurate pentru serviciul respectiv. Duratele exacte depind de configurația aplicației și de serviciile active, iar aici nu sunt prezentate alte termene.',
+        'Durata de stocare diferă de la un serviciu la altul. Unele cookie-uri sunt valabile doar cât timp sesiunea din browser este deschisă, iar altele rămân pe dispozitiv până la expirarea perioadei configurate pentru serviciul respectiv. Duratele exacte depind de configurația aplicației și de serviciile active.',
         'Poți șterge oricând cookie-urile și datele locale din setările browserului. După ștergere, opțiunile de consimțământ trebuie reconfirmate, iar în zona de administrare poate fi necesară o nouă autentificare.',
       ].join('\n\n'),
     }),
@@ -510,7 +480,7 @@ function buildPoliticaCookies(orgInfoSection) {
       title: 'Furnizori terți și contact',
       text: [
         'Unii furnizori ai serviciilor de analiză și de marketing pot prelucra date în afara Spațiului Economic European, cu garanțiile prevăzute de GDPR, cum ar fi clauzele contractuale standard.',
-        `Detalii despre prelucrarea datelor găsești în politica de confidențialitate (/confidentialitate), iar întrebările despre cookie-uri ne pot fi trimise la ${COOKIE_CONTACT_EMAIL}.`,
+        `Detalii despre prelucrarea datelor găsești în politica de confidențialitate, iar întrebările despre cookie-uri ne pot fi trimise la ${COOKIE_CONTACT_EMAIL}.`,
       ].join('\n\n'),
     }),
   ];
@@ -667,7 +637,7 @@ function main() {
   const pages = [
     buildCodEtic(codEticRecords, warnings),
     buildConfidentialitate(confidentialitateRecords, orgInfoSection, warnings),
-    buildPoliticaCookies(orgInfoSection),
+    buildPoliticaCookies(),
   ];
 
   const backupPath = backupContent(CONTENT_FILE);

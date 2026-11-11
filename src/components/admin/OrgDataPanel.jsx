@@ -6,7 +6,7 @@ import { SOCIAL_NETWORKS, isValidUrl } from '../../utils/social'
 const LEGAL_FIELDS = [
   { key: 'name', label: 'Denumire legală' },
   { key: 'cif', label: 'Cod de identificare fiscală (CIF)' },
-  { key: 'registry', label: 'Nr. în Registrul asociațiilor și fundațiilor' },
+  { key: 'registry', label: 'Înregistrare în Registrul asociațiilor și fundațiilor' },
   { key: 'address', label: 'Sediu' },
   { key: 'representative', label: 'Reprezentant legal' },
   { key: 'iban', label: 'Cont bancar (IBAN)' },

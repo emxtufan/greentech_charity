@@ -10,7 +10,7 @@
       },
       {
         "label": "Despre noi",
-        "to": "/#about"
+        "to": "/despre-asociatie"
       },
       {
         "label": "Case modulare",
@@ -18,7 +18,7 @@
       },
       {
         "label": "Cum ajuți",
-        "to": "/#causes"
+        "to": "/implica-te"
       },
       {
         "label": "Proiecte",
@@ -46,13 +46,13 @@
       "text": "GreenTech Charity vrea să construiască case modulare pentru persoane și familii care au nevoie de un loc sigur în care să locuiască.",
       "joinCta": {
         "label": "Implică-te",
-        "to": "/contact"
+        "to": "/implica-te"
       },
       "exploreTitle": "Pagini",
       "exploreLinks": [
         {
-          "label": "Povestea noastră",
-          "to": "/#about"
+          "label": "Despre noi",
+          "to": "/despre-asociatie"
         },
         {
           "label": "Case modulare",
@@ -60,7 +60,7 @@
         },
         {
           "label": "Cum poți ajuta",
-          "to": "/#causes"
+          "to": "/implica-te"
         },
         {
           "label": "Formularul 230",
@@ -73,6 +73,10 @@
         {
           "label": "Contact",
           "to": "/contact"
+        },
+        {
+          "label": "Datele asociației",
+          "to": "/date-asociatie"
         }
       ],
       "supportTitle": "Contact",
@@ -99,12 +103,12 @@
       ],
       "bottomLinks": [
         {
-          "label": "Confidențialitate",
+          "label": "Politica GDPR",
           "to": "/confidentialitate"
         },
         {
-          "label": "Date de identificare",
-          "to": "/contact#date-asociatie"
+          "label": "Date asociație",
+          "to": "/date-asociatie"
         },
         {
           "label": "Contact",
@@ -113,23 +117,39 @@
         {
           "label": "Setări cookie",
           "to": "#setari-cookie"
+        },
+        {
+          "label": "Despre noi",
+          "to": "/despre-asociatie"
+        },
+        {
+          "label": "Implică-te",
+          "to": "/implica-te"
+        },
+        {
+          "label": "Politica cookies",
+          "to": "/politica-cookies"
+        },
+        {
+          "label": "Cod etic",
+          "to": "/cod-etic"
         }
       ],
       "copyright": "GreenTech Charity. Toate drepturile rezervate."
     },
     "contact": {
-      "email": "contact@example.com",
+      "email": "help@greentechcharity.ro",
       "phone": "",
-      "address": ""
+      "address": "București, Sector 1, Calea Floreasca nr. 194, etaj 4"
     },
     "legal": {
-      "name": "GreenTech Charity (date de test)",
-      "cif": "00000000",
-      "registry": "(test) 00/0000/2026",
-      "address": "(test) Str. Exemplu nr. 1, București",
-      "representative": "(test) Nume Prenume",
-      "iban": "RO00TEST0000000000000000",
-      "bank": "(test) Banca Exemplu"
+      "name": "ASOCIAȚIA GREENTECH EDU",
+      "cif": "54940308",
+      "registry": "Registrul Asociațiilor și Fundațiilor — Judecătoria Sectorului 1 București",
+      "address": "București, Sector 1, Calea Floreasca nr. 194, etaj 4",
+      "representative": "Alexandru Nicolae, Președinte",
+      "iban": "RO65BACX0000004211039001",
+      "bank": "UniCredit Bank"
     },
     "tracking": {
       "googleId": "",
@@ -138,9 +158,9 @@
     },
     "modals": {
       "gdpr": {
-        "title": "Cum folosim datele tale",
-        "text": "Datele pe care ni le trimiți prin site le folosim doar pentru ce ne-ai cerut: ca să îți răspundem la mesaj sau ca să depunem Formularul 230 la ANAF în numele tău.\n\nNu le vindem și nu le dăm altor organizații sau firme. Formularul 230 îl transmitem doar către ANAF. Datele din Formularul 230, inclusiv CNP-ul, sunt păstrate criptat.\n\nMesajele le păstrăm cel mult 12 luni. Formularele 230 le păstrăm cât timp avem nevoie de ele pentru depunere și pentru eventualele verificări, apoi le ștergem.\n\nPoți cere oricând să afli ce date avem despre tine, să le corectăm sau să le ștergem. Ne scrii prin pagina de contact.",
-        "linkLabel": "Citește toată politica de confidențialitate",
+        "title": "Politica de confidențialitate (GDPR)",
+        "text": "Folosim datele tale pentru a răspunde solicitărilor, pentru funcționarea aplicației și pentru obligațiile legale. Temeiurile, drepturile tale și termenele de păstrare sunt descrise în politica de confidențialitate.",
+        "linkLabel": "Citește politica de confidențialitate",
         "closeLabel": "Am înțeles"
       },
       "anaf": {
@@ -165,6 +185,11 @@
         "marketingText": "Ne ajută să arătăm reclame despre proiectele noastre pe Facebook, Instagram sau TikTok oamenilor care au vizitat site-ul.",
         "save": "Salvează alegerile"
       }
+    },
+    "social": {
+      "facebook": "",
+      "instagram": "",
+      "linkedin": ""
     }
   },
   "pages": [
@@ -355,77 +380,38 @@
         },
         {
           "id": "causes-1",
-          "type": "causes",
+          "type": "cardsGrid",
           "hidden": false,
           "data": {
-            "subtitle": "Cum poți ajuta",
+            "anchor": "causes",
+            "eyebrow": "Cum poți ajuta",
             "title": "Cum ne poți sprijini",
-            "raisedOfLabel": "strânși din",
-            "goalLabel": "",
-            "supportersPrefix": "",
-            "supportersSuffix": "susținători",
+            "intro": "Sunt două feluri principale în care te poți implica: ca persoană fizică sau ca firmă. Fiecare are opțiunile lui, scrise pe scurt mai jos.",
+            "columns": 2,
             "items": [
               {
-                "id": 1,
-                "tag": "Formularul 230",
-                "image": "/uploads/ec1f5730-a38b-436d-a231-8f4431a5e9e9.jpg",
-                "title": {
-                  "label": "Redirecționezi 3,5% din impozit",
-                  "to": "/formular-230"
-                },
-                "text": "Dacă ai venituri din salarii, o parte din impozitul pe care oricum îl plătești poate ajunge la noi. Nu plătești nimic în plus.",
-                "raised": "",
-                "goal": "",
-                "progress": 0,
-                "percent": "",
-                "supporters": ""
+                "icon": "bi-person-heart",
+                "title": "Ca persoană fizică",
+                "text": "Poți redirecționa o parte din impozitul pe venit, poți dona, poți face voluntariat sau ne poți semnala o situație în care cineva are nevoie de un loc sigur unde să locuiască.",
+                "cta": {
+                  "label": "Vezi opțiunile",
+                  "to": "/implica-te/persoane"
+                }
               },
               {
-                "id": 2,
-                "tag": "Firme",
-                "image": "/uploads/c242a9e8-d80f-41ff-9567-1ba81d6bf0e6.jpg",
-                "title": {
-                  "label": "Ne susții ca firmă",
-                  "to": "/contact?subiect=companie"
-                },
-                "text": "Putem vorbi despre o sponsorizare sau despre sprijinirea unei case anume. Ne scrii și vedem împreună ce are sens.",
-                "raised": "",
-                "goal": "",
-                "progress": 0,
-                "percent": "",
-                "supporters": ""
-              },
-              {
-                "id": 3,
-                "tag": "Materiale",
-                "image": "/uploads/641a339d-c9bd-4cd8-8e0b-effb2958cb84.jpg",
-                "title": {
-                  "label": "Ajuți cu materiale sau servicii",
-                  "to": "/contact?subiect=materiale"
-                },
-                "text": "Materialele, utilajele sau câteva zile de muncă ne ajută direct la ridicarea unei case.",
-                "raised": "",
-                "goal": "",
-                "progress": 0,
-                "percent": "",
-                "supporters": ""
-              },
-              {
-                "id": 4,
-                "tag": "Voluntariat",
-                "image": "/uploads/d8606661-0379-4b6f-9fef-b5e982ec26ac.jpg",
-                "title": {
-                  "label": "Te implici ca voluntar",
-                  "to": "/contact?subiect=voluntariat"
-                },
-                "text": "Ne poți ajuta pe teren sau la partea de organizare, cu cât timp ai.",
-                "raised": "",
-                "goal": "",
-                "progress": 0,
-                "percent": "",
-                "supporters": ""
+                "icon": "bi-building",
+                "title": "Ca firmă",
+                "text": "Poți intra ca sponsor, poți dona materiale sau servicii, poți pune la dispoziție expertiză ori un voluntariat de echipă.",
+                "cta": {
+                  "label": "Vezi opțiunile",
+                  "to": "/implica-te/companii"
+                }
               }
-            ]
+            ],
+            "cta": {
+              "label": "",
+              "to": ""
+            }
           }
         },
         {
@@ -1257,34 +1243,268 @@
       "id": "confidentialitate",
       "slug": "/confidentialitate",
       "title": "Politica de confidențialitate",
-      "description": "Ce date personale colectează site-ul GreenTech Charity, de ce le folosim, cât timp le păstrăm și ce drepturi ai.",
+      "description": "Cum prelucrăm datele cu caracter personal: temeiuri, drepturi, termene și canale de contact.",
       "showInNav": false,
       "sections": [
         {
-          "id": "cf-header",
+          "id": "confidentialitate-header",
+          "type": "pageHeader",
+          "data": {
+            "eyebrow": "",
+            "title": "Politica de confidențialitate",
+            "subtitle": "Notă de informare privind prelucrarea datelor cu caracter personal",
+            "text": "",
+            "version": "",
+            "adopted": "",
+            "image": "",
+            "imageNote": ""
+          }
+        },
+        {
+          "id": "da-orginfo",
+          "type": "orgInfo",
+          "hidden": false,
+          "data": {
+            "anchor": "date-asociatie",
+            "bg": "white",
+            "eyebrow": "Cine suntem",
+            "title": "Date de contact și de identificare",
+            "intro": "",
+            "contactTitle": "Contact",
+            "contactMissing": "Deocamdată ne poți scrie prin formularul de mai sus.",
+            "legalTitle": "Date de identificare",
+            "legalMissing": "Datele de identificare ale asociației (denumire, cod fiscal, sediu) vor fi publicate aici după ce sunt confirmate."
+          }
+        },
+        {
+          "id": "confidentialitate-nota-1",
+          "type": "textBlock",
+          "data": {
+            "eyebrow": "",
+            "title": "Scopurile prelucrării",
+            "text": "Asociația prelucrează datele cu caracter personal în următoarele scopuri:\n\nprimirea, înregistrarea și analizarea cererilor de acordare a ajutorului social;\n\nevaluarea situației sociale și materiale a solicitantului;\n\nstabilirea eligibilității pentru acordarea ajutorului, potrivit criteriilor și regulamentului intern al Asociației;\n\nacordarea, distribuirea și evidența ajutoarelor financiare, alimentare, materiale sau de altă natură;\n\ncomunicarea cu solicitanții și beneficiarii;\n\njustificarea utilizării fondurilor și îndeplinirea obligațiilor legale, contabile și fiscale, după caz;\n\nprevenirea erorilor și a acordării nejustificate a ajutoarelor.",
+            "compact": true,
+            "image": "",
+            "imageNote": "",
+            "cta": {
+              "label": "",
+              "to": ""
+            }
+          }
+        },
+        {
+          "id": "confidentialitate-nota-2",
+          "type": "textBlock",
+          "data": {
+            "eyebrow": "",
+            "title": "Categoriile de date",
+            "text": "În funcție de natura ajutorului solicitat și de documentele necesare evaluării cererii, Asociația poate prelucra următoarele categorii de date:\n\ndate de identificare: nume, prenume, data nașterii și, numai dacă este necesar și există un temei legal, CNP;\n\ndate de contact și domiciliu/reședință;\n\ndate privind situația familială și componența gospodăriei;\n\ndate privind veniturile, situația profesională și condițiile materiale;\n\ninformații și documente justificative privind situația socială;\n\ndate privind acordarea ajutorului, tipul, valoarea sau natura acestuia și data acordării;\n\ndate privind sănătatea ori dizabilitatea, exclusiv dacă sunt relevante pentru evaluarea solicitării și există un temei legal aplicabil;\n\ndate ale reprezentantului legal, ale aparținătorilor sau ale altor persoane, în măsura în care sunt necesare și prelucrarea este justificată.\n\nAsociația va solicita numai datele adecvate, relevante și necesare scopurilor pentru care sunt colectate.",
+            "compact": true,
+            "image": "",
+            "imageNote": "",
+            "cta": {
+              "label": "",
+              "to": ""
+            }
+          }
+        },
+        {
+          "id": "confidentialitate-nota-3",
+          "type": "textBlock",
+          "data": {
+            "eyebrow": "",
+            "title": "Temeiurile prelucrării",
+            "text": "Datele sunt prelucrate, după caz, în baza unuia sau mai multora dintre următoarele temeiuri prevăzute de Regulamentul (UE) 2016/679 (GDPR):\n\nalin. (1) lit. b) – atunci când prelucrarea este necesară pentru efectuarea demersurilor solicitate de persoană sau pentru executarea unui acord aplicabil;\n\nalin. (1) lit. c) – pentru îndeplinirea obligațiilor legale ale Asociației;\n\nalin. (1) lit. f) – pentru interesele legitime ale Asociației, dacă acestea sunt aplicabile și nu prevalează drepturile și libertățile persoanei vizate;\n\nalin. (1) lit. a) – consimțământul, numai pentru operațiunile de prelucrare pentru care acesta este temeiul adecvat.\n\nPentru datele privind sănătatea sau alte categorii speciale de date se va aplica și o condiție legală distinctă, conform art. 9 GDPR, după caz.\n\nTemeiul juridic concret va fi stabilit în funcție de natura activității, de regulile programului de ajutor și de obligațiile legale aplicabile Asociației.",
+            "compact": true,
+            "image": "",
+            "imageNote": "",
+            "cta": {
+              "label": "",
+              "to": ""
+            }
+          }
+        },
+        {
+          "id": "confidentialitate-nota-4",
+          "type": "textBlock",
+          "data": {
+            "eyebrow": "",
+            "title": "Destinatarii datelor",
+            "text": "Datele pot fi accesate, în limitele atribuțiilor și ale necesității de a le cunoaște, de către:\n\npersoanele autorizate din cadrul Asociației;\n\nfurnizorii de servicii contabile, informatice sau administrative, dacă este necesar;\n\nautoritățile și instituțiile publice competente, atunci când transmiterea este impusă de lege;\n\nfinanțatorii sau partenerii programului de ajutor, numai dacă transmiterea este justificată și există un temei juridic corespunzător.\n\nAsociația nu va divulga datele beneficiarilor către alte persoane în lipsa unui temei legal și a garanțiilor necesare.",
+            "compact": true,
+            "image": "",
+            "imageNote": "",
+            "cta": {
+              "label": "",
+              "to": ""
+            }
+          }
+        },
+        {
+          "id": "confidentialitate-nota-5",
+          "type": "textBlock",
+          "data": {
+            "eyebrow": "",
+            "title": "Durata păstrării",
+            "text": "Datele vor fi păstrate numai pe perioada necesară soluționării cererii, administrării ajutorului și îndeplinirii scopurilor pentru care au fost colectate.\n\nDocumentele vor fi păstrate pe perioadele prevăzute de legislația aplicabilă, inclusiv de regulile financiar-contabile și de arhivare, după caz. La expirarea perioadelor aplicabile, datele vor fi șterse sau distruse în condiții de siguranță, dacă nu există un alt temei legal pentru păstrarea lor.",
+            "compact": true,
+            "image": "",
+            "imageNote": "",
+            "cta": {
+              "label": "",
+              "to": ""
+            }
+          }
+        },
+        {
+          "id": "confidentialitate-nota-6",
+          "type": "textBlock",
+          "data": {
+            "eyebrow": "",
+            "title": "Drepturile persoanelor",
+            "text": "În condițiile prevăzute de GDPR, beneficiați, după caz, de următoarele drepturi:\n\ndreptul de acces la datele personale;\n\ndreptul la rectificarea datelor inexacte sau incomplete;\n\ndreptul la ștergerea datelor, în situațiile prevăzute de lege;\n\ndreptul la restricționarea prelucrării;\n\ndreptul la opoziție, atunci când prelucrarea se întemeiază pe interesul legitim;\n\ndreptul la portabilitatea datelor, dacă sunt îndeplinite condițiile legale;\n\ndreptul de a vă retrage consimțământul, dacă prelucrarea se bazează pe acesta, fără a afecta legalitatea prelucrării efectuate anterior retragerii;\n\ndreptul de a depune o plângere la autoritatea de supraveghere competentă.\n\nDrepturile pot fi exercitate printr-o solicitare transmisă la sediul Asociației sau la adresa de e-mail help@greentechcharity.ro (mailto:help@greentechcharity.ro) .\n\nAutoritatea de supraveghere din România este Autoritatea Națională de Supraveghere a\n\nPrelucrării Datelor cu Caracter Personal (ANSPDCP). Site: https://www.dataprotection.ro/ (https://www.dataprotection.ro/)",
+            "compact": true,
+            "image": "",
+            "imageNote": "",
+            "cta": {
+              "label": "",
+              "to": ""
+            }
+          }
+        },
+        {
+          "id": "confidentialitate-nota-7",
+          "type": "textBlock",
+          "data": {
+            "eyebrow": "",
+            "title": "Furnizarea datelor",
+            "text": "Furnizarea datelor strict necesare analizării cererii este necesară pentru evaluarea eligibilității și, după caz, acordarea ajutorului. Refuzul de a furniza anumite informații sau documente indispensabile poate împiedica analizarea cererii ori acordarea ajutorului.\n\nDatele care nu sunt necesare pentru aceste scopuri nu vor fi solicitate în mod nejustificat.",
+            "compact": true,
+            "image": "",
+            "imageNote": "",
+            "cta": {
+              "label": "",
+              "to": ""
+            }
+          }
+        },
+        {
+          "id": "confidentialitate-nota-8",
+          "type": "textBlock",
+          "data": {
+            "eyebrow": "",
+            "title": "Securitate și decizii automate",
+            "text": "Asociația aplică măsuri tehnice și organizatorice adecvate pentru protejarea datelor împotriva accesului neautorizat, pierderii, modificării, divulgării sau distrugerii accidentale ori ilegale. Accesul la documentele beneficiarilor este limitat la persoanele autorizate.\n\nDecizii automatizate și transferuri de date\n\nAsociația nu utilizează decizii bazate exclusiv pe prelucrare automată, inclusiv crearea de profiluri, pentru stabilirea eligibilității, cu excepția situației în care o astfel de prelucrare este implementată în mod legal și persoanele vizate sunt informate corespunzător.\n\nDatele nu vor fi transferate către țări din afara Spațiului Economic European decât dacă există un temei și garanții conforme GDPR, dacă o asemenea situație apare.\n\nPrezenta notă de informare este pusă la dispoziția solicitanților și beneficiarilor pentru asigurarea transparenței prelucrării datelor cu caracter personal.",
+            "compact": true,
+            "image": "",
+            "imageNote": "",
+            "cta": {
+              "label": "",
+              "to": ""
+            }
+          }
+        },
+        {
+          "id": "confidentialitate-nota-9",
+          "type": "textBlock",
+          "data": {
+            "eyebrow": "",
+            "title": "Contact și reclamații",
+            "text": "Întrebările legate de toate prelucrările de date pot fi adresate oricând la:\n\nAdresa: București, Sector 1, Calea Floreasca nr. 194, etaj 4\n\nNu în ultimul rând, aveți dreptul să vă adresați Autorității Naționale de Supraveghere a Prelucrării Datelor cu Caracter Personal, la următoarele date de contact:\n\nWeb page: https://www.dataprotection.ro/ (https://www.dataprotection.ro/) sau direct pagina pentru transmiterea unei\n\nplângeri: https://www.dataprotection.ro/page=Plangeri_pagina_principala. (https://www.dataprotection.ro/?page=Plangeri_pagina_principala)\n\nAdresa email: anspdcp@dataprotection.ro (mailto:anspdcp@dataprotection.ro)\n\nTel.: 40.318.059.211/ +40.318.059.212",
+            "compact": true,
+            "image": "",
+            "imageNote": "",
+            "cta": {
+              "label": "",
+              "to": ""
+            }
+          }
+        },
+        {
+          "id": "confidentialitate-web",
+          "type": "textBlock",
+          "data": {
+            "eyebrow": "",
+            "title": "Date primite prin site și durata de păstrare",
+            "text": "Formularul de contact, corespondența prin e-mail (SMTP), verificarea de securitate Turnstile și formularul F230 sunt canale prin care ne trimiți date cu caracter personal: nume, date de contact, conținutul mesajului și documentele atașate.\n\nMesajele primite prin aplicație se păstrează 365 de zile, apoi se șterg.\n\nCelelalte documente se păstrează potrivit obligațiilor legale aplicabile asociației.",
+            "compact": true,
+            "image": "",
+            "imageNote": "",
+            "cta": {
+              "label": "",
+              "to": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "date-asociatie",
+      "slug": "/date-asociatie",
+      "title": "Datele asociației",
+      "description": "Datele de identificare și de contact ale Asociației GreenTech Edu: denumire, cod fiscal, registru, sediu, reprezentant și cont bancar.",
+      "showInNav": false,
+      "sections": [
+        {
+          "id": "pageHeader-1",
           "type": "pageHeader",
           "hidden": false,
           "data": {
             "anchor": "",
-            "eyebrow": "Confidențialitate",
-            "title": "Cum avem grijă de datele tale",
-            "text": "Am încercat să scriem informarea aceasta cât mai simplu. Dacă ceva nu e clar, scrie-ne."
+            "eyebrow": "Despre noi",
+            "title": "Datele asociației",
+            "text": "Aici găsești datele de identificare și de contact ale asociației, ca să le poți folosi pentru un transfer, pentru un formular sau pentru o colaborare."
           }
         },
         {
-          "id": "cf-1",
+          "id": "da-orginfo",
+          "type": "orgInfo",
+          "hidden": false,
+          "data": {
+            "anchor": "date-asociatie",
+            "bg": "white",
+            "eyebrow": "Cine suntem",
+            "title": "Date de contact și de identificare",
+            "intro": "",
+            "contactTitle": "Contact",
+            "contactMissing": "Deocamdată ne poți scrie prin formularul de mai sus.",
+            "legalTitle": "Date de identificare",
+            "legalMissing": "Datele de identificare ale asociației (denumire, cod fiscal, sediu) vor fi publicate aici după ce sunt confirmate."
+          }
+        }
+      ]
+    },
+    {
+      "id": "despre-asociatie",
+      "slug": "/despre-asociatie",
+      "title": "Despre asociație",
+      "description": "Cine este Asociația GreenTech Edu, ce își propune să facă pentru familiile care nu au un loc sigur unde să locuiască și pe ce valori se sprijină.",
+      "showInNav": false,
+      "sections": [
+        {
+          "id": "pageHeader-3",
+          "type": "pageHeader",
+          "hidden": false,
+          "data": {
+            "anchor": "",
+            "eyebrow": "Despre noi",
+            "title": "Asociația GreenTech Edu",
+            "text": "Cine suntem, ce ne propunem să facem și pe ce valori ne sprijinim deciziile atunci când cineva ne cere ajutor."
+          }
+        },
+        {
+          "id": "despre-misiune",
           "type": "textBlock",
           "hidden": false,
           "data": {
-            "anchor": "cine-suntem",
+            "anchor": "misiune",
             "bg": "white",
             "compact": true,
-            "eyebrow": "",
-            "title": "Cine suntem",
-            "text": "Site-ul este administrat de GreenTech Charity. Datele de identificare ale asociației sunt publicate pe pagina de contact, în secțiunea „Date de identificare”.",
+            "eyebrow": "Misiunea noastră",
+            "title": "De ce existăm",
+            "text": "Credem că fiecare familie merită un acoperiș sigur deasupra capului, un spațiu în care să trăiască în siguranță, sănătate și respect. Asociația s-a format pentru a aduce împreună oameni și firme care pot sprijini persoane și familii aflate în situații grele, care nu au un loc sigur în care să locuiască.\n\nPornim de la oamenii pe care îi cunoaștem, de la situațiile reale și de la sprijinul pe care îl putem strânge. Casele modulare sunt soluția pe care am ales-o pentru că pot fi pregătite într-un spațiu de producție și apoi montate pe un teren pregătit dinainte.",
             "image": "",
             "imageNote": "",
-            "imagePosition": "right",
             "cta": {
               "label": "",
               "to": ""
@@ -1292,19 +1512,18 @@
           }
         },
         {
-          "id": "cf-2",
+          "id": "despre-scop",
           "type": "textBlock",
           "hidden": false,
           "data": {
-            "anchor": "ce-date",
+            "anchor": "scop",
             "bg": "white",
             "compact": true,
-            "eyebrow": "",
-            "title": "Ce date colectăm",
-            "text": "Colectăm date personale în două situații. Când ne scrii prin formularul de contact: numele, adresa de email, telefonul, dacă alegi să îl dai, și mesajul tău. Când completezi Formularul 230 pe site: datele cerute de formular, adică numele, inițiala tatălui, prenumele, CNP-ul, adresa, telefonul și emailul dacă le dai, opțiunile bifate și semnătura.\n\nÎn mesajele trimise prin formularul de contact nu avem nevoie de CNP, acte de identitate sau informații despre sănătate. Te rugăm să nu le incluzi. Dacă le primim din greșeală, le ștergem.",
+            "eyebrow": "Direcțiile noastre",
+            "title": "Ce vrem să facem",
+            "text": "Ne propunem să construim și să montăm case simple pentru persoane și familii care au nevoie de o locuință sigură, să lucrăm cu asistenți sociali, primării și organizații care cunosc situațiile din comunitate și să atragem sprijin prin redirecționarea impozitului pe venit, prin donații și prin sponsorizări.\n\nVrem să ținem la vedere ce se întâmplă cu fiecare contribuție: pe ce s-au folosit banii și materialele. Protejăm datele persoanelor care ne cer ajutor și folosim informațiile necesare pentru evaluarea și acordarea sprijinului, potrivit politicii de confidențialitate.",
             "image": "",
             "imageNote": "",
-            "imagePosition": "right",
             "cta": {
               "label": "",
               "to": ""
@@ -1312,19 +1531,52 @@
           }
         },
         {
-          "id": "cf-3",
-          "type": "textBlock",
+          "id": "despre-valori",
+          "type": "cardsGrid",
           "hidden": false,
           "data": {
-            "anchor": "de-ce",
-            "bg": "white",
-            "compact": true,
-            "eyebrow": "",
-            "title": "De ce le folosim",
-            "text": "Datele din formularul de contact le folosim doar ca să îți răspundem și să discutăm despre ce ne-ai scris. Datele din Formularul 230 le folosim doar ca să depunem formularul la ANAF, așa cum ne-ai cerut. Nu folosim datele pentru reclame și nu îți trimitem mesaje de promovare.\n\nTemeiul legal este acordul pe care ni-l dai când bifezi căsuța din formular. Îți poți retrage acordul oricând, scriindu-ne.",
-            "image": "",
-            "imageNote": "",
-            "imagePosition": "right",
+            "eyebrow": "Valorile noastre",
+            "title": "Pe ce ne sprijinim deciziile",
+            "intro": "",
+            "columns": 2,
+            "items": [
+              {
+                "icon": "bi-house-heart",
+                "title": "Demnitate umană",
+                "text": "Credem că fiecare familie merită un acoperiș sigur deasupra capului, un spațiu în care să trăiască în siguranță, sănătate și respect. Fiecare proiect pornește de la dreptul fundamental al oamenilor la o locuință decentă.",
+                "cta": {
+                  "label": "",
+                  "to": ""
+                }
+              },
+              {
+                "icon": "bi-people",
+                "title": "Solidaritate",
+                "text": "Construim case, dar mai ales construim punți între oameni. Prin contribuțiile celor care redirecționează o parte din impozit și prin sponsorizările companiilor, vulnerabilitatea familiilor poate deveni sprijin concret și șansa unui nou început.",
+                "cta": {
+                  "label": "",
+                  "to": ""
+                }
+              },
+              {
+                "icon": "bi-shield-check",
+                "title": "Echitate",
+                "text": "Sprijinim familiile aflate în cele mai dificile situații, fără discriminare. Prioritizăm nevoia reală, nu vizibilitatea sau avantajul personal. Fiecare familie are dreptul la șanse egale.",
+                "cta": {
+                  "label": "",
+                  "to": ""
+                }
+              },
+              {
+                "icon": "bi-chat-heart",
+                "title": "Empatie",
+                "text": "Înțelegem poveștile, greutățile și provocările cu care se confruntă familiile. Fiecare intervenție începe cu ascultare, respect și dorința de a oferi sprijin real, nu doar o construcție.",
+                "cta": {
+                  "label": "",
+                  "to": ""
+                }
+              }
+            ],
             "cta": {
               "label": "",
               "to": ""
@@ -1332,19 +1584,228 @@
           }
         },
         {
-          "id": "cf-4",
+          "id": "ctaBand-7",
+          "type": "ctaBand",
+          "hidden": false,
+          "data": {
+            "anchor": "",
+            "title": "Vrei să știi după ce reguli lucrăm?",
+            "text": "Am strâns într-un cod etic felul în care ne raportăm la oamenii care ne cer ajutor, la donatori și la companiile cu care colaborăm.",
+            "primary": {
+              "label": "Citește codul etic",
+              "to": "/cod-etic"
+            },
+            "secondary": {
+              "label": "",
+              "to": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "implica-te",
+      "slug": "/implica-te",
+      "title": "Implică-te",
+      "description": "Cum poți ajuta Asociația GreenTech Edu: ca persoană fizică prin redirecționarea impozitului, donație sau voluntariat, ori ca firmă prin sponsorizări, materiale și expertiză.",
+      "showInNav": false,
+      "sections": [
+        {
+          "id": "pageHeader-8",
+          "type": "pageHeader",
+          "hidden": false,
+          "data": {
+            "anchor": "",
+            "eyebrow": "Implică-te",
+            "title": "Cum poți ajuta",
+            "text": "Sunt două drumuri: ca persoană fizică sau ca firmă. Am scris pentru fiecare ce poți face concret și unde ajunge sprijinul tău."
+          }
+        },
+        {
+          "id": "implica-te-diregii",
+          "type": "cardsGrid",
+          "hidden": false,
+          "data": {
+            "eyebrow": "Două direcții",
+            "title": "Alege cum vrei să te implici",
+            "intro": "",
+            "columns": 2,
+            "items": [
+              {
+                "icon": "bi-person-heart",
+                "title": "Ca persoană fizică",
+                "text": "Redirecționarea unei părți din impozitul pe venit, o donație, câteva ore de voluntariat sau semnalarea unei situații în care cineva are nevoie de ajutor.",
+                "cta": {
+                  "label": "Vezi opțiunile",
+                  "to": "/implica-te/persoane"
+                }
+              },
+              {
+                "icon": "bi-building",
+                "title": "Ca firmă",
+                "text": "Sponsorizări, materiale și servicii, expertiză sau o zi de voluntariat de echipă. Toate ajung direct la lucrările de la o casă.",
+                "cta": {
+                  "label": "Vezi opțiunile",
+                  "to": "/implica-te/companii"
+                }
+              }
+            ],
+            "cta": {
+              "label": "",
+              "to": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "implica-te-persoane",
+      "slug": "/implica-te/persoane",
+      "title": "Implică-te ca persoană fizică",
+      "description": "Poți ajuta ca persoană fizică prin redirecționarea unei părți din impozitul pe venit, printr-o donație, prin voluntariat sau semnalând o situație în care cineva are nevoie de un loc sigur.",
+      "showInNav": false,
+      "sections": [
+        {
+          "id": "pageHeader-10",
+          "type": "pageHeader",
+          "hidden": false,
+          "data": {
+            "anchor": "",
+            "eyebrow": "Persoane fizice",
+            "title": "Cum poți ajuta ca persoană fizică",
+            "text": "Nu e nevoie să faci totul. Și o parte din impozitul pe care oricum îl plătești, și câteva ore de voluntariat contează."
+          }
+        },
+        {
+          "id": "persoane-redirectionare",
           "type": "textBlock",
           "hidden": false,
           "data": {
-            "anchor": "acces",
+            "anchor": "redirectionare",
             "bg": "white",
             "compact": true,
-            "eyebrow": "",
-            "title": "Cine are acces la ele",
-            "text": "Doar persoanele din echipă care se ocupă de mesaje și de depunerea formularelor. Datele sunt păstrate pe serverul site-ului, într-o zonă care nu este publică și la care se ajunge doar cu parolă. Formularele 230 sunt păstrate criptat. Nu vindem datele tale și nu le dăm altor organizații sau firme. Formularul 230 îl transmitem doar către ANAF.",
+            "eyebrow": "Cel mai simplu drum",
+            "title": "Redirecționează o parte din impozit",
+            "text": "Dacă ai venituri din salarii, poți alege ca o parte din impozitul pe care oricum îl plătești să ajungă la asociație. Nu plătești nimic în plus, iar suma o calculează ANAF. Completezi Formularul 230, iar noi îl depunem mai departe.",
             "image": "",
             "imageNote": "",
-            "imagePosition": "right",
+            "cta": {
+              "label": "Completează Formularul 230",
+              "to": "/formular-230"
+            }
+          }
+        },
+        {
+          "id": "persoane-optiuni",
+          "type": "cardsGrid",
+          "hidden": false,
+          "data": {
+            "eyebrow": "Alte feluri de a ajuta",
+            "title": "Ce poți face concret",
+            "intro": "",
+            "columns": 2,
+            "items": [
+              {
+                "icon": "bi-heart",
+                "title": "Donație",
+                "text": "Orice sumă ajută la materiale și la lucrările de la o casă. Datele de care ai nevoie pentru un transfer sunt pe pagina cu datele asociației.",
+                "cta": {
+                  "label": "Vezi datele asociației",
+                  "to": "/date-asociatie"
+                }
+              },
+              {
+                "icon": "bi-people",
+                "title": "Voluntariat",
+                "text": "Poți ajuta pe teren, la montaj sau la partea de organizare, cu timpul pe care îl ai. Scrie-ne și vedem împreună ce se potrivește.",
+                "cta": {
+                  "label": "Scrie-ne",
+                  "to": "/contact?subiect=voluntariat"
+                }
+              },
+              {
+                "icon": "bi-flag",
+                "title": "Semnalează o situație",
+                "text": "Dacă știi o familie sau o persoană care nu are un loc sigur unde să locuiască, scrie-ne. Nu publicăm date despre oamenii care ne contactează.",
+                "cta": {
+                  "label": "Semnalează o situație",
+                  "to": "/contact?subiect=situatie"
+                }
+              }
+            ],
+            "cta": {
+              "label": "",
+              "to": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "implica-te-companii",
+      "slug": "/implica-te/companii",
+      "title": "Implică-te ca firmă",
+      "description": "Cum poate ajuta o firmă: sponsorizări, materiale și servicii, expertiză sau voluntariat de echipă, după criterii clare de obiectivitate, transparență și independență.",
+      "showInNav": false,
+      "sections": [
+        {
+          "id": "pageHeader-13",
+          "type": "pageHeader",
+          "hidden": false,
+          "data": {
+            "anchor": "",
+            "eyebrow": "Companii",
+            "title": "Cum poți ajuta ca firmă",
+            "text": "O sponsorizare, materiale, expertiză sau o zi de voluntariat de echipă se văd direct la o casă. Îți spunem ce presupune fiecare și cum lucrăm."
+          }
+        },
+        {
+          "id": "companii-sprijin",
+          "type": "cardsGrid",
+          "hidden": false,
+          "data": {
+            "eyebrow": "Forme de sprijin",
+            "title": "Ce poate face o firmă",
+            "intro": "",
+            "columns": 2,
+            "items": [
+              {
+                "icon": "bi-cash-stack",
+                "title": "Sponsorizări",
+                "text": "Poți susține o etapă a lucrărilor sau o casă anume. Îți spunem pe ce s-a folosit suma și îți punem la dispoziție documentele de care ai nevoie.",
+                "cta": {
+                  "label": "Discută cu noi",
+                  "to": "/contact?subiect=companie"
+                }
+              },
+              {
+                "icon": "bi-box-seam",
+                "title": "Materiale și servicii",
+                "text": "Materialele de construcție, utilajele, transportul sau serviciile pe care le oferiți reduc direct costul unei case.",
+                "cta": {
+                  "label": "Discută cu noi",
+                  "to": "/contact?subiect=companie"
+                }
+              },
+              {
+                "icon": "bi-lightbulb",
+                "title": "Expertiză",
+                "text": "Proiectare, structură, instalații, acte sau organizare: dacă aveți specialiști care pot sta o oră cu noi, ne ajută enorm.",
+                "cta": {
+                  "label": "Discută cu noi",
+                  "to": "/contact?subiect=companie"
+                }
+              },
+              {
+                "icon": "bi-people",
+                "title": "Voluntariat de echipă",
+                "text": "O echipă de colegi poate lucra o zi pe șantier sau se poate ocupa de partea de organizare, cu îndrumarea celor care coordonează lucrările.",
+                "cta": {
+                  "label": "Discută cu noi",
+                  "to": "/contact?subiect=companie"
+                }
+              }
+            ],
             "cta": {
               "label": "",
               "to": ""
@@ -1352,19 +1813,18 @@
           }
         },
         {
-          "id": "cf-5",
+          "id": "companii-criterii",
           "type": "textBlock",
           "hidden": false,
           "data": {
-            "anchor": "cat-timp",
+            "anchor": "criterii",
             "bg": "white",
             "compact": true,
-            "eyebrow": "",
-            "title": "Cât timp le păstrăm",
-            "text": "Păstrăm mesajele cel mult 12 luni de la primire, apoi le ștergem automat. Formularele 230 le păstrăm cât timp avem nevoie de ele pentru depunere și pentru eventualele verificări din partea autorităților, apoi le ștergem. Le ștergem și mai devreme, dacă ne ceri asta și dacă legea ne permite.",
+            "eyebrow": "Cum lucrăm",
+            "title": "Ce criterii folosim",
+            "text": "Când alegem ce proiecte și ce colaborări ducem mai departe ne uităm la trei lucruri:\n\nObiectivitate. Pornim de la nevoia reală a familiei și de la starea tehnică a lucrării, nu de la cine ne-a recomandat cazul sau colaborarea.\n\nTransparență. Spunem pe ce s-au folosit banii și materialele și publicăm datele asociației. Cine ne întreabă primește un răspuns clar.\n\nIndependență. Nu acceptăm un sprijin care ne-ar obliga să favorizăm o firmă, un produs sau o persoană și nu facem recomandări comerciale în schimbul unei donații.",
             "image": "",
             "imageNote": "",
-            "imagePosition": "right",
             "cta": {
               "label": "",
               "to": ""
@@ -1372,19 +1832,56 @@
           }
         },
         {
-          "id": "cf-6",
-          "type": "textBlock",
+          "id": "ctaBand-16",
+          "type": "ctaBand",
           "hidden": false,
           "data": {
-            "anchor": "formular-230",
-            "bg": "white",
-            "compact": true,
+            "anchor": "",
+            "title": "Vrei să colaborăm?",
+            "text": "Scrie-ne ce ați putea oferi: o sumă, materiale, servicii, expertiză sau timpul echipei. Îți răspundem cu pașii concreți.",
+            "primary": {
+              "label": "Scrie-ne despre colaborare",
+              "to": "/contact?subiect=companie"
+            },
+            "secondary": {
+              "label": "",
+              "to": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "cod-etic",
+      "slug": "/cod-etic",
+      "title": "Cod etic",
+      "description": "Codul etic al asociației, versiunea 1.0, adoptată în 21.09.2026.",
+      "showInNav": false,
+      "sections": [
+        {
+          "id": "cod-etic-header",
+          "type": "pageHeader",
+          "data": {
             "eyebrow": "",
-            "title": "Formularul 230",
-            "text": "Dacă completezi Formularul 230 pe site, îl păstrăm criptat pe serverul nostru și îl depunem la ANAF în numele tău, împreună cu celelalte formulare primite. Până îl depunem, formularul este doar la noi. Dacă depui formularul direct la ANAF, datele tale ajung doar la ANAF.",
+            "title": "Cod etic",
+            "subtitle": "Principiile și regulile de conduită ale asociației",
+            "text": "",
+            "version": "1.0",
+            "adopted": "21.09.2026",
+            "image": "",
+            "imageNote": ""
+          }
+        },
+        {
+          "id": "cod-etic-cap-1",
+          "type": "textBlock",
+          "data": {
+            "eyebrow": "",
+            "title": "DISPOZIŢII GENERALE",
+            "text": "DISPOZIŢII GENERALE\n\nPrezentul cod etic se aplică personalului (membrilor, personalului angajat și voluntarilor) Asociației Greentech EDU .\n\nCodul etic se bazează pe un set de valori şi norme etice fundamentale și reprezintă un set de reguli care reflectă principiile generale de conduită profesională aplicabile în relaţia cu beneficiarii şi partenerii asociației.\n\nScopul codului etic este:\n\nDe a identifica valorile morale fundamentale care stau la baza misiunii asociației;\n\nDe a stabili normele generale de conduită în desfăşurarea activităţii asociației;\n\nDe a fi folosit ca un instrument în rezolvarea conflictelor de natură etică.",
+            "compact": true,
             "image": "",
             "imageNote": "",
-            "imagePosition": "right",
             "cta": {
               "label": "",
               "to": ""
@@ -1392,19 +1889,15 @@
           }
         },
         {
-          "id": "cf-7",
+          "id": "cod-etic-cap-2",
           "type": "textBlock",
-          "hidden": false,
           "data": {
-            "anchor": "cookie",
-            "bg": "white",
-            "compact": true,
             "eyebrow": "",
-            "title": "Cookie-uri",
-            "text": "Folosim cookie-uri necesare ca site-ul să funcționeze. Cookie-uri de analiză sau de marketing, de exemplu de la Google, Facebook sau TikTok, folosim doar dacă ești de acord în fereastra de cookie-uri.\n\nÎți poți schimba alegerea oricând, din linkul „Setări cookie” din subsolul paginii.",
+            "title": "VALORI ŞI PRINCIPII ETICE APLICATE ÎN CADRUL FURNIZĂRII SERVICIILOR",
+            "text": "VALORI ŞI PRINCIPII ETICE APLICATE ÎN CADRUL FURNIZĂRII SERVICIILOR\n\nGREENTECH EDU va acționa permanent ca vocea persoanelor pe care le reprezintă, asigurându-se că toate comunicările și activitățile sale reflectă și promovează exclusiv interesele, nevoile și drepturile acestora.\n\nValorile şi principiile etice care stau la baza prezentului cod:\n\nVALORI:\n\nDEMNITATE UMANĂ - Considerăm că fiecare familie are dreptul la o locuință sigură, stabilă și demnă, un spațiu în care să trăiască în siguranță, sănătate și respect, pornind de la dreptul fundamental al oamenilor la o locuință decentă, fiind trataţi cu demnitate cu privire la modul lor de viaţă, cultură, credinţele şi valorile personale.\n\nSOLIDARITATE- Construim case, dar mai ales construim punți între oameni. Prin contribuțiile persoanelor care redirecționează impozitul pe venit și prin sponsorizările oferite de companii, reușim să transformăm vulnerabilitatea familiilor în sprijin concret și în șansa unui nou început.\n\nECHITATE - Sprijinim familiile aflate în cele mai dificile situații, fără discriminare. Prioritizăm nevoia reală, nu vizibilitatea sau avantajul personal. Fiecare familie are dreptul la șanse egale.\n\nEMPATIE- ințelegem poveștile, greutățile și provocarile cu care se confrunta familiile.\n\nFiecare intervenție începe cu ascultare, respect și dorința de a oferi sprijin real, nu doar\n\no construcție.\n\nPRINCIPII:\n\nUNIVERSALITATE - Fiecare persoană are dreptul să acceseze serviciile oferite de GREENTECH EDU, în limita numărului de beneficiari ce pot fi incluși în diferitele servicii.\n\nOBIECTIVITATE ŞI IMPARŢIALITATE - În acordarea serviciilor se va păstra o atitudine obiectivă, neutră faţă de orice interes politic, economic, religios sau de altă natură.\n\nEFICIENŢĂ ŞI EFICACITATE - În acordarea serviciilor se vor depune toate eforturile pentru rezolvarea cazului într-un mod adecvat calitativ și cantitativ, într-o perioadă de timp adecvată.\n\nABORDAREA MULTIDISCIPLINARĂ ÎN FURNIZAREA DE SERVICII - Acordarea de servicii se va baza pe o evaluare multidisciplinară completă şi complexă a nevoilor solicitanţilor şi se va efectua o intervenţie multidisciplinară acolo unde este cazul.\n\nCOOPERARE ŞI PARTENERIAT - Serviciile se acordă în parteneriat şi cooperând cu ceilalţi furnizori de servicii. Se va recomanda transferul beneficiarului atunci când situaţia o impune, către alte servicii.\n\nORIENTAREA PE REZULTATE - GREENTECH EDU are ca obiectiv principal orientarea pe rezultate în beneficiul persoanelor deservite.\n\nÎMBUNĂTĂŢIREA CONTINUĂ A CALITĂŢII - GREENTECH EDU se centrează pe îmbunătăţirea continuă a serviciilor şi pe eficientizarea resurselor disponibile.",
+            "compact": true,
             "image": "",
             "imageNote": "",
-            "imagePosition": "right",
             "cta": {
               "label": "",
               "to": ""
@@ -1412,19 +1905,198 @@
           }
         },
         {
-          "id": "cf-8",
+          "id": "cod-etic-cap-3",
           "type": "textBlock",
-          "hidden": false,
           "data": {
-            "anchor": "drepturi",
-            "bg": "white",
-            "compact": true,
             "eyebrow": "",
-            "title": "Drepturile tale",
-            "text": "Ai dreptul să afli ce date avem despre tine, să ceri corectarea sau ștergerea lor, să ceri limitarea folosirii lor și să îți retragi acordul. Pentru oricare dintre acestea, scrie-ne prin pagina de contact.\n\nDacă ai o nemulțumire legată de felul în care folosim datele tale, te poți adresa și Autorității Naționale de Supraveghere a Prelucrării Datelor cu Caracter Personal, pe dataprotection.ro.\n\nUltima actualizare: noiembrie 2026.",
+            "title": "NORME GENERALE DE CONDUITĂ ÎN ACORDAREA SERVICIILOR",
+            "text": "NORME GENERALE DE CONDUITĂ ÎN ACORDAREA SERVICIILOR\n\nÎn relaţia personal GREENTECH EDU - Beneficiar se vor respecta următoarele norme generale de conduită:\n\nPersonalul trebuie să fie bine pregătit din punct de vedere profesional;\n\nPersonalul va adapta limbajul profesional la capacităţile de înţelegere şi caracteristicile beneficiarului și va furniza informaţii obiective, centrate pe problema beneficiarului;\n\nÎn vederea abordării comprensive a problemelor, personalul va lucra în echipe multidisciplinare;\n\nPersonalul va prezenta beneficiarului sau aparținătorului (după caz) toate avantajele şi dezavantajele opţiunilor posibile;\n\nServiciile trebuie să fie adaptate în funcţie de nevoile beneficiarului;\n\nÎntre GREENTECH EDU și beneficiari se va încheia un contract de asistență socială, în care sunt specificate drepturile şi obligaţiile fiecăruia;\n\nEchipa multidisciplinară, după o analiză corectă și obiectivă a nevoilor şi problemelor beneficiarului va alege strategia şi metodele adecvate de intervenție;\n\nPersonalul nu va face discriminări pe bază de sex, religie, rasă, etnie, apartenenţă profesională, orientare politică sau sexuală şi venituri;\n\nPersonalul nu va influenţa beneficiarul în orientarea politică, religioasă, sexuală sau de altă natură;\n\nPersonalul nu se va implica în relaţii sentimentale cu beneficiarii;\n\nPersonalul nu va accepta de la beneficiari recompense materiale pentru serviciile prestate în cadrul activității din asociație;\n\nPersonalul nu va folosi informaţiile obţinute în timpul activității în scop personal;\n\nasociația implică beneficiarii şi partenerii în procesul de organizare şi dezvoltare a serviciilor furnizate.\n\nÎn relaţia coleg - coleg se vor respecta următoarele norme generale de conduită:\n\nÎntre colegi trebuie să existe o relaţie de cooperare şi susţinere reciprocă:\n\ntot personalul contribuie la realizarea scopurilor şi obiectivelor asociației;\n\neste necesară o permanentă comunicare şi un transfer de date între colegi pentru a asigura multidisciplinaritatea serviciilor;\n\ncolegii vor depune eforturi comune pentru realizarea unei comunicări eficiente prin transferul de informaţii, implicarea în identificarea şi soluţionarea problemelor.\n\nRelaţia între colegi se va baza pe respect reciproc:\n\nnemulţumirile apărute între colegi vor fi exprimate direct şi imediat;\n\nfiecare dintre colegi are dreptul de a-i fi respectată opinia;\n\nîn cazul unui conflict fiecare are dreptul să-şi expună şi să-şi susţină punctul de vedere;\n\nconflictele personale nu vor afecta relaţiile de colegialitate şi profesionale;\n\nîn relaţiile dintre colegi se va folosi un limbaj adecvat şi decent.\n\nSinceritate şi corectitudine:\n\nse va evita denigrarea şi calomnierea cu bună ştiinţă a colegilor;\n\nse va evita dezvăluirea unor aspecte din viaţa privată/personală a colegilor care ar putea prejudicia imaginea acestora;\n\nopiniile exprimate vor fi conforme cu realitatea;\n\nîn activitatea desfăşurată colegii se vor baza pe promovarea propriilor calităţi şi merite profesionale şi nu pe evidenţierea defectelor celorlalţi.",
+            "compact": true,
             "image": "",
             "imageNote": "",
-            "imagePosition": "right",
+            "cta": {
+              "label": "",
+              "to": ""
+            }
+          }
+        },
+        {
+          "id": "cod-etic-cap-4",
+          "type": "textBlock",
+          "data": {
+            "eyebrow": "",
+            "title": "COLABORAREA CU FIRMELE ȘI CONTRACTANȚII DIN INDUSTRIA CONSTRUCȚIILOR",
+            "text": "COLABORAREA CU FIRMELE ȘI CONTRACTANȚII DIN INDUSTRIA CONSTRUCȚIILOR\n\nPrincipii privind colaborarea cu firmele și contractanții din industria construcțiilor\n\nÎn vederea asigurării unor relații de colaborare transparente, echitabile și responsabile cu firmele și contractanții din industria construcțiilor, GREENTECH EDU adoptă următoarele principii:\n\nGREENTECH EDU își va păstra independența în ceea ce privește deciziile, politicile, activitățile și proiectele desfășurate, precum și capacitatea de a-și promova și apăra misiunea, valorile și obiectivele.\n\nToate parteneriatele și relațiile contractuale dintre GREENTECH EDU și firmele sau contractanții din industria construcțiilor se vor baza pe respect reciproc, corectitudine, integritate și egalitate în procesul de luare a deciziilor care privesc colaborarea.\n\nObiectivele, responsabilitățile și condițiile fiecărei colaborări vor fi clar definite, transparente și în concordanță cu misiunea și obiectivele GREENTECH EDU. Sprijinul financiar și nefinanciar, precum și contribuțiile primite din partea partenerilor, vor fi evidențiate în mod corespunzător în documentele și rapoartele organizației, cu respectarea obligațiilor legale aplicabile.\n\nGREENTECH EDU nu va permite partenerilor să influențeze în mod nejustificat deciziile organizației și nu va susține practici comerciale neloiale, conflicte de interese sau activități care ar putea afecta integritatea, reputația ori independența sa.\n\nGREENTECH EDU va urmări diversificarea surselor de finanțare și a parteneriatelor, evitând dependența financiară excesivă față de o singură firmă sau un singur contractant, pentru a-și proteja independența și capacitatea de a acționa în interesul misiunii sale.\n\nSelectarea partenerilor și derularea colaborărilor se vor realiza pe baza unor criterii obiective, precum competența profesională, calitatea serviciilor, respectarea legislației în vigoare, transparența și asumarea responsabilităților contractuale.",
+            "compact": true,
+            "image": "",
+            "imageNote": "",
+            "cta": {
+              "label": "",
+              "to": ""
+            }
+          }
+        },
+        {
+          "id": "cod-etic-cap-5",
+          "type": "textBlock",
+          "data": {
+            "eyebrow": "",
+            "title": "RESPONSABILITĂŢI, MODUL DE ÎNREGISTRARE ŞI SOLUŢIONARE A RECLAMAŢIILOR",
+            "text": "RESPONSABILITĂŢI, MODUL DE ÎNREGISTRARE ŞI SOLUŢIONARE A RECLAMAŢIILOR\n\nRESPONSABILITĂȚI, PROCEDURA DE ÎNREGISTRARE, ANALIZARE ȘI SOLUȚIONARE A SESIZĂRILOR ȘI RECLAMAȚIILOR\n\nScopul și domeniul de aplicare\n\n(1) Prezentul capitol reglementează modalitatea de primire, înregistrare, analizare și soluționare a sesizărilor și reclamațiilor referitoare la activitatea GREENTECH EDU, la conduita reprezentanților săi, precum și la relațiile de colaborare cu partenerii, furnizorii, prestatorii de servicii și contractanții din industria construcțiilor.\n\n(2) Procedura urmărește asigurarea transparenței, respectarea principiilor de integritate și responsabilitate, prevenirea conflictelor de interese și protejarea drepturilor și intereselor legitime ale persoanelor implicate.\n\nPrincipii generale\n\n(1 ) Gestionarea sesizărilor și reclamațiilor se realizează cu respectarea următoarelor principii:\n\na) imparțialitate și obiectivitate în analizarea faptelor semnalate;\n\nb) confidențialitatea informațiilor și protejarea datelor cu caracter personal;\n\nc) transparență și responsabilitate în procesul de soluționare;\n\nd) tratament egal și nediscriminatoriu pentru toate persoanele implicate;\n\ne) soluționarea cu bună-credință și într-un termen rezonabil;\n\nf) interzicerea oricăror forme de intimidare, hărțuire sau represalii împotriva persoanelor care formulează sesizări cu bună-credință.\n\nResponsabilități\n\n(1) Conducerea GREENTECH EDU are responsabilitatea de a asigura aplicarea prezentei proceduri și de a desemna persoana sau persoanele responsabile cu primirea, înregistrarea și gestionarea sesizărilor și reclamațiilor.\n\n(2) Persoana desemnată are următoarele atribuții:\n\na) primește și înregistrează sesizările și reclamațiile;\n\nb) verifică informațiile furnizate și solicită, după caz, clarificări sau documente suplimentare;\n\nc) analizează faptele semnalate în mod obiectiv și imparțial;\n\nd) propune măsuri de soluționare și prevenire a repetării situațiilor reclamate;\n\ne) informează persoana care a formulat reclamația cu privire la rezultatul analizei, în limitele legii;\n\nf) păstrează evidența sesizărilor și a măsurilor adoptate, cu respectarea confidențialității.\n\n(3) În situația în care reclamația privește persoana responsabilă de soluționare sau un membru al conducerii, aceasta va fi analizată de o persoană independentă de situația reclamată, desemnată în condițiile stabilite de organizație.\n\nModalitatea de depunere și înregistrare a sesizărilor și reclamațiilor\n\n(1) Sesizările și reclamațiile pot fi formulate în scris, prin poștă, prin e-mail sau prin alte canale oficiale de comunicare puse la dispoziție de GREENTECH EDU.\n\n(2) Reclamația va cuprinde, în măsura în care aceste informații sunt disponibile:\n\na) numele și datele de contact ale persoanei care formulează reclamația;\n\nb) descrierea clară a situației reclamate;\n\nc) data și locul producerii faptelor, dacă sunt cunoscute;\n\nd) identificarea persoanelor sau entităților implicate, după caz;\n\ne) documentele sau alte informații relevante pentru analiză;\n\nf) măsurile solicitate, dacă este cazul.\n\n(3) Fiecare sesizare sau reclamație primită va fi înregistrată într-un registru dedicat, cu atribuirea unui număr de înregistrare și consemnarea datei primirii.\n\n(4) Sesizările anonime pot fi analizate în măsura în care conțin informații suficient de clare și verificabile pentru efectuarea unor demersuri de clarificare.\n\nAnalizarea și soluționarea reclamațiilor\n\n(1) Reclamațiile vor fi analizate cu promptitudine, în mod obiectiv și imparțial, pe baza informațiilor și documentelor disponibile.\n\n(2) În cadrul procesului de analiză, GREENTECH EDU poate solicita puncte de vedere persoanelor implicate, documente suplimentare sau alte informații necesare clarificării situației.\n\n(3) Persoanele vizate de reclamație vor avea posibilitatea de a-și exprima punctul de vedere, cu respectarea dreptului la apărare și a confidențialității.\n\n(4) În urma analizării reclamației, se poate dispune, după caz:\n\na) admiterea totală sau parțială a reclamației;\n\nb) respingerea reclamației, în situația în care aceasta nu este susținută de informațiile disponibile;\n\nc) solicitarea unor măsuri corective sau de remediere;\n\nd) revizuirea procedurilor interne ori a condițiilor de colaborare cu partenerii;\n\ne) încetarea sau reevaluarea unei relații contractuale, în condițiile contractului și ale legislației aplicabile;\n\nf) sesizarea autorităților competente, atunci când situația impune acest lucru.\n\nTermene de soluționare și comunicarea rezultatului\n\n(1) GREENTECH EDU va confirma primirea reclamației, atunci când există date de contact disponibile, în termen de 5 zile lucrătoare de la înregistrare.\n\n(2) Reclamațiile vor fi analizate și soluționate, de regulă, în termen de 30 de zile calendaristice de la înregistrare.\n\n(3) În cazul în care situația este complexă și necesită verificări suplimentare, termenul poate fi prelungit, cu informarea prealabilă a persoanei reclamante și comunicarea motivelor întârzierii.\n\n(4) Rezultatul analizei și măsurile adoptate vor fi comunicate persoanei care a formulat reclamația, în limitele obligațiilor de confidențialitate și ale legislației aplicabile.\n\nConfidențialitate și protecția persoanelor implicate\n\n(1) GREENTECH EDU va asigura protejarea identității persoanelor implicate și a informațiilor obținute în cadrul procedurii, în măsura permisă de lege.\n\n(2) Datele cu caracter personal vor fi prelucrate exclusiv în scopul gestionării sesizărilor și reclamațiilor și cu respectarea legislației aplicabile privind protecția datelor.\n\n(3) Este interzisă orice formă de represalii împotriva persoanelor care formulează sesizări sau reclamații cu bună-credință ori care participă la clarificarea faptelor semnalate.\n\nEvidența reclamațiilor și măsuri preventive\n\n(1) GREENTECH EDU va păstra evidența reclamațiilor primite, a modului de soluționare și a măsurilor adoptate.\n\n(2) Informațiile centralizate pot fi utilizate pentru identificarea problemelor recurente, îmbunătățirea procedurilor interne și prevenirea situațiilor similare.\n\n(3) Evidențele vor fi păstrate pe o perioadă adecvată scopului urmărit și în conformitate cu cerințele legale aplicabile.",
+            "compact": true,
+            "image": "",
+            "imageNote": "",
+            "cta": {
+              "label": "",
+              "to": ""
+            }
+          }
+        },
+        {
+          "id": "cod-etic-cap-6",
+          "type": "textBlock",
+          "data": {
+            "eyebrow": "",
+            "title": "DISPOZIŢII FINALE SI DE APLICARE",
+            "text": "DISPOZIŢII FINALE SI DE APLICARE\n\nPrevederi finale\n\n(1) Prezenta procedură se aplică tuturor persoanelor care acționează în numele GREENTECH EDU, precum și relațiilor de colaborare în care organizația este parte, în limitele competențelor și obligațiilor sale.\n\n(2) Prevederile prezentului capitol se completează cu dispozițiile legale aplicabile și cu celelalte regulamente și proceduri interne ale organizației.\n\n(3) Orice modificare a prezentei proceduri se aprobă de organul de conducere competent, potrivit actelor constitutive ale GREENTECH EDU.\n\nPentru asigurarea transparenței și informarea persoanelor interesate, prezentul Cod Etic va fi pus la dispoziția acestora la sediul GREENTECH EDU, într-un loc accesibil, pentru consultare.\n\nPrezentul cod de conduită intră în vigoare la data de 21.09.2026\n\nSesizările privind nerespectarea codului etic se trimit prin formularul de contact sau la help@greentechcharity.ro.",
+            "compact": true,
+            "image": "",
+            "imageNote": "",
+            "cta": {
+              "label": "Sesizează o problemă de etică",
+              "to": "/contact?subiect=altceva"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "politica-cookies",
+      "slug": "/politica-cookies",
+      "title": "Politica de cookies",
+      "description": "Cookie-urile și stocarea locală folosite de aplicație, scopurile lor și opțiunile tale de control.",
+      "showInNav": false,
+      "sections": [
+        {
+          "id": "politica-cookies-header",
+          "type": "pageHeader",
+          "data": {
+            "eyebrow": "",
+            "title": "Politica de cookies",
+            "subtitle": "Ce cookie-uri folosim, de ce și cum le poți controla",
+            "text": "",
+            "version": "",
+            "adopted": "",
+            "image": "",
+            "imageNote": ""
+          }
+        },
+        {
+          "id": "politica-cookies-1",
+          "type": "textBlock",
+          "data": {
+            "eyebrow": "",
+            "title": "Cookie-uri și stocare locală",
+            "text": "Operatorul aplicației este asociația care administrează site-ul, iar datele complete de identificare sunt publicate în pagina „Date asociație” (/date-asociatie).\n\nAplicația folosește cookie-uri și stocare locală în browser pentru trei scopuri: funcționarea tehnică a site-ului, analiza modului în care este folosit și, numai cu acordul tău, marketing.\n\nCookie-urile și înregistrările strict necesare asigură funcționarea și securitatea aplicației și nu pot fi refuzate din setările de consimțământ; cele de analiză și de marketing se activează exclusiv pe baza opțiunilor tale.",
+            "compact": true,
+            "image": "",
+            "imageNote": "",
+            "cta": {
+              "label": "",
+              "to": ""
+            }
+          }
+        },
+        {
+          "id": "politica-cookies-2",
+          "type": "textBlock",
+          "data": {
+            "eyebrow": "",
+            "title": "Cookie-uri necesare",
+            "text": "Cookie-urile și înregistrările de stocare locală necesare sunt folosite pentru funcționarea și securitatea aplicației: păstrarea preferințelor, protejarea formularelor și a zonei de administrare.\n\nTurnstile (Cloudflare) rulează ca măsură de securitate pentru formulare numai când este activ în configurația aplicației.\n\nPreferințele de consimțământ sunt salvate local, în gt_consent, și rămân pe dispozitiv până când le modifici sau le ștergi.\n\nwc_admin_token este folosit exclusiv în zona de administrare: sesiunea de administrare este valabilă 8 ore, iar tokenul este stocat până la ieșirea din cont, până când este înlocuit cu unul nou sau până când îl ștergi.",
+            "compact": true,
+            "image": "",
+            "imageNote": "",
+            "cta": {
+              "label": "",
+              "to": ""
+            }
+          }
+        },
+        {
+          "id": "politica-cookies-3",
+          "type": "textBlock",
+          "data": {
+            "eyebrow": "",
+            "title": "Cookie-uri de analiză",
+            "text": "Cookie-urile de analiză (Google Analytics 4 și Microsoft Clarity) se instalează numai dacă serviciul respectiv este configurat în aplicație și numai dacă ai dat consimțământ pentru categoria analytics.\n\nDacă lipsește oricare dintre aceste condiții, nu se instalează cookie-uri de analiză și nu se colectează date prin ele.",
+            "compact": true,
+            "image": "",
+            "imageNote": "",
+            "cta": {
+              "label": "",
+              "to": ""
+            }
+          }
+        },
+        {
+          "id": "politica-cookies-4",
+          "type": "textBlock",
+          "data": {
+            "eyebrow": "",
+            "title": "Cookie-uri de marketing",
+            "text": "Cookie-urile de marketing (Google Ads, Meta, TikTok) se instalează numai dacă serviciul respectiv este configurat în aplicație și numai dacă ai dat consimțământ pentru categoria marketing.\n\nGoogle Tag Manager rulează conform categoriilor configurate în aplicație, astfel încât etichetele să fie încărcate doar pentru categoriile pe care le-ai acceptat.",
+            "compact": true,
+            "image": "",
+            "imageNote": "",
+            "cta": {
+              "label": "",
+              "to": ""
+            }
+          }
+        },
+        {
+          "id": "politica-cookies-5",
+          "type": "textBlock",
+          "data": {
+            "eyebrow": "",
+            "title": "Alegerea consimțământului",
+            "text": "La prima vizită poți accepta toate cookie-urile, poți refuza cookie-urile opționale sau poți configura separat fiecare categorie.\n\nÎți poți modifica sau retrage opțiunile oricând, la fel de simplu cum le-ai acordat, din setările cookie de pe această pagină; refuzul cookie-urilor opționale nu îți limitează accesul la conținut și nici posibilitatea de a ne contacta.",
+            "compact": true,
+            "image": "",
+            "imageNote": "",
+            "cta": {
+              "label": "Deschide setările cookie",
+              "to": "/politica-cookies#setari-cookie"
+            }
+          }
+        },
+        {
+          "id": "politica-cookies-6",
+          "type": "textBlock",
+          "data": {
+            "eyebrow": "",
+            "title": "Durata stocării și controlul din browser",
+            "text": "Durata de stocare diferă de la un serviciu la altul: unele cookie-uri sunt valabile doar cât timp sesiunea din browser este deschisă, altele rămân pe dispozitiv până la expirarea perioadei configurate pentru serviciul respectiv. Duratele exacte depind de configurația aplicației și de serviciile active, iar aici nu sunt prezentate alte termene.\n\nPoți șterge oricând cookie-urile și datele locale din setările browserului. După ștergere, opțiunile de consimțământ trebuie reconfirmate, iar în zona de administrare poate fi necesară o nouă autentificare.",
+            "compact": true,
+            "image": "",
+            "imageNote": "",
+            "cta": {
+              "label": "",
+              "to": ""
+            }
+          }
+        },
+        {
+          "id": "politica-cookies-7",
+          "type": "textBlock",
+          "data": {
+            "eyebrow": "",
+            "title": "Furnizori terți și contact",
+            "text": "Unii furnizori ai serviciilor de analiză și de marketing pot prelucra date în afara Spațiului Economic European, cu garanțiile prevăzute de GDPR, cum ar fi clauzele contractuale standard.\n\nDetalii despre prelucrarea datelor găsești în politica de confidențialitate (/confidentialitate), iar întrebările despre cookie-uri ne pot fi trimise la help@greentechcharity.ro.",
+            "compact": true,
+            "image": "",
+            "imageNote": "",
             "cta": {
               "label": "",
               "to": ""
