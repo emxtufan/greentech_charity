@@ -288,7 +288,7 @@ const buildPages = (db) => [
             {
               icon: 'bi-building',
               title: 'Ca firmă',
-              text: 'Sponsorizări, materiale și servicii, expertiză sau o zi de voluntariat de echipă. Toate ajung direct la lucrările de la o casă.',
+              text: 'Sponsorizări, materiale și servicii, expertiză sau o zi de voluntariat de echipă. Sprijinul companiei poate contribui la realizarea unei locuințe sigure.',
               cta: { label: 'Vezi opțiunile', to: '/implica-te/companii' },
             },
           ],

@@ -1643,7 +1643,7 @@
               {
                 "icon": "bi-building",
                 "title": "Ca firmă",
-                "text": "Sponsorizări, materiale și servicii, expertiză sau o zi de voluntariat de echipă. Toate ajung direct la lucrările de la o casă.",
+                "text": "Sponsorizări, materiale și servicii, expertiză sau o zi de voluntariat de echipă. Sprijinul companiei poate contribui la realizarea unei locuințe sigure.",
                 "cta": {
                   "label": "Vezi opțiunile",
                   "to": "/implica-te/companii"
@@ -1997,13 +1997,13 @@
           "data": {
             "eyebrow": "",
             "title": "Cookie-uri și stocare locală",
-            "text": "Operatorul aplicației este asociația care administrează site-ul, iar datele complete de identificare sunt publicate în pagina „Date asociație” (/date-asociatie).\n\nAplicația folosește cookie-uri și stocare locală în browser pentru trei scopuri: funcționarea tehnică a site-ului, analiza modului în care este folosit și, numai cu acordul tău, marketing.\n\nCookie-urile și înregistrările strict necesare asigură funcționarea și securitatea aplicației și nu pot fi refuzate din setările de consimțământ; cele de analiză și de marketing se activează exclusiv pe baza opțiunilor tale.",
+            "text": "Datele operatorului, ASOCIAȚIA GREENTECH EDU, sunt disponibile în pagina de identificare a asociației.\n\nAplicația folosește cookie-uri și stocare locală în browser pentru trei scopuri, și anume funcționarea tehnică a site-ului, analiza modului în care este folosit și, numai cu acordul tău, marketing.\n\nCookie-urile și înregistrările strict necesare asigură funcționarea și securitatea aplicației și nu pot fi refuzate din setările de consimțământ; cele de analiză și de marketing se activează exclusiv pe baza opțiunilor tale.",
             "compact": true,
             "image": "",
             "imageNote": "",
             "cta": {
-              "label": "",
-              "to": ""
+              "label": "Datele asociației",
+              "to": "/date-asociatie"
             }
           }
         },
@@ -2013,7 +2013,7 @@
           "data": {
             "eyebrow": "",
             "title": "Cookie-uri necesare",
-            "text": "Cookie-urile și înregistrările de stocare locală necesare sunt folosite pentru funcționarea și securitatea aplicației: păstrarea preferințelor, protejarea formularelor și a zonei de administrare.\n\nTurnstile (Cloudflare) rulează ca măsură de securitate pentru formulare numai când este activ în configurația aplicației.\n\nPreferințele de consimțământ sunt salvate local, în gt_consent, și rămân pe dispozitiv până când le modifici sau le ștergi.\n\nwc_admin_token este folosit exclusiv în zona de administrare: sesiunea de administrare este valabilă 8 ore, iar tokenul este stocat până la ieșirea din cont, până când este înlocuit cu unul nou sau până când îl ștergi.",
+            "text": "Cookie-urile și înregistrările de stocare locală necesare sunt folosite pentru funcționarea și securitatea aplicației, adică păstrarea preferințelor, protejarea formularelor și a zonei de administrare.\n\nTurnstile (Cloudflare) rulează ca măsură de securitate pentru formulare numai când este activ în configurația aplicației.\n\nPreferințele de consimțământ sunt salvate local, în gt_consent, și rămân pe dispozitiv până când le modifici sau le ștergi.\n\nwc_admin_token este folosit exclusiv în zona de administrare. Sesiunea de administrare este valabilă 8 ore, iar tokenul este stocat până la ieșirea din cont, până când este înlocuit cu unul nou sau până când îl ștergi.",
             "compact": true,
             "image": "",
             "imageNote": "",
@@ -2029,7 +2029,7 @@
           "data": {
             "eyebrow": "",
             "title": "Cookie-uri de analiză",
-            "text": "Cookie-urile de analiză (Google Analytics 4 și Microsoft Clarity) se instalează numai dacă serviciul respectiv este configurat în aplicație și numai dacă ai dat consimțământ pentru categoria analytics.\n\nDacă lipsește oricare dintre aceste condiții, nu se instalează cookie-uri de analiză și nu se colectează date prin ele.",
+            "text": "Cookie-urile de analiză (Google Analytics 4 și Microsoft Clarity) se instalează numai dacă serviciul respectiv este configurat în aplicație și numai dacă ai dat consimțământ pentru categoria de analiză.\n\nDacă lipsește oricare dintre aceste condiții, nu se instalează cookie-uri de analiză și nu se colectează date prin ele.",
             "compact": true,
             "image": "",
             "imageNote": "",
@@ -2045,7 +2045,7 @@
           "data": {
             "eyebrow": "",
             "title": "Cookie-uri de marketing",
-            "text": "Cookie-urile de marketing (Google Ads, Meta, TikTok) se instalează numai dacă serviciul respectiv este configurat în aplicație și numai dacă ai dat consimțământ pentru categoria marketing.\n\nGoogle Tag Manager rulează conform categoriilor configurate în aplicație, astfel încât etichetele să fie încărcate doar pentru categoriile pe care le-ai acceptat.",
+            "text": "Cookie-urile de marketing (Google Ads, Meta, TikTok) se instalează numai dacă serviciul respectiv este configurat în aplicație și numai dacă ai dat consimțământ pentru categoria de marketing.\n\nGoogle Tag Manager rulează conform categoriilor configurate în aplicație, astfel încât etichetele să fie încărcate doar pentru categoriile pe care le-ai acceptat.",
             "compact": true,
             "image": "",
             "imageNote": "",
@@ -2077,7 +2077,7 @@
           "data": {
             "eyebrow": "",
             "title": "Durata stocării și controlul din browser",
-            "text": "Durata de stocare diferă de la un serviciu la altul: unele cookie-uri sunt valabile doar cât timp sesiunea din browser este deschisă, altele rămân pe dispozitiv până la expirarea perioadei configurate pentru serviciul respectiv. Duratele exacte depind de configurația aplicației și de serviciile active, iar aici nu sunt prezentate alte termene.\n\nPoți șterge oricând cookie-urile și datele locale din setările browserului. După ștergere, opțiunile de consimțământ trebuie reconfirmate, iar în zona de administrare poate fi necesară o nouă autentificare.",
+            "text": "Durata de stocare diferă de la un serviciu la altul. Unele cookie-uri sunt valabile doar cât timp sesiunea din browser este deschisă, iar altele rămân pe dispozitiv până la expirarea perioadei configurate pentru serviciul respectiv. Duratele exacte depind de configurația aplicației și de serviciile active.\n\nPoți șterge oricând cookie-urile și datele locale din setările browserului. După ștergere, opțiunile de consimțământ trebuie reconfirmate, iar în zona de administrare poate fi necesară o nouă autentificare.",
             "compact": true,
             "image": "",
             "imageNote": "",
@@ -2093,13 +2093,13 @@
           "data": {
             "eyebrow": "",
             "title": "Furnizori terți și contact",
-            "text": "Unii furnizori ai serviciilor de analiză și de marketing pot prelucra date în afara Spațiului Economic European, cu garanțiile prevăzute de GDPR, cum ar fi clauzele contractuale standard.\n\nDetalii despre prelucrarea datelor găsești în politica de confidențialitate (/confidentialitate), iar întrebările despre cookie-uri ne pot fi trimise la help@greentechcharity.ro.",
+            "text": "Unii furnizori ai serviciilor de analiză și de marketing pot prelucra date în afara Spațiului Economic European, cu garanțiile prevăzute de GDPR, cum ar fi clauzele contractuale standard.\n\nDetalii despre prelucrarea datelor găsești în politica de confidențialitate, iar întrebările despre cookie-uri ne pot fi trimise la help@greentechcharity.ro.",
             "compact": true,
             "image": "",
             "imageNote": "",
             "cta": {
-              "label": "",
-              "to": ""
+              "label": "Politica de confidențialitate",
+              "to": "/confidentialitate"
             }
           }
         }
