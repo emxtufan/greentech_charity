@@ -2,6 +2,7 @@ import { Fragment } from 'react'
 import { EditableParagraphs, EditableText, Scope, useField } from '../editable'
 import useContent from '../../hooks/useContent'
 import { getIn } from '../../utils/path'
+import { getSocialLinks } from '../../utils/social'
 
 const contactRows = [
   { key: 'contact.email', label: 'Email', href: (value) => `mailto:${value}` },
@@ -39,6 +40,7 @@ export default function OrgInfo() {
   const { value: bg } = useField('bg')
 
   const site = content?.site
+  const socialLinks = getSocialLinks(content?.site || {})
 
   const renderCard = (titleField, rows, missingField) => {
     const visibleRows = editMode ? rows : rows.filter((row) => hasValue(getIn(site, row.key)))
@@ -89,7 +91,21 @@ export default function OrgInfo() {
         </div>
         <EditableParagraphs field="intro" className="gt-text gt-intro text-center" />
         <div className="row g-4 mt-30">
-          <div className="col-lg-6">{renderCard('contactTitle', contactRows, 'contactMissing')}</div>
+          <div className="col-lg-6">
+            {renderCard('contactTitle', contactRows, 'contactMissing')}
+            {socialLinks.length > 0 && (
+              <ul className="gt-info-social">
+                {socialLinks.map((item) => (
+                  <li key={item.url}>
+                    <a href={item.url} aria-label={item.label} target="_blank" rel="noopener noreferrer">
+                      <i className={item.icon} aria-hidden="true" />
+                      {item.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
           <div className="col-lg-6">{renderCard('legalTitle', legalRows, 'legalMissing')}</div>
         </div>
       </div>
