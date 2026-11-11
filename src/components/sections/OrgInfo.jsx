@@ -13,7 +13,7 @@ const contactRows = [
 const legalRows = [
   { key: 'legal.name', label: 'Denumire' },
   { key: 'legal.cif', label: 'Cod de identificare fiscală' },
-  { key: 'legal.registry', label: 'Nr. în Registrul asociațiilor și fundațiilor' },
+  { key: 'legal.registry', label: 'Înregistrare în Registrul asociațiilor și fundațiilor' },
   { key: 'legal.address', label: 'Sediu' },
   { key: 'legal.representative', label: 'Reprezentant legal' },
   { key: 'legal.iban', label: 'Cont bancar (IBAN)' },

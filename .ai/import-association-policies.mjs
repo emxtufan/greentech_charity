@@ -431,6 +431,7 @@ function buildPoliticaCookies() {
         'Aplicația folosește cookie-uri și stocare locală în browser pentru trei scopuri, și anume funcționarea tehnică a site-ului, analiza modului în care este folosit și, numai cu acordul tău, marketing.',
         'Cookie-urile și înregistrările strict necesare asigură funcționarea și securitatea aplicației și nu pot fi refuzate din setările de consimțământ; cele de analiză și de marketing se activează exclusiv pe baza opțiunilor tale.',
       ].join('\n\n'),
+      cta: { label: 'Datele asociației', to: '/date-asociatie' },
     }),
     textBlock({
       id: 'politica-cookies-2',
@@ -482,6 +483,7 @@ function buildPoliticaCookies() {
         'Unii furnizori ai serviciilor de analiză și de marketing pot prelucra date în afara Spațiului Economic European, cu garanțiile prevăzute de GDPR, cum ar fi clauzele contractuale standard.',
         `Detalii despre prelucrarea datelor găsești în politica de confidențialitate, iar întrebările despre cookie-uri ne pot fi trimise la ${COOKIE_CONTACT_EMAIL}.`,
       ].join('\n\n'),
+      cta: { label: 'Politica de confidențialitate', to: '/confidentialitate' },
     }),
   ];
 
