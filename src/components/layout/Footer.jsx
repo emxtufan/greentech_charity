@@ -217,12 +217,12 @@ function FooterContent() {
       </div>
       <div className="container">
         <div className="bottom-footer">
-          <div className="d-md-flex align-items-center justify-content-between">
-            <div className="d-flex justify-content-center align-items-center sm-mb-10 order-md-last">
+          <div className="footer-bottom-content">
+            <div className="footer-bottom-nav">
               <EditableList
                 field="bottomLinks"
                 as="ul"
-                className="style-none d-flex justify-content-center"
+                className="style-none footer-bottom-links"
                 renderItem={() => (
                   <li>
                     <EditableLink />
@@ -230,7 +230,7 @@ function FooterContent() {
                 )}
               />
             </div>
-            <p className="copyright-text text-center m0">
+            <p className="copyright-text">
               ©{year} <EditableText field="copyright" />
             </p>
           </div>

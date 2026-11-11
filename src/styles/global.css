@@ -67,6 +67,69 @@ body,
   border-color: rgba(239, 237, 224, 0.2);
 }
 
+/* Bara de jos a footerului: linkuri centrate, copyright pe rând separat. */
+.main-footer .bottom-footer .footer-bottom-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 0;
+}
+
+.main-footer .bottom-footer .footer-bottom-nav {
+  width: 100%;
+}
+
+.main-footer .bottom-footer .footer-bottom-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px 24px;
+  margin: 0;
+  padding: 0;
+}
+
+.main-footer .bottom-footer .footer-bottom-links li {
+  margin: 0;
+  padding: 0;
+}
+
+.main-footer .bottom-footer .footer-bottom-links li a {
+  display: inline-block;
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: nowrap;
+  margin: 0;
+  padding: 3px 0;
+}
+
+.main-footer .bottom-footer .copyright-text {
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 100%;
+  text-align: center;
+}
+
+@media (max-width: 575px) {
+  .main-footer .bottom-footer .footer-bottom-content {
+    padding: 20px 0;
+  }
+
+  .main-footer .bottom-footer .footer-bottom-links {
+    gap: 6px 18px;
+  }
+
+  .main-footer .bottom-footer .footer-bottom-links li a {
+    font-size: 13px;
+  }
+
+  .main-footer .bottom-footer .copyright-text {
+    font-size: 12px;
+  }
+}
+
 /* Logo brand */
 .logo-img {
   height: 60px;
