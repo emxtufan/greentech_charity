@@ -6,7 +6,16 @@ import Modal from '../common/Modal'
 import useContent from '../../hooks/useContent'
 import { createSection } from '../../sections/registry'
 
-const RESERVED_SLUGS = ['/login', '/register', '/dashboard', '/admin']
+const RESERVED_SLUGS = [
+  '/login',
+  '/register',
+  '/dashboard',
+  '/admin',
+  '/website',
+  '/greencube',
+  '/api',
+  '/uploads',
+]
 
 const slugify = (value) =>
   String(value ?? '')
@@ -139,7 +148,7 @@ export default function PagesPanel({ open, onClose }) {
                 />
               </td>
               <td className="text-nowrap">
-                <Link to={page.slug} onClick={onClose}>
+                <Link to={page.slug === '/' ? '/website' : page.slug} onClick={onClose}>
                   Open
                 </Link>
                 {page.slug !== '/' && (

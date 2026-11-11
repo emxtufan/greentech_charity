@@ -6,6 +6,7 @@ import { AdminLoginCard } from './AdminLogin'
 import Overview from '../components/admin/dashboard/Overview'
 import LogsView from '../components/admin/dashboard/LogsView'
 import ModalsEditor from '../components/admin/dashboard/ModalsEditor'
+import ContentPages from '../components/admin/dashboard/ContentPages'
 import TrackingSettings from '../components/admin/dashboard/TrackingSettings'
 import IntegrationSettings from '../components/admin/dashboard/IntegrationSettings'
 import { MessagesView } from '../components/admin/MessagesPanel'
@@ -17,6 +18,7 @@ const TABS = [
   { key: 'mesaje', label: 'Mesaje', icon: 'bi-envelope' },
   { key: 'formulare', label: 'Formulare 230', icon: 'bi-file-earmark-text' },
   { key: 'firma', label: 'Date asociație', icon: 'bi-building' },
+  { key: 'pagini', label: 'Pagini și politici', icon: 'bi-file-earmark' },
   { key: 'modale', label: 'Modale', icon: 'bi-window' },
   { key: 'tracking', label: 'Tracking', icon: 'bi-graph-up' },
   { key: 'integrari', label: 'Email și Turnstile', icon: 'bi-shield-check' },
@@ -48,7 +50,7 @@ export default function AdminDashboard() {
 
   const handleEditSite = () => {
     setEditMode(true)
-    navigate('/')
+    navigate('/website')
   }
 
   if (!isAdmin) {
@@ -134,6 +136,8 @@ export default function AdminDashboard() {
             <OrgDataView />
           </div>
         )}
+
+        {tab === 'pagini' && <ContentPages />}
 
         {tab === 'modale' && <ModalsEditor />}
 

@@ -1,21 +1,17 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import Modal from '../common/Modal'
 import useContent from '../../hooks/useContent'
 import { getConsent, setConsent } from '../../utils/consent'
+import { hasTracking } from '../../../shared/tracking'
 
-const GOOGLE_ID_PATTERN = /^(G-[A-Z0-9]+|GTM-[A-Z0-9]+|AW-\d+)$/
-const FACEBOOK_ID_PATTERN = /^\d+$/
-const TIKTOK_ID_PATTERN = /^[A-Z0-9]+$/
+const POLICY_LABEL = 'Politica de cookies'
 
 function paragraphs(text) {
   return (text || '')
     .split(/\n\s*\n/)
     .filter(Boolean)
     .map((p, i) => <p key={i}>{p}</p>)
-}
-
-function readId(value) {
-  return typeof value === 'string' ? value.trim() : ''
 }
 
 export default function CookieConsent() {
@@ -27,16 +23,7 @@ export default function CookieConsent() {
   const [analytics, setAnalytics] = useState(() => Boolean(getConsent()?.analytics))
   const [marketing, setMarketing] = useState(() => Boolean(getConsent()?.marketing))
 
-  const tracking = content?.site?.tracking || {}
-  const googleId = readId(tracking.googleId)
-  const facebookPixelId = readId(tracking.facebookPixelId)
-  const tiktokPixelId = readId(tracking.tiktokPixelId)
-
-  const hasTracking = Boolean(
-    (googleId && GOOGLE_ID_PATTERN.test(googleId)) ||
-      (facebookPixelId && FACEBOOK_ID_PATTERN.test(facebookPixelId)) ||
-      (tiktokPixelId && TIKTOK_ID_PATTERN.test(tiktokPixelId))
-  )
+  const trackingConfigured = hasTracking(content?.site?.tracking)
 
   const cookie = content?.site?.modals?.cookie || {}
 
@@ -82,7 +69,7 @@ export default function CookieConsent() {
 
   const saveSettings = () => applyConsent({ analytics, marketing })
 
-  const showBanner = hasTracking && consent === null && !bannerClosed
+  const showBanner = trackingConfigured && consent === null && !bannerClosed
 
   return (
     <>
@@ -106,6 +93,10 @@ export default function CookieConsent() {
             >
               {cookie.settings || 'Setări'}
             </button>
+
+            <Link to="/politica-cookies" className="btn btn-link">
+              {POLICY_LABEL}
+            </Link>
           </div>
         </div>
       )}
@@ -121,6 +112,12 @@ export default function CookieConsent() {
         }
       >
         <div className="gt-modal-text">{paragraphs(cookie.modalIntro)}</div>
+
+        <p className="mb-3">
+          <Link to="/politica-cookies" onClick={() => setSettingsOpen(false)}>
+            {POLICY_LABEL}
+          </Link>
+        </p>
 
         <div className="gt-cookie-row">
           <div>
