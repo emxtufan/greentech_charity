@@ -9,6 +9,8 @@ import { registerF230Routes } from './f230.js'
 import { logEvent, registerAuditRoutes } from './audit.js'
 import { applyEnvDefaults } from './orgDefaults.js'
 import { UPLOADS_DIR, uploadImage } from './upload.js'
+import { registerIntegrationRoutes } from './integrations.js'
+import { normalizeTracking, trackingError } from '../shared/tracking.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT_DIR = path.resolve(__dirname, '..')
@@ -73,6 +75,12 @@ app.put('/api/content', requireAdmin, (req, res, next) => {
     if (!isPlainObject(body) || !isPlainObject(body.site) || !Array.isArray(body.pages)) {
       return res.status(400).json({ message: 'Conținut invalid: se așteaptă {site: object, pages: array}' })
     }
+    if (body.site.tracking) {
+      const tracking = normalizeTracking(body.site.tracking)
+      const error = trackingError(tracking)
+      if (error) return res.status(400).json({ message: error })
+      body.site.tracking = tracking
+    }
     backupContent()
     writeContentAtomic(body)
     logEvent('content', 'Conținutul site-ului a fost salvat')
@@ -102,6 +110,7 @@ app.post('/api/upload', requireAdmin, (req, res) => {
   })
 })
 
+registerIntegrationRoutes(app)
 registerMessageRoutes(app)
 registerF230Routes(app)
 registerAuditRoutes(app)
@@ -111,6 +120,9 @@ app.use('/api', (req, res) => {
 })
 
 if (fs.existsSync(DIST_DIR)) {
+  app.get(['/greencube', '/greencube/'], (req, res) => {
+    return res.sendFile(path.join(DIST_DIR, 'index.html'))
+  })
   app.use(express.static(DIST_DIR))
 
   app.get('*', (req, res, next) => {

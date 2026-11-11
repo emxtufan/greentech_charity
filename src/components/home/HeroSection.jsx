@@ -49,25 +49,25 @@ export default function HeroSection() {
       <div className="box-layout-one">
         <div className="row">
           <div className="col-xl-5 col-md-6">
-            <Reveal className="slogan font-amita fs-20" anim="slide-up" duration={900}>
+            <Reveal className="slogan font-amita fs-20" anim="slide-up" duration={650}>
               <EditableText field="subtitle" />
             </Reveal>
             <Reveal
               as="h1"
               className="hero-heading"
               anim="slide-up"
-              duration={900}
-              delay={300}
+              duration={850}
+              delay={100}
             >
               <EditableText field="title" />
             </Reveal>
-            <Reveal as="p" className="fs-20" anim="slide-up" duration={900} delay={500}>
+            <Reveal as="p" className="fs-20" anim="slide-up" duration={750} delay={220}>
               <EditableText field="text" />
             </Reveal>
-            <Reveal className="mt-35" anim="slide-up" duration={900} delay={700}>
+            <Reveal className="mt-35" anim="slide-up" duration={650} delay={340}>
               <EditableLink field="cta" className="btn-one" />
             </Reveal>
-            <Reveal className="avatar-group mt-35" anim="slide-up" duration={900} delay={900}>
+            <Reveal className="avatar-group mt-35" anim="slide-up" duration={650} delay={440}>
               <ul className="style-none d-flex align-items-center">
                 {avatars.map((avatar, index) => (
                   <ListItem key={index} field="avatars" index={index}>
@@ -86,7 +86,7 @@ export default function HeroSection() {
           </div>
         </div>
 
-        <Reveal className="media-wrapper" anim="slide-left" duration={900} delay={500}>
+        <Reveal className="media-wrapper" anim="slide-left" duration={1000} delay={180}>
           <div className="hero-marquee">
             <div className="hero-marquee__tilt">
               {columns.map((items, col) => (

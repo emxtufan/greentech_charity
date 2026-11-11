@@ -7,10 +7,14 @@ export default function useCountUp(end, { duration = 2000, start = true } = {}) 
   const frameRef = useRef(0)
 
   useEffect(() => {
-    if (!start) return undefined
+    if (!start) {
+      setValue(0)
+      return undefined
+    }
 
     const target = Number(end)
-    if (!Number.isFinite(target) || duration <= 0) {
+    const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)')
+    if (!Number.isFinite(target) || duration <= 0 || motionPreference.matches) {
       setValue(Number.isFinite(target) ? target : 0)
       return undefined
     }
@@ -29,7 +33,17 @@ export default function useCountUp(end, { duration = 2000, start = true } = {}) 
 
     frameRef.current = requestAnimationFrame(tick)
 
-    return () => cancelAnimationFrame(frameRef.current)
+    const onMotionChange = (event) => {
+      if (event.matches) {
+        cancelAnimationFrame(frameRef.current)
+        setValue(target)
+      }
+    }
+    motionPreference.addEventListener('change', onMotionChange)
+    return () => {
+      cancelAnimationFrame(frameRef.current)
+      motionPreference.removeEventListener('change', onMotionChange)
+    }
   }, [end, duration, start])
 
   return value

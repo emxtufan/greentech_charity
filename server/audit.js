@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url'
 import { requireAdmin } from './auth.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const DATA_DIR = path.join(__dirname, 'data')
+const DATA_DIR = process.env.WEBCHARITY_DATA_DIR || path.join(__dirname, 'data')
 const AUDIT_FILE = path.join(DATA_DIR, 'audit.log')
 
 const RETENTION_DAYS = 180

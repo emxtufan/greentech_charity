@@ -43,6 +43,13 @@ export async function deleteMessage(id) {
   return parseBody(response)
 }
 
+export async function retryMessageEmail(id) {
+  const response = await fetch(`/api/messages/${encodeURIComponent(id)}/retry-email`, {
+    method: 'POST', headers: { Accept: 'application/json', ...authHeaders() },
+  })
+  return parseBody(response)
+}
+
 const messageService = { sendMessage, listMessages, deleteMessage }
 
 export default messageService

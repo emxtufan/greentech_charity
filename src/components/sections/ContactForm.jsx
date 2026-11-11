@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { EditableParagraphs, EditableText, ListItem, useField } from '../editable'
 import useContent from '../../hooks/useContent'
 import { sendMessage } from '../../services/messageService'
 import { isValidEmail } from '../../utils/helpers'
+import { getPublicIntegrations } from '../../services/integrationService'
+import Turnstile from '../site/Turnstile'
 
 export const defaultData = {
   anchor: 'formular',
@@ -58,6 +60,30 @@ export default function ContactForm() {
   const [status, setStatus] = useState('idle')
   const [errors, setErrors] = useState({})
   const [serverError, setServerError] = useState('')
+  const [integrations, setIntegrations] = useState(null)
+  const [configError, setConfigError] = useState('')
+  const [configAttempt, setConfigAttempt] = useState(0)
+  const [turnstileToken, setTurnstileToken] = useState('')
+  const [turnstileReset, setTurnstileReset] = useState(0)
+  const [confirmationStatus, setConfirmationStatus] = useState('')
+  const submissionId = useRef(crypto.randomUUID())
+  const submitting = useRef(false)
+
+  useEffect(() => {
+    let active = true
+    setConfigError('')
+    getPublicIntegrations().then((settings) => {
+      if (!active) return
+      if (settings.turnstile.enabled && !settings.turnstile.siteKey) {
+        setConfigError('Formularul este în curs de configurare pentru acest domeniu.')
+        return
+      }
+      setIntegrations(settings)
+    }).catch(() => {
+      if (active) setConfigError('Formularul nu s-a putut pregăti. Reîncearcă încărcarea.')
+    })
+    return () => { active = false }
+  }, [configAttempt])
 
   // subiectul se ia din query (?subiect=...) doar când se schimbă adresa
   useEffect(() => {
@@ -72,6 +98,7 @@ export default function ContactForm() {
   }
 
   const update = (setter, field) => (event) => {
+    submissionId.current = crypto.randomUUID()
     setter(event.target.value)
     clearError(field)
   }
@@ -85,12 +112,14 @@ export default function ContactForm() {
       nextErrors.message = 'Scrie-ne câteva cuvinte în plus, te rugăm.'
     }
     if (!consent) nextErrors.consent = 'Avem nevoie de acordul tău ca să îți putem răspunde.'
+    if (integrations?.turnstile.enabled && !turnstileToken) nextErrors.turnstile = 'Așteaptă verificarea de securitate.'
 
     return nextErrors
   }
 
   const handleSubmit = async (event) => {
     event.preventDefault()
+    if (submitting.current || !integrations) return
 
     const nextErrors = validate()
     setErrors(nextErrors)
@@ -99,13 +128,20 @@ export default function ContactForm() {
     if (Object.keys(nextErrors).length > 0) return
 
     setStatus('sending')
+    submitting.current = true
 
     try {
-      await sendMessage({ name, email, phone, topic, message, consent, website })
+      const result = await sendMessage({ name, email, phone, topic, message, consent, website, turnstileToken, submissionId: submissionId.current })
+      setConfirmationStatus(result.confirmationStatus || '')
       setStatus('sent')
+      if (result.id) window.dispatchEvent(new CustomEvent('gt-contact-sent', { detail: { id: result.id } }))
     } catch (error) {
       setServerError(error.message || errorText)
       setStatus('idle')
+      setTurnstileToken('')
+      setTurnstileReset((value) => value + 1)
+    } finally {
+      submitting.current = false
     }
   }
 
@@ -121,8 +157,11 @@ export default function ContactForm() {
             <EditableParagraphs field="intro" className="gt-text gt-intro text-center" />
             <div className="gt-form-card mt-40">
               {status === 'sent' ? (
-                <div className="gt-success">
+                <div className="gt-success" role="status">
+                  <i className="bi bi-check-circle-fill me-2" aria-hidden="true" />
                   <EditableParagraphs field="successText" />
+                  {confirmationStatus === 'sent' && <p>Ți-am trimis și un email de confirmare.</p>}
+                  {['failed', 'pending', 'sending'].includes(confirmationStatus) && <p>Mesajul este înregistrat. Confirmarea prin email întârzie.</p>}
                 </div>
               ) : (
                 <form noValidate onSubmit={handleSubmit}>
@@ -253,7 +292,12 @@ export default function ContactForm() {
                     <EditableParagraphs field="privacyNote" />
                   </div>
 
-                  <button type="submit" className="btn-one mt-20" disabled={status === 'sending'}>
+                  {integrations?.turnstile.enabled && <Turnstile siteKey={integrations.turnstile.siteKey} resetKey={turnstileReset} onToken={setTurnstileToken} />}
+                  {integrations?.turnstile.mode === 'test' && <p className="form-text">Verificare în mod de test local.</p>}
+                  {errors.turnstile && <p className="gt-error" role="alert">{errors.turnstile}</p>}
+                  {configError && <p className="gt-error" role="alert">{configError}{' '}<button type="button" className="btn btn-link p-0" onClick={() => setConfigAttempt((value) => value + 1)}>Reîncarcă formularul</button></p>}
+
+                  <button type="submit" className="btn-one mt-20" disabled={status === 'sending' || !integrations || (integrations.turnstile.enabled && !turnstileToken)}>
                     {status === 'sending' ? sendingLabel : submitLabel}
                   </button>
 

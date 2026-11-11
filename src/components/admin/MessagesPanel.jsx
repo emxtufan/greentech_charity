@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import Modal from '../common/Modal'
-import { deleteMessage, listMessages } from '../../services/messageService'
+import { deleteMessage, listMessages, retryMessageEmail } from '../../services/messageService'
+
+const EMAIL_STATUS = { sent: 'Trimis', failed: 'Trimitere eșuată', pending: 'În așteptare', sending: 'Trimitere începută — verifică inboxul', disabled: 'Dezactivat' }
 
 const TOPIC_LABELS = {
   situatie: 'O situație',
@@ -21,6 +23,17 @@ export function MessagesView() {
   const [messages, setMessages] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [retrying, setRetrying] = useState('')
+
+  const retryEmail = async (id) => {
+    setRetrying(id)
+    setError('')
+    try {
+      const updated = await retryMessageEmail(id)
+      if (updated) setMessages((previous) => previous.map((message) => message.id === id ? updated : message))
+    } catch (cause) { setError(cause.message) }
+    finally { setRetrying('') }
+  }
 
   useEffect(() => {
     let active = true
@@ -90,6 +103,12 @@ export function MessagesView() {
               <p className="mb-0 mt-2" style={{ whiteSpace: 'pre-wrap' }}>
                 {message.message}
               </p>
+              {message.delivery && <div className="small mt-3">
+                <div>Notificarea echipei — {EMAIL_STATUS[message.delivery.notification?.status] || 'În așteptare'}</div>
+                <div>Confirmarea clientului — {EMAIL_STATUS[message.delivery.confirmation?.status] || 'În așteptare'}</div>
+                {Object.values(message.delivery).some((delivery) => ['failed', 'pending', 'disabled', 'sending'].includes(delivery.status)) &&
+                  <button type="button" className="btn btn-sm btn-outline-success mt-2" disabled={Boolean(retrying)} onClick={() => retryEmail(message.id)}>{retrying === message.id ? 'Se trimit…' : 'Reîncearcă emailurile netrimise'}</button>}
+              </div>}
             </li>
           ))}
         </ul>

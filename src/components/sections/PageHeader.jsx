@@ -1,4 +1,5 @@
 import { EditableParagraphs, EditableText, useField } from '../editable'
+import Reveal from '../common/Reveal'
 
 export const defaultData = {
   anchor: 'page-header',
@@ -13,11 +14,11 @@ export default function PageHeader({ bg }) {
   return (
     <section id={anchor || undefined} className={`gt-page-header gt-bg-${bg || 'white'}`}>
       <div className="container">
-        <div className="gt-narrow">
+        <Reveal className="gt-narrow">
           <EditableText field="eyebrow" as="div" className="upper-title font-amita mb-15" />
           <EditableText field="title" as="h1" className="gt-page-title" />
           <EditableParagraphs field="text" className="gt-lead mt-20" />
-        </div>
+        </Reveal>
       </div>
     </section>
   )

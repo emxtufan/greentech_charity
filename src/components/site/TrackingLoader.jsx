@@ -2,12 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import useContent from '../../hooks/useContent'
 import { getConsent } from '../../utils/consent'
-
-const GA_ID_PATTERN = /^G-[A-Z0-9]+$/
-const GTM_ID_PATTERN = /^GTM-[A-Z0-9]+$/
-const AW_ID_PATTERN = /^AW-\d+$/
-const FACEBOOK_ID_PATTERN = /^\d+$/
-const TIKTOK_ID_PATTERN = /^[A-Z0-9]+$/
+import { normalizeTracking, TRACKING_FIELDS } from '../../../shared/tracking'
 
 function appendScript(scriptId, src) {
   if (document.getElementById(scriptId)) return
@@ -22,7 +17,7 @@ function appendScript(scriptId, src) {
 
 function ensureGtag(gtagId) {
   const gtagSrc = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(gtagId)}`
-  appendScript('gt-gtag-js', gtagSrc)
+  if (gtagId) appendScript('gt-gtag-js', gtagSrc)
 
   window.dataLayer = window.dataLayer || []
 
@@ -34,22 +29,24 @@ function ensureGtag(gtagId) {
 
   if (!window.__gtGtagInit) {
     window.__gtGtagInit = true
+    window.gtag('consent', 'default', { analytics_storage: 'denied', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' })
     window.gtag('js', new Date())
   }
 }
 
 function loadGa(googleId) {
-  if (window.__gtGaLoaded) return
+  if (window.__gtGaLoaded === googleId) return
 
-  window.__gtGaLoaded = true
+  if (window.__gtGaLoaded) window[`ga-disable-${window.__gtGaLoaded}`] = true
+  window.__gtGaLoaded = googleId
   ensureGtag(googleId)
-  window.gtag('config', googleId, { anonymize_ip: true })
+  window.gtag('config', googleId, { send_page_view: false, page_location: `${window.location.origin}${window.location.pathname}` })
 }
 
 function loadGtm(containerId) {
   if (window.__gtGtmLoaded) return
 
-  window.__gtGtmLoaded = true
+  window.__gtGtmLoaded = containerId
   window.dataLayer = window.dataLayer || []
   window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' })
 
@@ -58,17 +55,17 @@ function loadGtm(containerId) {
 }
 
 function loadAw(awId) {
-  if (window.__gtAwLoaded) return
+  if (window.__gtAwLoaded === awId) return
 
-  window.__gtAwLoaded = true
+  window.__gtAwLoaded = awId
   ensureGtag(awId)
-  window.gtag('config', awId)
+  window.gtag('config', awId, { send_page_view: false, page_location: `${window.location.origin}${window.location.pathname}` })
 }
 
 function loadFacebook(pixelId) {
-  if (window.__gtFbLoaded) return
+  if (window.__gtFbLoaded === pixelId) return
 
-  window.__gtFbLoaded = true
+  window.__gtFbLoaded = pixelId
 
   if (typeof window.fbq !== 'function') {
     const fbq = function () {
@@ -88,14 +85,19 @@ function loadFacebook(pixelId) {
     appendScript('gt-fbevents-js', 'https://connect.facebook.net/en_US/fbevents.js')
   }
 
+  window.fbq('set', 'autoConfig', false, pixelId)
   window.fbq('init', pixelId)
-  window.fbq('track', 'PageView')
 }
 
 function loadTiktok(pixelId) {
-  if (window.__gtTtLoaded) return
+  if (window.__gtTtLoaded === pixelId) return
+  if (window.__gtTtLoaded && window.ttq?.load) {
+    window.ttq.load(pixelId)
+    window.__gtTtLoaded = pixelId
+    return
+  }
 
-  window.__gtTtLoaded = true
+  window.__gtTtLoaded = pixelId
 
   const analytics = window.ttq || []
   const methods = [
@@ -112,6 +114,9 @@ function loadTiktok(pixelId) {
     'group',
     'enableCookie',
     'disableCookie',
+    'holdConsent',
+    'revokeConsent',
+    'grantConsent',
   ]
 
   window.TiktokAnalyticsObject = 'ttq'
@@ -146,67 +151,104 @@ function loadTiktok(pixelId) {
   }
 
   analytics.load(pixelId)
-  analytics.page()
+}
+
+function loadClarity(id) {
+  if (window.__gtClarityLoaded) return
+  window.__gtClarityLoaded = id
+  window.clarity = window.clarity || function () {
+    (window.clarity.q = window.clarity.q || []).push(arguments)
+  }
+  appendScript('gt-clarity-js', 'https://www.clarity.ms/tag/' + encodeURIComponent(id))
 }
 
 export default function TrackingLoader() {
   const { content } = useContent()
   const location = useLocation()
-  const firstRoute = useRef(true)
+  const lastPage = useRef({})
+  const leadIds = useRef(new Set())
   const [consent, setConsent] = useState(getConsent)
-
-  const tracking = content?.site?.tracking || {}
-  const googleId = typeof tracking.googleId === 'string' ? tracking.googleId.trim() : ''
-  const facebookPixelId =
-    typeof tracking.facebookPixelId === 'string' ? tracking.facebookPixelId.trim() : ''
-  const tiktokPixelId =
-    typeof tracking.tiktokPixelId === 'string' ? tracking.tiktokPixelId.trim() : ''
+  const tracking = normalizeTracking(content?.site?.tracking)
+  for (const { key, pattern } of TRACKING_FIELDS) {
+    if (!pattern.test(tracking[key])) tracking[key] = ''
+  }
+  const { ga4Id, gtmId, googleAdsId, googleAdsConversionLabel, facebookPixelId, tiktokPixelId, clarityId } = tracking
 
   useEffect(() => {
-    setConsent(getConsent())
-
     const onConsent = () => setConsent(getConsent())
-
     window.addEventListener('gt-consent', onConsent)
-
-    return () => window.removeEventListener('gt-consent', onConsent)
+    return () => {
+      window.removeEventListener('gt-consent', onConsent)
+      if (window.__gtGaLoaded) window['ga-disable-' + window.__gtGaLoaded] = true
+      window.gtag?.('consent', 'update', { analytics_storage: 'denied', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' })
+      window.fbq?.('consent', 'revoke')
+      window.ttq?.revokeConsent?.()
+      window.clarity?.('stop')
+    }
   }, [])
 
   useEffect(() => {
-    if (!consent) return
-
-    if (consent.analytics && googleId) {
-      if (GA_ID_PATTERN.test(googleId)) loadGa(googleId)
-      else if (GTM_ID_PATTERN.test(googleId)) loadGtm(googleId)
+    const analytics = consent?.analytics === true
+    const marketing = consent?.marketing === true
+    const googleTag = (analytics && ga4Id) || (marketing && googleAdsId)
+    if (googleTag || ((analytics || marketing) && gtmId)) ensureGtag(googleTag || undefined)
+    if (typeof window.gtag === 'function') {
+      window.gtag('consent', 'update', {
+        analytics_storage: analytics ? 'granted' : 'denied',
+        ad_storage: marketing ? 'granted' : 'denied',
+        ad_user_data: marketing ? 'granted' : 'denied',
+        ad_personalization: marketing ? 'granted' : 'denied',
+      })
     }
+    if (window.__gtGaLoaded) window['ga-disable-' + window.__gtGaLoaded] = !analytics || ga4Id !== window.__gtGaLoaded
+    if (ga4Id) window['ga-disable-' + ga4Id] = !analytics
+    if (analytics && ga4Id) loadGa(ga4Id)
+    if ((analytics || marketing) && gtmId) loadGtm(gtmId)
+    if (marketing && googleAdsId) loadAw(googleAdsId)
+    if (marketing && facebookPixelId) loadFacebook(facebookPixelId)
+    if (marketing && tiktokPixelId) loadTiktok(tiktokPixelId)
+    if (analytics && clarityId) loadClarity(clarityId)
+    if (window.fbq) window.fbq('consent', marketing && facebookPixelId ? 'grant' : 'revoke')
+    if (window.ttq) window.ttq[marketing && tiktokPixelId ? 'grantConsent' : 'revokeConsent']?.()
+    if (window.clarity) window.clarity('consentv2', {
+      analytics_Storage: analytics && clarityId ? 'granted' : 'denied',
+      ad_Storage: marketing && clarityId ? 'granted' : 'denied',
+    })
+    if (window.clarity) window.clarity(analytics && clarityId ? 'start' : 'stop')
 
-    if (consent.marketing) {
-      if (googleId && AW_ID_PATTERN.test(googleId)) loadAw(googleId)
-      if (facebookPixelId && FACEBOOK_ID_PATTERN.test(facebookPixelId)) loadFacebook(facebookPixelId)
-      if (tiktokPixelId && TIKTOK_ID_PATTERN.test(tiktokPixelId)) loadTiktok(tiktokPixelId)
+    const page = { page_path: location.pathname, page_location: window.location.origin + location.pathname, page_title: document.title }
+    const sendPage = (key, enabled, id, send) => {
+      if (!enabled || !id) {
+        delete lastPage.current[key]
+        return
+      }
+      const marker = id + ':' + page.page_path
+      if (lastPage.current[key] === marker) return
+      lastPage.current[key] = marker
+      send()
     }
-  }, [consent, googleId, facebookPixelId, tiktokPixelId])
+    sendPage('ga', analytics, ga4Id, () => window.gtag('event', 'page_view', { ...page, send_to: ga4Id }))
+    sendPage('ads', marketing, googleAdsId, () => window.gtag('event', 'page_view', { ...page, send_to: googleAdsId }))
+    sendPage('meta', marketing, facebookPixelId, () => window.fbq('trackSingle', facebookPixelId, 'PageView'))
+    sendPage('tiktok', marketing, tiktokPixelId, () => window.ttq.page())
+    sendPage('gtm', analytics || marketing, gtmId, () => window.dataLayer.push({ event: 'virtual_page_view', ...page }))
 
-  useEffect(() => {
-    if (firstRoute.current) {
-      firstRoute.current = false
-      return
+    const onContact = (event) => {
+      const id = event.detail?.id
+      if (!id || leadIds.current.has(id)) return
+      leadIds.current.add(id)
+      if (analytics && ga4Id) window.gtag('event', 'generate_lead', { send_to: ga4Id, form_id: 'contact' })
+      if (marketing && googleAdsId && googleAdsConversionLabel) {
+        window.gtag('event', 'conversion', { send_to: googleAdsId + '/' + googleAdsConversionLabel, transaction_id: id })
+      }
+      if (marketing && facebookPixelId) window.fbq('trackSingle', facebookPixelId, 'Lead', {}, { eventID: id })
+      if (marketing && tiktokPixelId) window.ttq.track('SubmitForm', {}, { event_id: id })
+      if (analytics && clarityId) window.clarity('event', 'contact_sent')
+      if ((analytics || marketing) && gtmId) window.dataLayer.push({ event: 'generate_lead', form_id: 'contact', event_id: id })
     }
-
-    const pagePath = `${location.pathname}${location.search}`
-
-    if ((window.__gtGaLoaded || window.__gtAwLoaded) && typeof window.gtag === 'function') {
-      window.gtag('event', 'page_view', { page_path: pagePath })
-    }
-
-    if (window.__gtFbLoaded && typeof window.fbq === 'function') {
-      window.fbq('track', 'PageView')
-    }
-
-    if (window.__gtTtLoaded && window.ttq && typeof window.ttq.page === 'function') {
-      window.ttq.page()
-    }
-  }, [location.pathname, location.search])
+    window.addEventListener('gt-contact-sent', onContact)
+    return () => window.removeEventListener('gt-contact-sent', onContact)
+  }, [consent, ga4Id, gtmId, googleAdsId, googleAdsConversionLabel, facebookPixelId, tiktokPixelId, clarityId, location.pathname])
 
   return null
 }

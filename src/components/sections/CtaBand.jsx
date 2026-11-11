@@ -1,5 +1,6 @@
 import { EditableLink, EditableParagraphs, EditableText, useField } from '../editable'
 import useContent from '../../hooks/useContent'
+import Reveal from '../common/Reveal'
 
 export const defaultData = {
   anchor: '',
@@ -17,7 +18,7 @@ export default function CtaBand() {
   return (
     <section id={anchor || undefined} className="gt-section-sm">
       <div className="container">
-        <div className="gt-cta-band">
+        <Reveal className="gt-cta-band" anim="zoom-in" duration={800}>
           <div className="row align-items-center gy-4">
             <div className="col-lg-7">
               <EditableText field="title" as="h2" />
@@ -30,7 +31,7 @@ export default function CtaBand() {
               )}
             </div>
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   )

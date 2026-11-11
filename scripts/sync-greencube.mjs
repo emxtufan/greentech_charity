@@ -109,7 +109,7 @@ async function rewriteTextFile(filePath, assetIndex) {
 
   const rewritten = text.replace(ABSOLUTE_URL, (match, offset) => {
     const previous = offset > 0 ? text[offset - 1] : ''
-    if (previous === '\\' || previous === '/' || /[A-Za-z0-9]/.test(previous)) return match
+    if (previous === '\\' || previous === '/' || previous === '.' || /[A-Za-z0-9]/.test(previous)) return match
     if (shouldSkip(match, assetIndex)) return match
     replacements += 1
     return `${PUBLIC_PREFIX}${match}`
@@ -124,6 +124,9 @@ async function rewriteTextFile(filePath, assetIndex) {
 async function main() {
   await ensureSource()
 
+  if (path.relative(PROJECT_ROOT, TARGET_DIR) !== path.join('public', 'greencube')) {
+    throw new Error('Destinatia sincronizarii trebuie sa fie public/greencube.')
+  }
   await rm(TARGET_DIR, { recursive: true, force: true })
   await cp(SOURCE_DIR, TARGET_DIR, { recursive: true })
 

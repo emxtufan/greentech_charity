@@ -6,6 +6,7 @@ import {
   useField,
 } from '../editable'
 import useContent from '../../hooks/useContent'
+import Reveal from '../common/Reveal'
 
 const newItem = {
   title: 'Titlu',
@@ -42,13 +43,13 @@ export default function Steps() {
             <ol className="gt-steps">
               {items.map((item, index) => (
                 <ListItem key={index} field="items" index={index}>
-                  <li>
+                  <Reveal as="li" delay={(index % 3) * 80}>
                     <span className="gt-step-num">{index + 1}</span>
                     <div>
                       <EditableText field="title" as="h5" />
                       <EditableParagraphs field="text" />
                     </div>
-                  </li>
+                  </Reveal>
                 </ListItem>
               ))}
             </ol>

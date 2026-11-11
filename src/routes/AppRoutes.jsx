@@ -1,5 +1,4 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
-import MainLayout from '../components/layout/MainLayout'
 import ProtectedRoute from './ProtectedRoute'
 import useAuth from '../hooks/useAuth'
 import DynamicPage from '../pages/DynamicPage'
@@ -14,10 +13,10 @@ export default function AppRoutes() {
 
   return (
     <Routes>
-      <Route path="greencube/*" element={<GreencubeFrame />} />
-
-      <Route element={<MainLayout />}>
+      <Route element={<GreencubeFrame />}>
         <Route index element={<DynamicPage />} />
+        <Route path="greencube/*" element={<Navigate to="/" replace />} />
+        <Route path="website" element={<DynamicPage />} />
         <Route
           path="login"
           element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login />}

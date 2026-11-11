@@ -18,7 +18,7 @@ export default function DynamicPage() {
   const location = useLocation()
 
   const pages = Array.isArray(content?.pages) ? content.pages : []
-  const slug = normalizeSlug(location.pathname)
+  const slug = location.pathname === '/website' ? '/' : normalizeSlug(location.pathname)
   const pageIndex = pages.findIndex((page) => normalizeSlug(page?.slug) === slug)
   const page = pageIndex >= 0 ? pages[pageIndex] : null
   const siteName = content?.site?.name ?? ''

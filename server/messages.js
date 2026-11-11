@@ -1,12 +1,13 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import { randomUUID } from 'node:crypto'
+import { createHash, randomUUID } from 'node:crypto'
 import { fileURLToPath } from 'node:url'
 import { requireAdmin } from './auth.js'
 import { logEvent } from './audit.js'
+import { getIntegrationSettings, sendContactEmail, verifyTurnstile } from './integrations.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const DATA_DIR = path.join(__dirname, 'data')
+const DATA_DIR = process.env.WEBCHARITY_DATA_DIR || path.join(__dirname, 'data')
 const MESSAGES_FILE = path.join(DATA_DIR, 'messages.json')
 
 const RETENTION_DAYS = 365
@@ -22,6 +23,7 @@ const CONTROL_CHARS_RE = /[\u0000-\u0009\u000B-\u001F\u007F]/g
 
 // ip -> array de timestamp-uri ale mesajelor trimise în ultimele 10 minute
 const submissions = new Map()
+const emailJobs = new Map()
 
 const getClientIp = (req) => req.ip || req.socket.remoteAddress || 'unknown'
 
@@ -31,12 +33,9 @@ const clean = (value) =>
 const readMessages = () => {
   if (!fs.existsSync(MESSAGES_FILE)) return []
 
-  try {
-    const parsed = JSON.parse(fs.readFileSync(MESSAGES_FILE, 'utf8'))
-    return Array.isArray(parsed) ? parsed : []
-  } catch {
-    return []
-  }
+  const parsed = JSON.parse(fs.readFileSync(MESSAGES_FILE, 'utf8'))
+  if (!Array.isArray(parsed)) throw new Error('Fișierul mesajelor este invalid.')
+  return parsed
 }
 
 const writeMessagesAtomic = (messages) => {
@@ -83,7 +82,44 @@ const validateMessage = (payload) => {
   return ''
 }
 
-const handleCreateMessage = (req, res, next) => {
+function updateDelivery(id, channel, delivery) {
+  const messages = readMessages()
+  const message = messages.find((item) => item.id === id)
+  if (!message) return
+  message.delivery = { ...message.delivery, [channel]: { ...delivery, updatedAt: new Date().toISOString() } }
+  writeMessagesAtomic(messages)
+}
+
+function deliverStoredMessage(id) {
+  if (emailJobs.has(id)) return emailJobs.get(id)
+  const job = (async () => {
+    const { smtp } = getIntegrationSettings()
+    for (const channel of ['notification', 'confirmation']) {
+      const message = readMessages().find((item) => item.id === id)
+      if (!message) return null
+      if (['sent', 'sending'].includes(message.delivery?.[channel]?.status)) continue
+      if (!smtp.enabled || (channel === 'confirmation' && !smtp.autoReply)) {
+        updateDelivery(id, channel, { status: 'disabled' })
+        continue
+      }
+      updateDelivery(id, channel, { status: 'sending' })
+      let result = { status: 'sent' }
+      try { await sendContactEmail(message, channel, smtp) }
+      catch (error) {
+        result = { status: 'failed', code: error.code || 'SMTP' }
+        logEvent('message', 'Trimiterea unui email a eșuat', { level: 'warn', channel, code: result.code })
+      }
+      updateDelivery(id, channel, result)
+    }
+    return readMessages().find((item) => item.id === id) || null
+  })().finally(() => emailJobs.delete(id))
+  emailJobs.set(id, job)
+  return job
+}
+
+const receipt = (message) => ({ ok: true, id: message.id, confirmationStatus: message.delivery?.confirmation?.status || 'pending' })
+
+const handleCreateMessage = async (req, res, next) => {
   try {
     const body = req.body && typeof req.body === 'object' ? req.body : {}
 
@@ -93,13 +129,6 @@ const handleCreateMessage = (req, res, next) => {
     const ip = getClientIp(req)
     const now = Date.now()
     const recent = (submissions.get(ip) || []).filter((time) => now - time < RATE_LIMIT_WINDOW_MS)
-
-    if (recent.length >= RATE_LIMIT_MAX) {
-      submissions.set(ip, recent)
-      return res.status(429).json({
-        message: 'Ai trimis deja câteva mesaje. Te rugăm să încerci din nou peste câteva minute.',
-      })
-    }
 
     const payload = {
       name: clean(body.name),
@@ -119,23 +148,49 @@ const handleCreateMessage = (req, res, next) => {
         .json({ message: 'Ca să putem trimite mesajul, avem nevoie de acordul tău.' })
     }
 
+    const requestId = typeof body.submissionId === 'string' && /^[a-f0-9-]{36}$/i.test(body.submissionId) ? body.submissionId : randomUUID()
+    const requestHash = createHash('sha256').update(JSON.stringify(payload)).digest('hex')
+    const previous = readMessages().find((item) => item.requestId === requestId)
+    if (previous) {
+      if (previous.requestHash !== requestHash) return res.status(409).json({ message: 'Această trimitere există deja cu alte date. Reîncarcă formularul.' })
+      const delivered = await deliverStoredMessage(previous.id)
+      return res.json(receipt(delivered || previous))
+    }
+    if (recent.length >= RATE_LIMIT_MAX) {
+      submissions.set(ip, recent)
+      return res.status(429).json({ message: 'Ai trimis deja câteva mesaje. Te rugăm să încerci din nou peste câteva minute.' })
+    }
+    recent.push(now)
+    submissions.set(ip, recent)
+    await verifyTurnstile(req, body.turnstileToken)
+
+    // Recitim după verificarea asincronă pentru trimiteri simultane și reîncercări.
     const messages = readMessages()
-    messages.push({
+    const duplicate = messages.find((item) => item.requestId === requestId)
+    if (duplicate) {
+      if (duplicate.requestHash !== requestHash) return res.status(409).json({ message: 'Identificator de trimitere deja folosit.' })
+      const delivered = await deliverStoredMessage(duplicate.id)
+      return res.json(receipt(delivered || duplicate))
+    }
+    const stored = {
       id: randomUUID(),
+      requestId,
+      requestHash,
       createdAt: new Date().toISOString(),
       name: payload.name,
       email: payload.email,
       phone: payload.phone,
       topic: payload.topic,
       message: payload.message,
-    })
+      consent: true,
+      delivery: { notification: { status: 'pending' }, confirmation: { status: 'pending' } },
+    }
+    messages.push(stored)
     writeMessagesAtomic(messages)
     logEvent('message', 'Mesaj nou primit', { topic: payload.topic })
 
-    recent.push(now)
-    submissions.set(ip, recent)
-
-    return res.status(201).json({ ok: true })
+    const delivered = await deliverStoredMessage(stored.id)
+    return res.status(201).json(receipt(delivered || stored))
   } catch (err) {
     return next(err)
   }
@@ -171,6 +226,19 @@ export function registerMessageRoutes(app) {
   app.post('/api/messages', handleCreateMessage)
   app.get('/api/messages', requireAdmin, handleListMessages)
   app.delete('/api/messages/:id', requireAdmin, handleDeleteMessage)
+  app.post('/api/messages/:id/retry-email', requireAdmin, async (req, res, next) => {
+    try {
+      if (!readMessages().some((message) => message.id === req.params.id)) return res.status(404).json({ message: 'Mesaj inexistent.' })
+      if (!emailJobs.has(req.params.id)) {
+        const stored = readMessages().find((message) => message.id === req.params.id)
+        for (const channel of ['notification', 'confirmation']) {
+          if (stored.delivery?.[channel]?.status === 'sending') updateDelivery(stored.id, channel, { status: 'pending' })
+        }
+      }
+      const message = await deliverStoredMessage(req.params.id)
+      res.json(message)
+    } catch (error) { next(error) }
+  })
 
   fs.mkdirSync(DATA_DIR, { recursive: true })
   prune()

@@ -7,6 +7,7 @@ import {
   useField,
 } from '../editable'
 import useContent from '../../hooks/useContent'
+import Reveal from '../common/Reveal'
 
 const newItem = {
   icon: 'bi-house-heart',
@@ -43,15 +44,15 @@ export default function CardsGrid() {
   return (
     <section id={anchor || undefined} className={`gt-section gt-bg-${bg || 'white'}`}>
       <div className="container">
-        <div className="title-one text-center">
+        <Reveal className="title-one text-center">
           <EditableText field="eyebrow" as="div" className="upper-title font-amita" />
           <EditableText field="title" as="h2" />
-        </div>
+        </Reveal>
         <EditableParagraphs field="intro" className="gt-text gt-intro text-center" />
         <div className="row g-4 mt-30">
           {items.map((item, index) => (
             <ListItem key={index} field="items" index={index}>
-              <div className={`col-md-6 col-lg-${12 / columnCount}`}>
+              <Reveal className={`col-md-6 col-lg-${12 / columnCount}`} delay={(index % columnCount) * 100}>
                 <div className="gt-card">
                   <div className="gt-card-icon">
                     <i className={`bi ${item.icon}`} />
@@ -65,7 +66,7 @@ export default function CardsGrid() {
                     </EditableLink>
                   )}
                 </div>
-              </div>
+              </Reveal>
             </ListItem>
           ))}
         </div>
